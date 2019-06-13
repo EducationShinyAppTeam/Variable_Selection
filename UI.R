@@ -24,7 +24,7 @@ shinyUI(fluidPage(
        dashboardPage(skin = "black",
                     
                     #header 
-                    dashboardHeader(title = "Model selection",
+                    dashboardHeader(title = "Variable selection",
                                     titleWidth = 180,
                                     tags$li(class = "dropdown", tags$a(href='https://shinyapps.science.psu.edu/',icon("home"))),
                                     tags$li(class = "dropdown", actionLink("info",icon("info",class="myClass")))
@@ -32,12 +32,13 @@ shinyUI(fluidPage(
           
                     #menu bar
                     dashboardSidebar(width = 180,
-                           sidebarMenu(id='tabs',style='font-size:13px;',
-                                       convertMenuItem(menuItem("Overview",tabName = "instruction", icon = icon("dashboard"),
-                                                               menuSubItem("Pre-requisites", tabName= "prereq", icon=icon("book"))),'instruction'),
-                                       menuItem("Exploring",tabName = "exploring", icon = icon("wpexplorer")),
-                                       menuItem("Game",tabName = "game", icon = icon("gamepad"))
-                                      )),
+                                     sidebarMenu(id='tabs',style='font-size:13px;',
+                                                 convertMenuItem(menuItem("Overview",tabName = "instruction", icon = icon("dashboard"),
+                                                                 menuSubItem("Pre-requisites", tabName= "prereq", icon=icon("book"))),'instruction'),
+                                                 menuItem("Explore",tabName = "explore", icon = icon("wpexplorer")),
+                                                 menuItem("Game",tabName = "game", icon = icon("gamepad"))
+                                                 )
+                                     ),
                     
                     #change the color,bacground color & word styles of buttons, icons & words
                     dashboardBody(
@@ -52,7 +53,7 @@ shinyUI(fluidPage(
                                   tags$head(tags$style(HTML('#start1{color:white;background-color: #ffb6c1}')),
                                             tags$style(HTML('#go{color:white;background-color: #ffb6c1}')),
                                             tags$style(HTML('#pre{color:white;background-color: #ffb6c1}')),
-                                            tags$style(HTML('#game{color:white;background-color: #ffb6c1}'))
+                                            tags$style(HTML('#game1{color:white;background-color: #ffb6c1}'))
                                   ),
                                   
                                   #change header color
@@ -81,47 +82,18 @@ shinyUI(fluidPage(
                                         #           tags$style(HTML('#start_timer{color:white;background-color: #ffb6c1}')),
                                         #           tags$style(HTML('#set{color:white;background-color: #ffb6c1}')),
                                         #           tags$style(HTML('#reset{color:white;background-color: #ffb6c1}')))
-                                        # 
- 
-                        # tags$style(type='text/css', '#timeleft {background-color:#ffb6c1; font-size: 18px; 
-                        #            color:white;font-weight: bold;font family:Sans-serif;text-align: center; border-radius: 100px}'),
-                        # tags$style(type='text/css', '#a {background-color:#C39BD3; font-size: 12px; 
-                        #            color:white;font-weight: bold;font family:Sans-serif;text-align: center; border-radius: 80px}'),
-                        # tags$style(type='text/css', '#b {background-color:#C39BD3; font-size: 12px; 
-                        #            color:white;font-weight: bold;font family:Sans-serif;text-align: center; border-radius: 80px}'),
-                        # tags$style(type='text/css', '#c {background-color:#C39BD3; font-size: 12px; 
-                        #            color:white;font-weight: bold;font family:Sans-serif;text-align: center; border-radius: 80px}'),
-                        
-                        
-                        ###format for the pre-req
-                        # tags$style(type='text/css', '#ano {background-color:#900C3F; font-size: 24px; padding:10px;height:180px; width:370px;
-                        #            color:white;font family:Sans-serif;text-align: center; border-radius: 80px}'),
-                        # 
-                        # tags$style(type='text/css', '#regression {background-color:#C70039; font-size: 24px; padding:10px;height:180px; width:370px;
-                        #            color:white;font family:Sans-serif;text-align: center; border-radius: 80px}'),
-                        # 
-                        # tags$style(type='text/css', '#anc {background-color:#FF5733; font-size: 24px;padding:10px;height:180px; width:370px;
-                        #            color:white;font family:Sans-serif;text-align: center; border-radius: 80px}'),
-                        # 
-                        # tags$style(type='text/css', '#box1 {background-color:#F36DA1; font-size: 26px; padding:20px;height:180px; width:520px;
-                        #            color:white;font-weight: bold;font family:Sans-serif;text-align: center; border-radius: 80px}'),
-                        # 
-                        # tags$style(type='text/css', '#box2 {background-color:#FFB3C9; font-size: 26px; padding:20px;height:180px; width:520px;
-                        #            color:white;font-weight: bold;font family:Sans-serif;text-align: center; border-radius: 80px}'),
-                        # 
-                        # tags$style(type='text/css', '#box3 {background-color:#FF9881; font-size: 26px;padding:20px;height:180px; width:520px;
-                        #            color:white;font-weight: bold;font family:Sans-serif;text-align: center; border-radius: 80px}'),
-
+                    
                                   tabItems(      
                                            # instruction page
                                            tabItem(tabName = "instruction",
                                                    tags$a(href='http://stat.psu.edu/',tags$img(src='logo.png', align = "left", width = 180)),
                                                    br(),br(),br(),
                                                    h3(strong("About:")),
-                                                   h4('This app introduces the concept of model selection.'),
+                                                   h4('This app introduces the concept of variable selection.'),
                                                    br(),
-                                                   div(style = "text-align: center",
-                                                       actionButton("pre","Pre-requisite",icon("bolt"),style='padding:10px; font-size:100%',class="circle grow")),
+                    
+                                                                                  div(style = "text-align: center",
+                                                       bsButton("pre","Pre-requisite",icon("bolt"),style='padding:10px; font-size:100%',class="circle grow")),
                                                    br(),
                                                    h3(strong('Instructions:')),
                                                    h4(tags$li('Click Go button to enter the explore page. ')),
@@ -138,8 +110,8 @@ shinyUI(fluidPage(
                                            # pre-requisite page
                                            tabItem(tabName="prereq",
                                                    h3(strong('Background')),
-                                                   h3('What is model selection:'),
-                                                   h4('Model selection is the task of selecting a statistical model from a set of canditadate models,'),
+                                                   h3('What is variable selection:'),
+                                                   h4('Variable selection is the task of selecting a statistical model from a set of canditadate models,'),
                                                    br(),
                                                    h4('Model checking is a critical part of an analysis. You need to understand the diagnostic plot s like these four:',
                                                    br(),
@@ -157,10 +129,94 @@ shinyUI(fluidPage(
                                                   ),
                                            
                                            # explore page
-                                           tabItem(tabName="explore"),
+                                           tabItem(tabName="explore",
+                                                   sidebarLayout(sidebarPanel(
+                                                                              selectInput("model", "Select one method of variable selection:", 
+                                                                                          choices= c('Select methods','Adjusted R-Squared','Cp criterion','bic criterion','Forward Selection','Backward Selection','Stepwise Selection')
+                                                                                          ),
+                                                                              checkboxInput("designcheckbox","Show design info:", TRUE),
+                                                                              uiOutput("design"),
+                                                                              width = 4
+                                                                              ),
+                                                                 mainPanel( 
+                                                                           width = 8,
+                                                                           fluidRow(
+                                                                                    uiOutput("correct", align = 'center')
+                                                                                    ),
+                                                                           br(),
+                                                                           br(),
+                                                                           
+                                                                           div(style = "text-align: center",
+                                                                               actionButton("game1","Game",icon("bolt"),class="circle grow"))
+                                                                 ))
+                                                   ),
                                            
                                            #game page
-                                           tabItem(tabName="game")
+                                           tabItem(tabName="game",
+                                                   titlePanel("Matching the text with the distribution"),
+                                                   sidebarLayout(
+                                                                 sidebarPanel(
+                                                                              wellPanel(style = "background-color: #EAF2F8",
+                                                                                        uiOutput("question"),
+                                                                                        tags$style(type='text/css', '#question {font-weight:bold;font-size: 20px;background-color: #EAF2F8;color: black;}','.well { padding: 12px; margin-bottom: 15px; max-width: 1000px; }')
+                                                                                        ),
+                                                                              
+                                                                              fluidRow( 
+                                                                                       h3("Identify the distribution of given text:")
+                                                                                       ),
+                                                                              
+                                                                              div(style="display: inline-block;vertical-align:top;",
+                                                                                  circleButton("hint",icon = icon("question"), status = "myClass",size = "xs")
+                                                                                  ),
+                                                                              
+                                                                              fluidRow(uiOutput('answerbox'),selectInput('answer',"",c('Select Distribution','Bernoulli','Binomial','Continuous Uniform','Discrete Uniform','Exponential','Gamma','Geometric','Negative Binomial',
+                                                                                                                                       'Normal','Poisson'), width='100%'),
+                                                                                       uiOutput('mark')),
+                                                                              
+                                                                              
+                                                                              br(),
+                                                                              br(),
+                                                                              br(),
+                                                                              
+                                                                              tags$head(tags$style(HTML("#result {font-size: 17px;background-color:#EAF2F8}"))),
+                                                                              
+                                                                              
+                                                                              width = 6
+                                                                              
+                                                                              ),
+                                                                 mainPanel(
+                                                                           br(),
+                                                                           width = 6,
+                                                                              
+                                                                           fluidRow(
+                                                                                    uiOutput("correct", align = 'center')
+                                                                                    ),
+                                                                              
+                                                                           br(),
+                                                                           br(),
+                                                                              
+                                                                           fluidRow(
+                                                                                    uiOutput("distPlot", align = 'center')
+                                                                                    ),
+                                                                           br(),
+                                                                           br(),
+                                                                           br(),
+                                                                              
+                                                                           fluidRow(
+                                                                                    column(3, offset=2,
+                                                                                           bsButton('nextq', "Next Question", size ="large", style="success",disabled=TRUE)),
+                                                                                    column(3,
+                                                                                           bsButton('submit', "Submit", size= "large", style ="warning", disabled =FALSE))
+                                                                                    )
+                                                                           
+                                                                           ),
+                                                                 
+                                                                 
+                                                                           position ="left"
+                                                                 )
+                                                   )
+                                                                          
+                                                                          
    
                     
                     )#close tabItems            
