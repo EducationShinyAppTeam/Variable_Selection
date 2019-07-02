@@ -10,9 +10,15 @@ library(simstudy)
 library(lubridate)
 library(shinyalert)
 library(shinyWidgets)
+library(leaps)
+
 
 #read in dataset
 
+exid <- read.csv("VariableSelection.csv")
+best <- regsubsets(Y~., data=exid, nbest=3) 
+null <- lm(Y~1, data=exid)
+full <- lm(Y~., data=exid)
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output,session) {
@@ -22,7 +28,16 @@ shinyServer(function(input, output,session) {
     sendSweetAlert(
       session = session,
       title = "Instructions:",
-      text = " Move the sliders to see their effect on the diagnostic plots.",
+      text = " Choose different methods to understand variable selection.",
+      type = "info"
+    )
+  })
+  
+  observeEvent(input$hint,{
+    sendSweetAlert(
+      session = session,
+      title = "Hints:",
+      text = " Each layer is a model which contain all the variable black block represent. The deeper color the more precise this model is.",
       type = "info"
     )
   })
@@ -30,21 +45,24 @@ shinyServer(function(input, output,session) {
   observeEvent(input$pre,{
     updateTabItems(session,"tabs","prereq")
   })
-  
-  observeEvent(input$start1,{
-    updateTabItems(session,"tabs","instruction")
-  })
     
   observeEvent(input$go,{
     updateTabItems(session,"tabs","explore")
   })
+  
+  observeEvent(input$go1,{
+    updateTabItems(session,"tabs","explore")
+  })
 
-  observeEvent(input$game1,{
-    updateTabItems(session,"tabs","game")
+  # observeEvent(input$game1,{
+  #   updateTabItems(session,"tabs","game")
+  # })
+  
+  observeEvent(input$info2,{
+    toggle("wow")
   })
   
   ############################Gray out buttons###############################
-  
   
   observeEvent(input$start2, {
     updateButton(session, "answer", disabled = TRUE)
@@ -67,7 +85,7 @@ shinyServer(function(input, output,session) {
   observeEvent(input$nextq, {
     updateButton(session, "submit", disabled = FALSE)
     updateButton(session, "nextq", disabled = TRUE)
-    updateSelectInput(session,"answer","",c('Select methods','Cp criterion','Adjusted R-Squared','bic criterion','Forward Selection','Backward Selection','Stepwise Selection'))
+    updateSelectInput(session,"answer","",c('Cp criterion','Adjusted R-Squared','bic criterion','Forward Selection','Backward Selection','Stepwise Selection'))
     output$result <- renderUI({
       
       h3("Choose the distribution from the list to match the given text, then click 'Submit' to check your answer.")
@@ -79,37 +97,57 @@ shinyServer(function(input, output,session) {
 
 ########################### exploring #####################################
   
-# R code details
-  output$design = renderUI({
-    if(input$designcheckbox)
-    {
-      h4("A researcher plans to take a random sample of size n students to do a survey about their experiences in studying at the University Park campus of Penn State University. However, she worries that sample results could be biased because the students who agree to participate might be different from those who don't (this would be an example of non-response bias). The researcher makes a confidence interval for the percentage of Penn State Students who are Pennsylvania residents based on her study and compares it to the mean of 59.5% for the population of all Penn State University Park students. This app shows  how confidence intervals of that type would come out when there is no bias.")
+  output$plots <- renderPlot({   
+    if(input$model== "Adjusted R-Squared criterion"){
+      plot(best, scale="adjr2",main = "Adjusted R-Squared")
+    }
+    else if(input$model == "Cp criterion"){
+      plot(best, scale="Cp", main = "Cp criterion")
+    }
+    else if(input$model == "BIC criterion"){
+      plot(best, scale="bic", main = "BIC criterion")
+    }
+    else if(input$model == "Forward Selection"){
+      plot(step(null, scope=list(lower=null, upper=full), direction="forward"))
+    }
+    else if(input$model == "Backward Selection"){
+      plot(step(full, data=hw6, direction="backward"))
+    }
+    else if(input$model == "Stepwise Selection"){
+      plot(step(null, scope = list(upper=full), data=hw6, direction="both"))
     }
   })
+    
+  output$download_data <- downloadHandler(
+    filename = function() {
+      paste("VariableSelection.csv")
+    },
+    
+    content = function(file) { 
+        write.csv(exid,file) 
+      }
+    )
   
-# 
-#   hw6 = read.table('HW6.csv', sep=',', header=T)
-#   #Best subset routine
-#   best=regsubsets(Y~., data=hw6, nbest=3) 
-#   plot(best, scale="adjr2")
-#   plot(best, scale="Cp")
-#   plot(best, scale="bic")
-#   
-#   #Automatic selection - Forward
-#   null=lm(Y~1, data=hw6) #intercept only model
-#   #full model- Regresses y on all variables in dataset
-#   full=lm(Y~., data=hw6)#full model- Regresses y on all variables in dataset
-#   step(null, scope=list(lower=null, upper=full), 
-#        direction="forward")
-#   
-#   #Automatic selection - backward
-#   step(full, data=hw6, direction="backward")
-#   
-#   #Automatic selection - Stepwise
-#   step(null, scope = list(upper=full), data=hw6, 
-#        direction="both")  
-#   
-  
+  output$interpretation <- renderText({
+    if(input$model== "Adjusted R-Squared criterion"){
+      paste("test1")
+    }
+    else if(input$model== "Cp criterion"){
+      paste("test2")
+    }
+    else if(input$model== "BIC criterion"){
+      paste("test3")
+    }
+    else if(input$model== "Forward Selection"){
+      paste("test4")
+    }
+    else if(input$model== "Backward Selection"){
+      paste("test5")
+    }
+    else if(input$model== "Stepwise Selection"){
+      paste("test6")
+    }
+  })
   
 ############################### Gaming #######################################
 
