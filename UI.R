@@ -6,8 +6,6 @@ library(shinyjs)
 library(ggplot2)
 library(dplyr)
 library(shinydashboard)
-library(simstudy)
-library(lubridate)
 library(shinyalert)
 library(shinyWidgets)
 library(leaps)
@@ -41,7 +39,6 @@ shinyUI(fluidPage(
                                                  convertMenuItem(menuItem("Overview",tabName = "instruction", icon = icon("dashboard"),
                                                                  menuSubItem("Pre-requisites", tabName= "prereq", icon=icon("book"))),'instruction'),
                                                  menuItem("Explore",tabName = "explore", icon = icon("wpexplorer"))
-                                                 # menuItem("Game",tabName = "game", icon = icon("gamepad"))
                                                  )
                                      ),
                     
@@ -61,9 +58,12 @@ shinyUI(fluidPage(
                                             tags$style(HTML('#go{color:white;background-color: #ffb6c1}')),
                                             tags$style(HTML('#go1{color:white;background-color: #ffb6c1}')),
                                             tags$style(HTML('#pre{color:white;background-color: #ffb6c1}')),
-                                            # tags$style(HTML('#game1{color:white;background-color: #ffb6c1}')),
                                             tags$style(HTML('#download_data{color:white;background-color: #ffb6c1}')),
-                                            tags$style(HTML('#info2{color:white;background-color: #ffb6c1}'))
+                                            tags$style(HTML('#info2{color:white;background-color: #ffb6c1}')),
+                                            tags$style(HTML('#restart{color:white;background-color: #ffb6c1}')),
+                                            tags$style(HTML('#refresh{color:white;background-color: #ffb6c1}')),
+                                            tags$style(HTML(".js-irs-0 .irs-single, .js-irs-0 .irs-bar-edge, .js-irs-0 .irs-bar {background: #ffb6c1}")),
+                                            tags$style(HTML(".js-irs-0 .irs-single, .js-irs-0 .irs-bar-edge, .js-irs-0 .irs-bar {border-color: #ffb6c1"))
                                   ),
                                   
                                   #change header color
@@ -87,13 +87,13 @@ shinyUI(fluidPage(
                                                   background-color: #ffb6c1;
                                                   }')),
 
-                                  tabItems(      
+                                   tabItems(      
                                            # instruction page
                                            tabItem(tabName = "instruction",
                                                    tags$a(href='http://stat.psu.edu/',tags$img(src='logo.png', align = "left", width = 180)),
                                                    br(),br(),br(),
                                                    h3(strong("About:")),
-                                                   h4('This app introduces the concept of variable selection.'),
+                                                   h4('This app introduces the concept of variable selection. The black block is the factor which model contains'),
                                                    br(),
                                                    div(style = "text-align: center",
                                                        actionButton("pre","Pre-requisite",icon("bolt"),style='padding:10px; font-size:100%',class="circle grow")),
@@ -101,8 +101,7 @@ shinyUI(fluidPage(
                                                    h3(strong('Instructions:')),
                                                    h4(tags$li('Click Go button to enter the explore page. ')),
                                                    h4(tags$li('Change the options to see how each method perform.')),
-                                                   h4(tags$li('Click download button if you want the database.')),
-                                                   h4(tags$li('After working with the explore section, you can start the game to test your understanding of the concepts.')),
+                                                   h4(tags$li('Click Refresh button if you want to generate a new database.')),
                                                    h4(tags$li('You can use "i" button for instruction')),
                                                    br(),
                                                    div(style = "text-align: center",
@@ -124,11 +123,11 @@ shinyUI(fluidPage(
                                                    br(),
                                                    tags$li('The BIC criterion is a criterion for model selection among a finite set of models. The model with the lowest BIC is preferred. '),
                                                    br(),
-                                                   tags$li('The Forward selection . If the equal variance assumption is true, you should expect a roughly horizontal line with the dots showing equal spread.'),
+                                                   tags$li('Forward selection is a type of stepwise regression which begins with an empty model and adds in variables one by one. In each forward step, you add the one variable that gives the single best improvement to your model. '),
                                                    br(),
-                                                   tags$li('The Backward selection checks for equal spread of residual the residuals. If the equal variance assumption is true, you should expect a roughly horizontal line with the dots showing equal spread.'),
+                                                   tags$li('Backward elimination is a type of stepwise regression which involves starting with all candidate variables, testing the deletion of each variable using a chosen model fit criterion, deleting the variable (if any) whose loss gives the most statistically insignificant deterioration of the model fit, and repeating this process until no further variables can be deleted without a statistically significant loss of fit. '),
                                                    br(),
-                                                   tags$li('The Stepwise selection checks for influential outliers. Outliers with high leverage will appear outside the dashed line range.'),
+                                                   tags$li('The Stepwise selection is the conbination of forward selection and backward elimination. '),
                                                    br(),
                                  
                                                    div(style = "text-align: center",
@@ -139,78 +138,24 @@ shinyUI(fluidPage(
                                            # explore page
                                            tabItem(tabName="explore",
                                                    sidebarLayout(sidebarPanel(
+                                                                              sliderInput("nfactor", h4(strong("The number of potential factors that influence Y:")),min = 3 , max = 8, value = 4, step= 1),
+                                                                              column(5,bsButton('refresh', "Refresh data", disabled =FALSE)),
+                                                                              column(7,bsButton('restart', "Genereate New Model", disabled =FALSE)),
+                                                                              br(),
+                                                                              br(),
                                                                               selectInput("model", h4(strong("Select one method of variable selection:")), 
                                                                                           choices = c('Adjusted R-Squared criterion','Cp criterion','BIC criterion','Forward Selection','Backward Selection','Stepwise Selection')
                                                                                           ),
-                                                                              column(6,downloadButton("download_data", "Download data")),
-                                                                              column(6,actionButton("info2","Interpretation")),
-                                                                              br(),
-                                                                              br(),
-                                                                              br(),
-                                                                              conditionalPanel(condition = 'input.info2',
-                                                                                               hidden(div(id="wow",textOutput("interpretation")))),
-                                                                              
+                                                                              prettyCheckbox(inputId = "button", label = "Show me the true answer", icon = icon("check")),
+                                                                              conditionalPanel("input.button != 0",textOutput("answer")),
                                                                               width = 4
                                                                               ),
                                                                  mainPanel( 
                                                                            width = 8,
                                                                            plotOutput("plots")
-                                                                           # div(style = "text-align: center",
-                                                                           #     actionButton("game1","Game",icon("bolt"),class="circle grow"))
                                                                  ))
                                                    )
                                            
-                                           #game page
-                                           # tabItem(tabName="game",
-                                           #         titlePanel("Matching the text with the distribution"),
-                                           #         sidebarLayout(
-                                           #                       sidebarPanel(
-                                           #                                    wellPanel(uiOutput("question"),
-                                           #                                              tags$style(type='text/css', '#question {font-weight:bold;font-size: 20px;background-color: #EAF2F8;color: black;}','.well { padding: 12px; margin-bottom: 15px; max-width: 1000px; }')
-                                           #                                              ),
-                                           #                                    br(),
-                                           #                                    
-                                           #                                    fluidRow( 
-                                           #                                             h3("Identify the distribution of given text:")
-                                           #                                             ),
-                                           #                                    
-                                           #                                    fluidRow(uiOutput('answerbox'),selectInput('answer',"",c('Select Distribution','Bernoulli','Binomial','Continuous Uniform','Discrete Uniform','Exponential','Gamma','Geometric','Negative Binomial',
-                                           #                                                                                             'Normal','Poisson'), width='100%'),
-                                           #                                             uiOutput('mark')),
-                                           #                                    
-                                           #                                    br(),
-                                           #                                    br(),
-                                           #                                    br(),
-                                           #                                    
-                                           #                                    tags$head(tags$style(HTML("#result {font-size: 17px;background-color:#EAF2F8}"))),
-                                           #                                    
-                                           #                                    
-                                           #                                    width = 6
-                                           #                                    
-                                           #                                    ),
-                                           #                       mainPanel(
-                                           #                                 br(),
-                                           #                                 width = 6,
-                                           #                                 br(),
-                                           #                                 br(),
-                                           #                                 br(),
-                                           #                                    
-                                           #                                 fluidRow(
-                                           #                                          column(3, offset=2,
-                                           #                                                 bsButton('nextq', "Next Question", size ="large", style="success",disabled=TRUE)),
-                                           #                                          column(3,
-                                           #                                                 bsButton('submit', "Submit", size= "large", style ="warning", disabled =FALSE))
-                                           #                                          )
-                                           #                                 
-                                           #                                 ),
-                                           #                       
-                                           #                       
-                                           #                                 position ="left"
-                                           #                       )
-                                           #         )
-                                                                          
-                                                                          
-   
                     
                     )#close tabItems            
       )#close dashboardbody                                   

@@ -11,9 +11,7 @@ color: white;
 .skin-black .main-header .logo:hover {
 background-color: black;
 }
-aside.main-sidebar {
-background-color: black !important;
-}
+
 .main-header .logo {
 font-family: "Georgia", Times, "Times New Roman", serif;
 font-weight: bold;
@@ -44,11 +42,4 @@ font-size: 13px;
 .circle:hover
 {
         border-radius:50%;
-}
-
-#gameMessage 
-{
-  font-family: "Georgia", Times, "Times New Roman", serif;
-font-weight: bold;
-font-size: 15px;
 }
