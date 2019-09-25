@@ -27,7 +27,8 @@ shinyServer(function(input, output,session) {
       title = "Instructions:",
       type = NULL,
       closeOnClickOutside = TRUE,
-      text = " Choose different methods to understand variable selection."
+      text = " Choose different methods to understand variable selection.
+               If the 'change'button does not work well, please keep pressing the button."
     )
    })
   
@@ -37,7 +38,7 @@ shinyServer(function(input, output,session) {
       title = "Hints:",
       type = NULL,
       closeOnClickOutside = TRUE,
-      text = " Each layer is a model which contain all the variable black blocks represent. The deeper color the more precise this model is."
+      text = " Each row designates a model which contains all of the variables shown in black blocks.The deeper the color, the more precise this model is.[adjr2 is the abbreviation of adjusted R-squared]"
       
     )
   })
@@ -79,11 +80,48 @@ shinyServer(function(input, output,session) {
       }
   })
   
+############################ modefiy the regsubset function########################################  
+  plot.regsubsets2 <- 
+    function (x, labels = obj$xnames, main = NULL, scale = c("bic", 
+                                                             "Cp", "adjr2", "r2"), col = gray(seq(0, 0.9, length = 10)), 
+              ...) 
+    {
+      obj <- x
+      lsum <- summary(obj)
+      par(mar = c(7, 5, 6, 3) + 0.1)
+      nmodels <- length(lsum$rsq)
+      np <- obj$np
+      propscale <- FALSE
+      sscale <- pmatch(scale[1], c("bic", "Cp", "adjr2", "r2"), 
+                       nomatch = 0)
+      if (sscale == 0) 
+        stop(paste("Unrecognised scale=", scale))
+      if (propscale) 
+        stop(paste("Proportional scaling only for probabilities"))
+      yscale <- switch(sscale, lsum$bic, lsum$cp, lsum$adjr2, lsum$rsq)
+      up <- switch(sscale, -1, -1, 1, 1)
+      index <- order(yscale * up)
+      colorscale <- switch(sscale, yscale, yscale, -log(pmax(yscale, 
+                                                             1e-04)), -log(pmax(yscale, 1e-04)))
+      image(z = t(ifelse(lsum$which[index, ], colorscale[index], 
+                         NA + max(colorscale) * 1.5)), xaxt = "n", yaxt = "n", 
+            x = (1:np), y = 1:nmodels, xlab = "", ylab = scale[1], 
+            col = col)
+      laspar <- par("las")
+      on.exit(par(las = laspar))
+      par(las = 2)
+      axis(1, at = 1:np, labels = labels, ...) # I modified this line
+      axis(2, at = 1:nmodels, labels = signif(yscale[index], 2), ...)
+      if (!is.null(main)) 
+        title(main = main)
+      box()
+      invisible(NULL)
+    }
+  
 #################################### exploring #####################################
   # hi, can you find out a way to simplify the code below? 
   # For example, when I put in a new data, the code will automaticlly change the plot and corresponding answer?
   # Thank you so much!
-
   
   #####################input#########################
   observeEvent(input$refresh, {
@@ -148,7 +186,9 @@ shinyServer(function(input, output,session) {
   output$plots <- renderPlot({
     if(c$list == 1){
       if(input$model== "Adjusted R-Squared criterion"){
-        plot(best1, scale="adjr2",main = "Adjusted R-Squared",xlab="adjustment R-squared")
+        plot.regsubsets2(best1,scale="adjr2",main = "Adjusted R-Squared"
+                         # , cex.axis = 0.75
+        )
       }
       else if(input$model == "Cp criterion"){
         plot(best1, scale="Cp", main = "Cp criterion")
@@ -190,7 +230,7 @@ shinyServer(function(input, output,session) {
     
     if(c$list == 3){
       if(input$model== "Adjusted R-Squared criterion"){
-        plot(best3, scale="adjr2",main = "Adjusted R-Squared",xlab="adjustment R-squared")
+        plot(best3, scale="adjr2",main = "Adjusted R-Squared")
       }
       else if(input$model == "Cp criterion"){
         plot(best3, scale="Cp", main = "Cp criterion")
@@ -211,7 +251,7 @@ shinyServer(function(input, output,session) {
     
     if(c$list == 4){
       if(input$model== "Adjusted R-Squared criterion"){
-        plot(best4, scale="adjr2",main = "Adjusted R-Squared",xlab="adjustment R-squared")
+        plot(best4, scale="adjr2",main = "Adjusted R-Squared")
       }
       else if(input$model == "Cp criterion"){
         plot(best4, scale="Cp", main = "Cp criterion")
@@ -232,7 +272,7 @@ shinyServer(function(input, output,session) {
     
     if(c$list == 5){
       if(input$model== "Adjusted R-Squared criterion"){
-        plot(best5, scale="adjr2",main = "Adjusted R-Squared",xlab="adjustment R-squared")
+        plot(best5, scale="adjr2",main = "Adjusted R-Squared")
       }
       else if(input$model == "Cp criterion"){
         plot(best5, scale="Cp", main = "Cp criterion")
@@ -253,7 +293,7 @@ shinyServer(function(input, output,session) {
     
     if(c$list == 6){
       if(input$model== "Adjusted R-Squared criterion"){
-        plot(best6, scale="adjr2",main = "Adjusted R-Squared",xlab="adjustment R-squared")
+        plot(best6, scale="adjr2",main = "Adjusted R-Squared")
       }
       else if(input$model == "Cp criterion"){
         plot(best6, scale="Cp", main = "Cp criterion")
@@ -274,7 +314,7 @@ shinyServer(function(input, output,session) {
     
     if(c$list == 7){
       if(input$model== "Adjusted R-Squared criterion"){
-        plot(best7, scale="adjr2",main = "Adjusted R-Squared",xlab="adjustment R-squared")
+        plot(best7, scale="adjr2",main = "Adjusted R-Squared")
       }
       else if(input$model == "Cp criterion"){
         plot(best7, scale="Cp", main = "Cp criterion")
@@ -295,7 +335,7 @@ shinyServer(function(input, output,session) {
     
     if(c$list == 8){
       if(input$model== "Adjusted R-Squared criterion"){
-        plot(best8, scale="adjr2",main = "Adjusted R-Squared",xlab="adjustment R-squared")
+        plot(best8, scale="adjr2",main = "Adjusted R-Squared")
       }
       else if(input$model == "Cp criterion"){
         plot(best8, scale="Cp", main = "Cp criterion")
@@ -316,7 +356,7 @@ shinyServer(function(input, output,session) {
     
     if(c$list == 9){
       if(input$model== "Adjusted R-Squared criterion"){
-        plot(best9, scale="adjr2",main = "Adjusted R-Squared",xlab="adjustment R-squared")
+        plot(best9, scale="adjr2",main = "Adjusted R-Squared")
       }
       else if(input$model == "Cp criterion"){
         plot(best9, scale="Cp", main = "Cp criterion")
@@ -337,7 +377,7 @@ shinyServer(function(input, output,session) {
     
     if(c$list == 10){
       if(input$model== "Adjusted R-Squared criterion"){
-        plot(best10, scale="adjr2",main = "Adjusted R-Squared",xlab="adjustment R-squared")
+        plot(best10, scale="adjr2",main = "Adjusted R-Squared")
       }
       else if(input$model == "Cp criterion"){
         plot(best10, scale="Cp", main = "Cp criterion")
@@ -358,7 +398,7 @@ shinyServer(function(input, output,session) {
     
     if(c$list == 11){
       if(input$model== "Adjusted R-Squared criterion"){
-        plot(best11, scale="adjr2",main = "Adjusted R-Squared",xlab="adjustment R-squared")
+        plot(best11, scale="adjr2",main = "Adjusted R-Squared")
       }
       else if(input$model == "Cp criterion"){
         plot(best11, scale="Cp", main = "Cp criterion")
