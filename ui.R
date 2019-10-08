@@ -139,8 +139,10 @@ shinyUI(fluidPage(
                                            tabItem(tabName="explore",
                                                    sidebarLayout(sidebarPanel(
                                                                               sliderInput("nfactor", h4(strong("The number of potential factors that influence Y:")),min = 3 , max = 8, value = 4, step= 1),
-                                                                              column(5,bsButton('refresh', "Refresh data", disabled =FALSE)),
-                                                                              column(7,bsButton('restart', "Genereate New Model", disabled =FALSE)),
+                                                                              bsButton('refresh', "Refresh data", disabled =FALSE),
+                                                                              br(),
+                                                                              br(),
+                                                                              bsButton('restart', "Genereate New Model", disabled =FALSE),
                                                                               br(),
                                                                               br(),
                                                                               selectInput("model", h4(strong("Select one method of variable selection:")), 
