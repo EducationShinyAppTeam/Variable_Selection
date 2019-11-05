@@ -54,22 +54,22 @@ shinyUI(fluidPage(
                                             ),
                                         
                                   #change button color
-                                  tags$head(tags$style(HTML('#start1{color:white;background-color: #ffb6c1}')),
-                                            tags$style(HTML('#go{color:white;background-color: #ffb6c1}')),
-                                            tags$style(HTML('#go1{color:white;background-color: #ffb6c1}')),
-                                            tags$style(HTML('#pre{color:white;background-color: #ffb6c1}')),
-                                            tags$style(HTML('#download_data{color:white;background-color: #ffb6c1}')),
-                                            tags$style(HTML('#info2{color:white;background-color: #ffb6c1}')),
-                                            tags$style(HTML('#restart{color:white;background-color: #ffb6c1}')),
-                                            tags$style(HTML('#refresh{color:white;background-color: #ffb6c1}')),
-                                            tags$style(HTML(".js-irs-0 .irs-single, .js-irs-0 .irs-bar-edge, .js-irs-0 .irs-bar {background: #ffb6c1}")),
-                                            tags$style(HTML(".js-irs-0 .irs-single, .js-irs-0 .irs-bar-edge, .js-irs-0 .irs-bar {border-color: #ffb6c1"))
+                                  tags$head(tags$style(HTML('#start1{color:white;background-color: #000000}')),
+                                            tags$style(HTML('#go{color:white;background-color: #000000}')),
+                                            tags$style(HTML('#go1{color:white;background-color: #000000}')),
+                                            tags$style(HTML('#pre{color:white;background-color: #000000}')),
+                                            tags$style(HTML('#download_data{color:white;background-color: #000000}')),
+                                            tags$style(HTML('#info2{color:white;background-color: #000000}')),
+                                            tags$style(HTML('#restart{color:white;background-color: #000000}')),
+                                            tags$style(HTML('#refresh{color:white;background-color: #000000}')),
+                                            tags$style(HTML(".js-irs-0 .irs-single, .js-irs-0 .irs-bar-edge, .js-irs-0 .irs-bar {background: #000000}")),
+                                            tags$style(HTML(".js-irs-0 .irs-single, .js-irs-0 .irs-bar-edge, .js-irs-0 .irs-bar {border-color: #000000"))
                                   ),
                                   
                                   #change header color
                                   tags$style(HTML('
                                                   .skin-black .main-header>.navbar {
-                                                  background-color: #ffb6c1 ;
+                                                  background-color: #000000 ;
                                                   }
                                                   
                                                   .content-wrapper,.right-side {
@@ -77,14 +77,14 @@ shinyUI(fluidPage(
                                                   }
                                                   
                                                   .skin-black .main-header .logo {
-                                                  background-color: #ffb6c1  ;
+                                                  background-color: #000000  ;
                                                   color: white;
                                                   }
                                                   .skin-black .main-header .logo:hover {
-                                                  background-color: #ffb6c1;
+                                                  background-color: #000000;
                                                   }
                                                   .skin-black .main-header .navbar .sidebar-toggle:hover{
-                                                  background-color: #ffb6c1;
+                                                  background-color: #000000;
                                                   }')),
 
                                    tabItems(      
