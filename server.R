@@ -27,8 +27,8 @@ shinyServer(function(input, output,session) {
       title = "Instructions:",
       type = NULL,
       closeOnClickOutside = TRUE,
-      text = " Choose different methods to understand variable selection.
-               If the 'change'button does not work well, please keep pressing the button."
+      text = " Choose the optimality criteria from the dropdown list of different methods.
+Make your own choice about which model you think is best before showing the true model."
     )
    })
   
