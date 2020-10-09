@@ -39,12 +39,12 @@ Make your own choice about which model you think is best before showing the true
   
   observeEvent(input$Jolin,{
     print("test")
-    updateTabItems(session=session,inputId = "sidebar", selected = "prereq")
+    updateTabItems(session=session,inputId = "pages", selected = "prereq")
     
   })
     
   observeEvent(input$explore,{
-    updateTabItems(session=session,inputId = "sidebar",selected = "explore1")
+    updateTabItems(session=session,inputId = "pages",selected = "explore1")
     
   })
   
@@ -1010,87 +1010,87 @@ Make your own choice about which model you think is best before showing the true
     
     #Render pic1
     if (input$question1!=''){
-      output$pic1 = renderUI({
-        
-        if(input$question1 == "Examination" || input$question1 == "examination"){
-          img(src = "check.png", alt = "it means the answer is correct", width = 25)
-        }
-        else{
-          img(src = "cross.png", alt = "it means the answer is wrong", width = 25)
-        }
-      })}
+      # output$pic1 = renderUI({
+      #   
+      #   if(input$question1 == "Examination" || input$question1 == "examination"){
+      #     img(src = "check.png", alt = "it means the answer is correct", width = 25)
+      #   }
+      #   else{
+      #     img(src = "cross.png", alt = "it means the answer is wrong", width = 25)
+      #   }
+      # })}
+      # The below code replaces the above code
+    output$pic1 <- boastUtils::renderIcon(
+      icon = ifelse(input$question1 == "Examination" || input$question1 == "examination",
+                    "correct",
+                    "incorrect"),
+      width = 25)
+    }
+    
+    # To clear the grade mark
+    # output$pic1 <- boastUtils::renderIcon()
+    #The same as
+    # output$pic1 <- renderUI({
+    # img(src = NULL)
+    # })
     
     #Render pic2
     if (input$question2!='null'){
-      output$pic2 = renderUI({
-        if(input$question2 == 'y'){
-          img(src = "check.png", alt = "it means the answer is correct", width = 25)
-        }
-        else{
-          img(src = "cross.png", alt = "it means the answer is wrong", width = 25)
-        }
-      })}
-    
+      output$pic2 <- boastUtils::renderIcon(
+      icon = ifelse(input$question2 == 'y',
+                    "correct",
+                    "incorrect"),
+      width = 25)
+  }
     #Render pic3
     if (input$question3!='null'){
-      output$pic3 = renderUI({
-        if(input$question3 == "y"){
-          img(src = "check.png", alt = "it means the answer is correct", width = 25)
-        }
-        else{
-          img(src = "cross.png", alt = "it means the answer is wrong", width = 25)
-        }
-      })}
+      output$pic3 <- boastUtils::renderIcon(
+        icon = ifelse(input$question3 == "y",
+                      "correct",
+                      "incorrect"),
+        width = 25)
+    }
     
     
     #Render pic4
     if (input$question4!='null'){
-      output$pic4 = renderUI({
-        
-        if(input$question4 == 'y'){
-          img(src = "check.png", width = 25)
-        }
-        else{
-          img(src = "cross.png", width = 25)
-        }
-      })}
+      output$pic4 <- boastUtils::renderIcon(
+        icon = ifelse(input$question4 == 'y',
+                      "correct",
+                      "incorrect"),
+        width = 25)
+    }
+    
     
     #Render pic5
     if (input$question5!='null'){
-      output$pic5 = renderUI({
-        
-        if(input$question5 == 'y'){
-          img(src = "check.png", width = 25)
-        }
-        else{
-          img(src = "cross.png", width = 25)
-        }
-      })}
+      output$pic5 <- boastUtils::renderIcon(
+        icon = ifelse(input$question5 == 'y',
+                      "correct",
+                      "incorrect"),
+        width = 25)
+    }
+    
+     
     
     #Render pic6
     if (input$question6!='null'){
-      output$pic6 = renderUI({
-        
-        if(input$question6 == 'y'){
-          img(src = "check.png", width = 25)
-        }
-        else{
-          img(src = "cross.png", width = 25)
-        }
-      })}
+      output$pic6 <- boastUtils::renderIcon(
+        icon = ifelse(input$question6 == 'y',
+                      "correct",
+                      "incorrect"),
+        width = 25)
+    }
+    
     
     #Render pic7
     if (input$question7!=''){
-      output$pic7 = renderUI({
-        
-        if(input$question7== 'null'){
-          img(src = "cross.png", width = 25)
-        }
-        else{
-          img(src = "check.png", width = 25)
-        }
-      })}
-    
+      output$pic2 <- boastUtils::renderIcon(
+        icon = ifelse(input$question7 == 'null',
+                      "correct",
+                      "incorrect"),
+        width = 25)
+    }
   })
   
 

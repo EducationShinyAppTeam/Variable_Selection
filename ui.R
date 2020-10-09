@@ -241,7 +241,7 @@ dashboardPage(
               div(style="display:inline-block",
                   textInput("question1", 
                             "Which variable(s) are not included in the top model for any of the three criteria?", width='13cm',"")),
-              div(style="display:inline-block",htmlOutput('pic1'))
+              div(style="display:inline-block", uiOutput('pic1')) #Use uiOutput instead of htmlOutput
               )),
               
               # question2
