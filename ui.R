@@ -16,7 +16,6 @@ dashboardPage(
   skin = "black",
   #header 
   dashboardHeader(
-    
     title = "Variable Selection",
     titleWidth = 250,
     tags$li(class="dropdown",
