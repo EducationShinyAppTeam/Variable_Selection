@@ -37,7 +37,7 @@ Make your own choice about which model you think is best before showing the true
     )
   })
   
-  observeEvent(input$Jolin,{
+  observeEvent(input$prereqs,{
     print("test")
     updateTabItems(session=session,inputId = "pages", selected = "prereq")
     

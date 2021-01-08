@@ -18,22 +18,31 @@ dashboardPage(
   dashboardHeader(
     title = "Variable Selection",
     titleWidth = 250,
-    tags$li(class="dropdown",
-            actionLink("info", icon("info"), class="myClass")),
     tags$li(
       class = "dropdown",
-      tags$a(target = "_blank", icon("comments"),
-             href = "https://pennstate.qualtrics.com/jfe/form/SV_7TLIkFtJEJ7fEPz?appName=Variable_Selection"
-      )
+      actionLink("info", icon("info"), class = "myClass")),
+    tags$li(
+      class = "dropdown",
+      tags$a(
+        target = "_blank", 
+        icon("comments"),
+        href = "https://pennstate.qualtrics.com/jfe/form/SV_7TLIkFtJEJ7fEPz?appName=Variable_Selection"
+        )
     ),
-    tags$li(class = "dropdown", tags$a(href='https://shinyapps.science.psu.edu/',icon("home")))
+    tags$li(
+      class = "dropdown", 
+      tags$a(
+        href = 'https://shinyapps.science.psu.edu/',
+        icon("home")
+        )
+    )
   ),
   #menu bar
   dashboardSidebar(
     width = 250,
     sidebarMenu(
       id = "pages",
-      menuItem("Overview", tabName = "over", icon = icon("dashboard")),
+      menuItem("Overview", tabName = "over", icon = icon("tachometer-alt")),
       menuItem("Prerequisites", tabName= "prereq", icon = icon("book")),
       menuItem("Explore Criteria", tabName = "explore1", icon = icon("wpexplorer")),
       menuItem("Explore Real Data", tabName = "explore2", icon = icon("wpexplorer")),
@@ -50,7 +59,7 @@ dashboardPage(
     #change header font
     tags$head(
       tags$link(rel = "stylesheet", type = "text/css",
-                href="https://educationshinyappteam.github.io/Style_Guide/theme/boast.css")
+                href = "https://educationshinyappteam.github.io/Style_Guide/theme/boast.css")
     ),
     tabItems(      
       # instruction page
@@ -59,33 +68,47 @@ dashboardPage(
         h1("Variable Selection"),
         p("This app introduces the concept of variable selection."),
         br(),
-        div(style = "text-align: center",
-            bsButton(inputId = "Jolin","Prerequisites",icon("bolt"),size = "large",class="circle grow")),
+        div(
+          style = "text-align: center",
+          bsButton(
+            inputId = "prereqs",
+            label = "Prerequisites", 
+            icon = icon("bolt"), 
+            size = "large"
+            )
+          ),
         br(),
         h2("Instructions"),
         tags$ol(
           tags$li("Click explore button to enter the explore page."),
           tags$li("Change the options to see how each method performs when exploring stimulation page."),
           tags$li("Click Refresh button if you want to generate a new dataset."),
-          tags$li("See how each method works when exploring real date set page.")),
+          tags$li("See how each method works when exploring real date set page.")
+          ),
         br(),
-        div(style = "text-align: center", 
-            bsButton(inputId = "explore", "Explore", icon("bolt"), size = "large",class = "circle grow")),
+        div(
+          style = "text-align: center", 
+          bsButton(
+            inputId = "explore", 
+            label = "Explore", 
+            icon = icon("bolt"), 
+            size = "large"
+          )
+        ),
         br(),
         h2("Acknowledgements"),
         p("This app was developed and programmed by Ziruo Wang and updated by Zhuolin Luo in 2020.",
           br(),
           br(),
           br(),
-          div(class = "updated", "Last Update: 07/29/2020 by ZL.")
+          div(class = "updated", "Last Update: 01/06/2021 by ZL.")
         )
-      ),
+        ),
     tabItem(  
-      tabName="prereq",
-      titlePanel("What is variable selection:"),
+      tabName = "prereq",
+      h2("What is variable selection:"),
       p("Variable selection is the task of selecting the best statistical 
-        regression model for analysis from a set of potential influenial factors,"),
-      br(),
+        regression model for analysis from a set of potential influenial factors."),
       tags$ul(
         tags$li('The adjusted R-squared compares the explanatory power of 
         regression models that contain different numbers of predictors. 
@@ -98,33 +121,33 @@ dashboardPage(
                 The model with the lowest BIC is preferred. '),
         tags$li('The Akaike Information Criterion (AIC) is a criterion for model 
         selection, dealing with both the risk of overfitting and the risk of underfitting. 
-                The model with the lowest AIC is preferred. '),
-        tags$li('Forward selection is a type of stepwise regression which begins 
-        with an empty model and adds in variables one by one. 
-                In each forward step, you add the one variable that gives the 
-                single best improvement to your model. '),
-        tags$li('Backward elimination is a type of stepwise regression which 
-                involves starting with all candidate variables, testing the 
-                deletion of each variable using a chosen model fit criterion, 
-                deleting the variable (if any) whose loss gives the most statistically 
-                insignificant deterioration of the model fit, and repeating this 
-                process until no further variables can be deleted without a statistically 
-                significant loss of fit. '),
-        tags$li('Stepwise selection is the combination of forward selection and 
-                backward elimination. ')
+                The model with the lowest AIC is preferred. ')
       )
     ),
     
     # explore page
     tabItem(
-      tabName="explore1",
+      tabName = "explore1",
       h2("Exploring Variable Selection Criteria"),
-      sliderInput(inputId = "nfactor", label = "Number of Xs in Data Set", 
-                  min = 3 , max = 8, value = 4, step= 1),
+      sliderInput(
+        inputId = "nfactor", 
+        label = "Number of Xs in Data Set", 
+        min = 3 , 
+        max = 8, 
+        value = 4, 
+        step= 1
+        ),
       br(),
-      bsButton('refresh', "Refresh data", disabled =FALSE),
-      bsButton('restart', "Genereate New Model", disabled =FALSE),
-      br(),br(),
+      bsButton(
+        inputId = 'refresh', 
+        label = "Refresh data", 
+        disabled = FALSE),
+      bsButton(
+        inputId = 'restart', 
+        label = "Genereate New Model", 
+        disabled = FALSE),
+      br(),
+      br(),
       tabsetPanel(
         id = "criteria",
         type = "tabs",
@@ -167,8 +190,11 @@ dashboardPage(
       ),
       textOutput("best"),
       br(),
-      prettyCheckbox(inputId = "button", label = "Describe the Best Estimated Model", icon = icon("check")),
-      conditionalPanel("input.button != 0",textOutput("answer"))
+      prettyCheckbox(
+        inputId = "button", 
+        label = "Describe the Best Estimated Model", 
+        icon = icon("check")),
+      conditionalPanel("input.button != 0", textOutput("answer"))
     ),
    
     tabItem(
@@ -178,17 +204,19 @@ dashboardPage(
       p("The example here using the Swiss Fertility and Socioeconomic Indicators Data, 
         helping us explore the past scene in field of Agriculture"),
       box(
-        title = strong("Background Information"), # This is the header of the box. Consider using "Story Context"
+        title = strong("Background Information"), 
+        # This is the header of the box. Consider using "Story Context"
         status = "primary",
         collapsible = TRUE,
         collapsed = FALSE,
         width = '100%', 
         "Standardized fertility measure and socio-economic indicators for each 
         of 47 French-speaking provinces of Switzerland at about 1888. 
-        Fertility: Ig, 'common standardized fertility measure’; Agriculture: 
-        % of males involved in agriculture as occupation; Examination:
-        % draftees receiving highest mark on army examination; Education: 
-        % education beyond primary school for draftees; Catholic: % ‘catholic’ (as opposed to ‘protestant’); 
+        Fertility: Ig, 'common standardized fertility measure’; 
+        Agriculture: percent of males involved in agriculture as occupation; 
+        Examination: percent of draftees receiving highest mark on army examination; 
+        Education: percent of education beyond primary school for draftees;
+        Catholic: percent of ‘catholic’ (as opposed to ‘protestant’); 
         Infant Mortality: live births who live less than 1 year.
         "
       ),
@@ -201,118 +229,224 @@ dashboardPage(
           br(),
           br(),
           fluidRow(
-            column(4,
-                   plotOutput("aPlot"),
-                   tags$script(HTML(
+            column(
+              width = 4,
+              plotOutput("aPlot"),
+              tags$script(HTML(
                      "$(document).ready(function() {
                      document.getElementById('aPlot').setAttribute('aria-label',
                      `real data model selection plot under the criterion adjusted r-squared`)
                      })"
-                   ))
-                   ),
-            column(4,
-                   plotOutput("bPlot"),
-                   tags$script(HTML(
+              ))
+            ),
+            column(
+              width = 4,
+              plotOutput("bPlot"),
+              tags$script(HTML(
                      "$(document).ready(function() {
                      document.getElementById('bPlot').setAttribute('aria-label',
                      `real data model selection plot under the criterion BIC`)
                      })"
                    ))
                    ),
-            column(4,
-                   plotOutput("cPlot"),
-                   tags$script(HTML(
+            column(
+              width = 4,
+              plotOutput("cPlot"),
+              tags$script(HTML(
                      "$(document).ready(function() {
                      document.getElementById('cPlot').setAttribute('aria-label',
                      `real data model selection plot under the criterion Mallow's Cp`)
                      })"
                    ))
-                   )
-          )
-        ),
+              )
+            )
+          ),
         tabPanel(
           title = "Check Yourself",
           br(),
           fluidRow(
-            column(10, offset = 1,
-              h3("Questions: "), br(),
+            column(
+              width = 10, 
+              offset = 1,
+              h3("Questions: "), 
+              br(),
               # question1
-              div(style="display:inline-block",
-                  textInput("question1", 
-                            "Which variable(s) are not included in the top model for any of the three criteria?", width='13cm',"")),
-              div(style="display:inline-block", uiOutput('pic1')) #Use uiOutput instead of htmlOutput
+              div(
+                style ="display:inline-block",
+                textInput(
+                  inputId = "question1",
+                  label = "Which variable(s) are not included in the top model for any of the three criteria?", 
+                  width='13cm', ""
+                  )
+                ),
+              div(
+                style ="display:inline-block", 
+                uiOutput('pic1')
+                ) 
+              #Use uiOutput instead of htmlOutput
               )),
               
-              # question2
+          # question2
           fluidRow(
-            column(10, offset = 1,
-                   div(style="display:inline-block", selectInput("question2", "Which model is at or near the optimum for all three criteria?",
-                                                            c(" " = "null",
-                                                              "Full model" = "n1",
-                                                              "Model without Examination" = "y",
-                                                              "Model without Examination and Agriculture" = "n2"
-                                                              ), width='13cm',selected = "null")),
-                   div(style="display:inline-block",htmlOutput('pic2'))
-          )),
+            column(
+              width = 10, 
+              offset = 1,
+              div(
+                style ="display:inline-block", 
+                selectInput(
+                  inputId = "question2", 
+                  label = "Which model is at or near the optimum for all three criteria?",
+                  c(
+                    " " = "null", 
+                    "Full model" = "n1",
+                    "Model without Examination" = "y",
+                    "Model without Examination and Agriculture" = "n2"
+                    ), 
+                   width = '13cm',
+                   selected = "null"
+                  )
+                ),
+              div(
+                style ="display:inline-block",
+                htmlOutput('pic2')
+                )
+              )
+            ),
               
-              # question3
+          # question3
           fluidRow(
-            column(10, offset = 1,
-              div(style="display:inline-block",selectInput("question3", "For Adjusted R-squared criterion, which model does the best using only three of the five variables?",
-                                                           c(" " = "null",
-                                                             "Model with Agriculture, Education, and Catholic" = "n1",
-                                                             "Model with Examination, Education, and Infant Mortality" = "n2",
-                                                             "Model with Education, Catholic, and Infant Mortality" = "y",
-                                                             "Model with Agriculture, Examination, and Infant Mortality" = "n3"
-                                                           ), width='13cm',selected = "null")),
-              div(style="display:inline-block",htmlOutput('pic3'))
-            )),
+            column(
+              width = 10, 
+              offset = 1,
+              div(
+                style="display:inline-block",
+                selectInput(
+                  inputId = "question3", 
+                  label = "For Adjusted R-squared criterion, which model does the best using only three of the five variables?",
+                  c(
+                    " " = "null",
+                    "Model with Agriculture, Education, and Catholic" = "n1",
+                    "Model with Examination, Education, and Infant Mortality" = "n2",
+                    "Model with Education, Catholic, and Infant Mortality" = "y",
+                    "Model with Agriculture, Examination, and Infant Mortality" = "n3"
+                    ), 
+                    width ='13cm',
+                    selected = "null"
+                  )
+                ),
+              div(
+                style ="display:inline-block",
+                htmlOutput('pic3')
+                )
+              )
+            ),
           
-              # question4
+          # question4
           fluidRow(
-            column(10, offset = 1,
-              div(style="display:inline-block",selectInput("question4", "For BIC criterion, which model does the best using only three of the five variables?",
-                                                           c(" " = "null",
-                                                             "Model with Agriculture, Education, and Catholic" = "n1",
-                                                             "Model with Education, Catholic, and Infant Mortality" = "y",
-                                                             "Model with Examination, Education, and Infant Mortality" = "n2",
-                                                             "Model with Agriculture, Examination, and Infant Mortality" = "n3"
-                                                           ), width = '13cm',selected = "null")),
-              div(style="display:inline-block",htmlOutput('pic4'))
-            )),
+            column(
+              width = 10, 
+              offset = 1,
+              div(
+                style ="display:inline-block",
+                selectInput(
+                  inputId = "question4", 
+                  label = "For BIC criterion, which model does the best using only three of the five variables?",
+                  c(
+                    " " = "null",
+                    "Model with Agriculture, Education, and Catholic" = "n1",
+                    "Model with Education, Catholic, and Infant Mortality" = "y",
+                    "Model with Examination, Education, and Infant Mortality" = "n2",
+                    "Model with Agriculture, Examination, and Infant Mortality" = "n3"
+                    ), 
+                  width = '13cm',
+                  selected = "null"
+                  )
+                ),
+              div(
+                style ="display:inline-block",
+                htmlOutput('pic4')
+                )
+              )
+            ),
           
-              # question5
+          # question5
           fluidRow(
-            column(10, offset = 1,
-              div(style="display:inline-block",selectInput("question5", "For Mallow's Cp criterion, which model does the best using only three of the five variables?",
-                                                           c(" " = "null",
-                                                             "Model with Agriculture, Education, and Catholic" = "n1",
-                                                             "Model with Examination, Education, and Infant Mortality" = "n2",
-                                                             "Model with Agriculture, Examination, and Infant Mortality" = "n3",
-                                                             "Model with Education, Catholic, and Infant Mortality" = "y"
-                                                           ), width='13cm',selected = "null")),
-              div(style="display:inline-block",htmlOutput('pic5'))
-            )),
+            column(
+              width = 10, 
+              offset = 1,
+              div(
+                style ="display:inline-block",
+                selectInput(
+                  inputId = "question5", 
+                  label = "For Mallow's Cp criterion, which model does the best using only three of the five variables?",
+                  c(
+                    " " = "null",
+                    "Model with Agriculture, Education, and Catholic" = "n1",
+                    "Model with Examination, Education, and Infant Mortality" = "n2",
+                    "Model with Agriculture, Examination, and Infant Mortality" = "n3",
+                    "Model with Education, Catholic, and Infant Mortality" = "y"
+                    ), 
+                  width ='13cm',
+                  selected = "null"
+                  )
+                ),
+              div(
+                style = "display:inline-block",
+                htmlOutput('pic5')
+                )
+             )
+            ),
           
-              # question6
+          # question6
           fluidRow(
-            column(10, offset = 1,
-              div(style="display:inline-block",selectInput("question6", "Is there any model using only three of the five variables that does well for all of the criteria?",
-                                                           c("Yes, there is such a model." = "y",
-                                                             "No, it does not exist." = "n",
-                                                             " " = "null"), width='13cm',selected = "null")),
-              div(style="display:inline-block",htmlOutput('pic6'))
-            )),
-          textOutput("feedback"), br(),
-              # question7
+            column(
+              width = 10, 
+              offset = 1,
+              div(
+                style ="display:inline-block",
+                selectInput(
+                  inputId = "question6", 
+                  label = "Is there any model using only three of the five variables that does well for all of the criteria?",
+                  c(
+                    "Yes, there is such a model." = "y",
+                    "No, it does not exist." = "n",
+                    " " = "null"
+                    ),
+                  width = '13cm',
+                  selected = "null"
+                  )
+                ),
+              div(
+                style="display:inline-block",
+                htmlOutput('pic6')
+                )
+              )
+            ),
+          textOutput("feedback"), 
+          br(),
+          
+          # question7
           fluidRow(
-            column(10, offset = 1,
-              div(style="display:inline-block",textInput("question7","Which model makes the most sense to you in terms of the Swiss fertility context?", width='13cm',"")),
-              div(style="display:inline-block",htmlOutput('pic7'))
-            ))
+            column(
+              width = 10, 
+              offset = 1,
+              div(
+                style="display:inline-block",
+                textInput(
+                  inputId = "question7",
+                  label = "Which model makes the most sense to you in terms of the Swiss fertility context?", 
+                  width='13cm', ""
+                  )
+                ),
+              div(
+                style="display:inline-block",
+                htmlOutput('pic7')
+                )
+              )
+            )
+          )
         )
-      )
-    ),
+      ),
     
     tabItem(
       tabName = "Ref",
@@ -334,11 +468,9 @@ dashboardPage(
       p(class = "hangingindent",
         "Perrier, V., Meyer, F., and Granjon, D. (2020), shinyWidgets: Custom inputs
         widgets for shiny, R Package. Available from https://cran.r-project.org/web/packages/shinyWidgets/index.html")
-
     )
-    
     
     )#close tabItems            
   )#close dashboardbody  
-  )                                 
+)
                       
