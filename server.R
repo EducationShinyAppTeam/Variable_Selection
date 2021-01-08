@@ -1,24 +1,18 @@
 library(shiny)
-library(png)
-library(shinyBS)
-library(shinyDND)
-library(shinyjs)
-library(ggplot2)
-library(dplyr)
 library(shinydashboard)
-library(shinyalert)
 library(shinyWidgets)
 library(leaps)
+
 
 # Little tips for R 
 # Ctrl + F ------------ quick way to find the key word
 # Ctrl + shif + C ----- convenient way to block out the code you don't need
 
 value <- reactiveValues(index = 1)
-c<-reactiveValues(list=3)
+c<-reactiveValues(list = 3)
 
 # Define server logic required to draw a histogram
-shinyServer(function(input, output,session) {
+shinyServer(function(input, output, session) {
   
 ##########################action buttons##################################### 
   observeEvent(input$info,{
@@ -43,18 +37,18 @@ Make your own choice about which model you think is best before showing the true
     )
   })
   
-  observeEvent(input$pre,{
-    updateTabItems(session,"tabs","prereq")
+  observeEvent(input$prereqs,{
+    print("test")
+    updateTabItems(session=session,inputId = "pages", selected = "prereq")
+    
   })
     
-  observeEvent(input$go,{
-    updateTabItems(session,"tabs","explore")
+  observeEvent(input$explore,{
+    updateTabItems(session=session,inputId = "pages",selected = "explore1")
+    
   })
   
-  observeEvent(input$go1,{
-    updateTabItems(session,"tabs","explore")
-  })
-
+  
 #################################Gray out buttons###############################
   
   observeEvent(input$restart, {
@@ -84,9 +78,20 @@ Make your own choice about which model you think is best before showing the true
   # For example, when I put in a new data, the code will automaticlly change the plot and corresponding answer?
   # Thank you so much!
   
+  #reactive for how the user chooses the dataset they want to use
+  
+  
+ 
+  
+  #read in the dataset that they want to use
+  # if statements for which they chose and then if statements for type of file if they are inputing their own
+  
+  
+  
   #####################input#########################
   observeEvent(input$refresh, {
     
+
     x1 <- rnorm(200,3,1.5)
     x2 <- rnorm(200,10,2)
     x3 <- rnorm(200,0,.2)
@@ -95,7 +100,7 @@ Make your own choice about which model you think is best before showing the true
     x6 <- rnorm(200,54,27)
     x7 <- rnorm(200,25,7.5)
     x8 <- rnorm(200,10,4)
-    Y  <- 0.2*x1**0.6+0.3*x2**0.8+0.5*x3**0.3+0.05*x8+50
+    Y  <- 0.2*x1 + 0.3*x2 + 0.5*x3 + 0.05*x8 + 50
     
     ################# model: 3 variable ######################   
     data1 <- data.frame(Y,x1,x2,x3)
@@ -312,2084 +317,782 @@ Make your own choice about which model you think is best before showing the true
     best49 <- regsubsets(Y~., data=data49, nbest=3)
     null49 <- lm(Y~1, data=data49)
     full49 <- lm(Y~., data=data49)
-
-  output$plots <- renderPlot({
+  
+    
+  
+    
+  output$Aplot <- renderPlot({
     
     ################# plot: 3 variable ###################### 
     if(c$list == 1){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best1,scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best1, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best1, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null1, scope=list(lower=null1, upper=full1), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full1, data=data1, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null1, scope = list(upper=full1), data=data1, direction="both"))
-      }
+      plot(best1,scale="adjr2",main = "Adjusted R-Squared")
     }
-    
-    if(c$list == 2){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best2, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best2, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best2, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null2, scope=list(lower=null2, upper=full2), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full2, data=data2, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null2, scope = list(upper=full2), data=data2, direction="both"))
-      }
+    else if(c$list == 2){
+      plot(best2, scale="adjr2",main = "Adjusted R-Squared")
     }
-
-    if(c$list == 3){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best3, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best3, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best3, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null3, scope=list(lower=null3, upper=full3), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full3, data=data3, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null3, scope = list(upper=full3), data=data3, direction="both"))
-      }
+    else if(c$list == 3){
+      plot(best3, scale="adjr2",main = "Adjusted R-Squared")
     }
-    
-    if(c$list == 4){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best4, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best4, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best4, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null4, scope=list(lower=null4, upper=full4), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full4, data=data4, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null4, scope = list(upper=full4), data=data4, direction="both"))
-      }
+    else if(c$list == 4){
+      plot(best4, scale="adjr2",main = "Adjusted R-Squared")
     }
-    
-    if(c$list == 5){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best5, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best5, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best5, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null5, scope=list(lower=null5, upper=full5), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full5, data=data5, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null5, scope = list(upper=full5), data=data5, direction="both"))
-      }
+    else if(c$list == 5){
+      plot(best5, scale="adjr2",main = "Adjusted R-Squared")
     }
-    
-    if(c$list == 6){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best6, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best6, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best6, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null6, scope=list(lower=null6, upper=full6), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full6, data=data6, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null6, scope = list(upper=full6), data=data6, direction="both"))
-      }
+    else if(c$list == 6){
+      plot(best6, scale="adjr2",main = "Adjusted R-Squared")
     }
-    
-    if(c$list == 7){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best7, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best7, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best7, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null7, scope=list(lower=null7, upper=full7), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full7, data=data7, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null7, scope = list(upper=full7), data=data7, direction="both"))
-      }
+    else if(c$list == 7){
+      plot(best7, scale="adjr2",main = "Adjusted R-Squared")
     }
-    
-    if(c$list == 8){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best8, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best8, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best8, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null8, scope=list(lower=null8, upper=full8), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full8, data=data8, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null8, scope = list(upper=full8), data=data8, direction="both"))
-      }
+    else if(c$list == 8){
+      plot(best8, scale="adjr2",main = "Adjusted R-Squared")
     }
-    
-    if(c$list == 9){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best9, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best9, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best9, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null9, scope=list(lower=null9, upper=full9), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full9, data=data9, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null9, scope = list(upper=full9), data=data9, direction="both"))
-      }
+    else if(c$list == 9){
+      plot(best9, scale="adjr2",main = "Adjusted R-Squared")
     }
-    
-    if(c$list == 10){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best10, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best10, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best10, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null10, scope=list(lower=null10, upper=full10), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full10, data=data10, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null10, scope = list(upper=full10), data=data10, direction="both"))
-      }
+    else if(c$list == 10){
+      plot(best10, scale="adjr2",main = "Adjusted R-Squared")
     }
     
     ################# plot: 4 variable ###################### 
-    if(c$list == 11){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best11, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best11, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best11, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null11, scope=list(lower=null11, upper=full11), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full11, data=data11, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null11, scope = list(upper=full11), data=data11, direction="both"))
-      }
+    else if(c$list == 11){
+      plot(best11,scale="adjr2",main = "Adjusted R-Squared")
+    }
+    else if(c$list == 12){
+      plot(best12, scale="adjr2",main = "Adjusted R-Squared")
+    }
+    else if(c$list == 13){
+      plot(best13, scale="adjr2",main = "Adjusted R-Squared")
+    }
+    else if(c$list == 14){
+      plot(best14, scale="adjr2",main = "Adjusted R-Squared")
+    }
+    else if(c$list == 15){
+      plot(best15, scale="adjr2",main = "Adjusted R-Squared")
+    }
+    else if(c$list == 16){
+      plot(best16, scale="adjr2",main = "Adjusted R-Squared")
+    }
+    else if(c$list == 17){
+      plot(best17, scale="adjr2",main = "Adjusted R-Squared")
+    }
+    else if(c$list == 18){
+      plot(best18, scale="adjr2",main = "Adjusted R-Squared")
+    }
+    else if(c$list == 19){
+      plot(best19, scale="adjr2",main = "Adjusted R-Squared")
+    }
+    else if(c$list == 20){
+      plot(best20, scale="adjr2",main = "Adjusted R-Squared")
     }
     
-    if(c$list == 12){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best12, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best12, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best12, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null12, scope=list(lower=null12, upper=full12), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full12, data=data12, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null12, scope = list(upper=full12), data=data12, direction="both"))
-      }
+    ################# plot: 5 variable ######################
+    else if(c$list == 21){
+      plot(best21,scale="adjr2",main = "Adjusted R-Squared")
+    }
+    else if(c$list == 22){
+      plot(best22, scale="adjr2",main = "Adjusted R-Squared")
+    }
+    else if(c$list == 23){
+      plot(best23, scale="adjr2",main = "Adjusted R-Squared")
+    }
+    else if(c$list == 24){
+      plot(best24, scale="adjr2",main = "Adjusted R-Squared")
+    }
+    else if(c$list == 25){
+      plot(best25, scale="adjr2",main = "Adjusted R-Squared")
+    }
+    else if(c$list == 26){
+      plot(best26, scale="adjr2",main = "Adjusted R-Squared")
+    }
+    else if(c$list == 27){
+      plot(best27, scale="adjr2",main = "Adjusted R-Squared")
+    }
+    else if(c$list == 28){
+      plot(best28, scale="adjr2",main = "Adjusted R-Squared")
+    }
+    else if(c$list == 29){
+      plot(best29, scale="adjr2",main = "Adjusted R-Squared")
+    }
+    else if(c$list == 30){
+      plot(best30, scale="adjr2",main = "Adjusted R-Squared")
     }
     
-    if(c$list == 13){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best13, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best13, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best13, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null13, scope=list(lower=null13, upper=full13), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full13, data=data13, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null13, scope = list(upper=full13), data=data13, direction="both"))
-      }
+    ################# plot: 6 variable ######################
+    else if(c$list == 31){
+      plot(best31,scale="adjr2",main = "Adjusted R-Squared")
+    }
+    else if(c$list == 32){
+      plot(best32, scale="adjr2",main = "Adjusted R-Squared")
+    }
+    else if(c$list == 33){
+      plot(best33, scale="adjr2",main = "Adjusted R-Squared")
+    }
+    else if(c$list == 34){
+      plot(best34, scale="adjr2",main = "Adjusted R-Squared")
+    }
+    else if(c$list == 35){
+      plot(best35, scale="adjr2",main = "Adjusted R-Squared")
+    }
+    else if(c$list == 36){
+      plot(best36, scale="adjr2",main = "Adjusted R-Squared")
+    }
+    else if(c$list == 37){
+      plot(best37, scale="adjr2",main = "Adjusted R-Squared")
+    }
+    else if(c$list == 38){
+      plot(best38, scale="adjr2",main = "Adjusted R-Squared")
+    }
+    else if(c$list == 39){
+      plot(best39, scale="adjr2",main = "Adjusted R-Squared")
+    }
+    else if(c$list == 40){
+      plot(best40, scale="adjr2",main = "Adjusted R-Squared")
     }
     
-    if(c$list == 14){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best14, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best14, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best14, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null14, scope=list(lower=null14, upper=full14), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full14, data=data14, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null14, scope = list(upper=full14), data=data14, direction="both"))
-      }
+    ################# plot: 7 variable ######################
+    else if(c$list == 41){
+      plot(best41,scale="adjr2",main = "Adjusted R-Squared")
+    }
+    else if(c$list == 42){
+      plot(best42, scale="adjr2",main = "Adjusted R-Squared")
+    }
+    else if(c$list == 43){
+      plot(best43, scale="adjr2",main = "Adjusted R-Squared")
+    }
+    else if(c$list == 44){
+      plot(best44, scale="adjr2",main = "Adjusted R-Squared")
+    }
+    else if(c$list == 45){
+      plot(best45, scale="adjr2",main = "Adjusted R-Squared")
+    }
+    else if(c$list == 46){
+      plot(best46, scale="adjr2",main = "Adjusted R-Squared")
+    }
+    else if(c$list == 47){
+      plot(best47, scale="adjr2",main = "Adjusted R-Squared")
+    }
+    else if(c$list == 48){
+      plot(best48, scale="adjr2",main = "Adjusted R-Squared")
     }
     
-    if(c$list == 15){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best15, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best15, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best15, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null15, scope=list(lower=null15, upper=full15), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full15, data=data15, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null15, scope = list(upper=full15), data=data15, direction="both"))
-      }
+    ################# plot: 8 variable ######################
+    else if(c$list == 49){
+      plot(best49, scale="adjr2",main = "Adjusted R-Squared")
     }
     
-    if(c$list == 16){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best16, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best16, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best16, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null16, scope=list(lower=null16, upper=full16), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full16, data=data16, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null16, scope = list(upper=full16), data=data16, direction="both"))
-      }
-    }
-    
-    if(c$list == 17){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best17, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best17, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best17, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null17, scope=list(lower=null17, upper=full17), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full17, data=data17, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null17, scope = list(upper=full17), data=data17, direction="both"))
-      }
-    }
-    
-    if(c$list == 18){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best18, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best18, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best18, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null18, scope=list(lower=null18, upper=full18), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full18, data=data18, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null18, scope = list(upper=full18), data=data18, direction="both"))
-      }
-    }
-    
-    if(c$list == 19){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best19, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best19, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best19, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null19, scope=list(lower=null19, upper=full19), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full19, data=data19, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null19, scope = list(upper=full19), data=data19, direction="both"))
-      }
-    }
-    
-    if(c$list == 20){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best20, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best20, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best20, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null20, scope=list(lower=null20, upper=full20), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full20, data=data20, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null20, scope = list(upper=full20), data=data20, direction="both"))
-      }
-    }
-    
-    ################# plot: 5 variable ###################### 
-    if(c$list == 21){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best21, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best21, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best21, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null21, scope=list(lower=null21, upper=full21), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full21, data=data21, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null21, scope = list(upper=full21), data=data21, direction="both"))
-      }
-    }
-    
-    if(c$list == 22){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best22, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best22, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best22, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null22, scope=list(lower=null22, upper=full22), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full22, data=data22, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null22, scope = list(upper=full22), data=data22, direction="both"))
-      }
-    }
-    
-    if(c$list == 23){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best23, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best23, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best23, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null23, scope=list(lower=null23, upper=full23), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full23, data=data23, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null23, scope = list(upper=full23), data=data23, direction="both"))
-      }
-    }
-    
-    if(c$list == 24){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best24, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best24, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best24, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null24, scope=list(lower=null24, upper=full24), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full24, data=data24, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null24, scope = list(upper=full24), data=data24, direction="both"))
-      }
-    }
-    
-    if(c$list == 25){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best25, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best25, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best25, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null25, scope=list(lower=null25, upper=full25), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full25, data=data25, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null25, scope = list(upper=full25), data=data25, direction="both"))
-      }
-    }
-    
-    if(c$list == 26){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best26, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best26, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best26, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null26, scope=list(lower=null26, upper=full26), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full26, data=data26, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null26, scope = list(upper=full26), data=data26, direction="both"))
-      }
-    }
-    
-    if(c$list == 27){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best27, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best27, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best27, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null27, scope=list(lower=null27, upper=full27), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full27, data=data27, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null27, scope = list(upper=full27), data=data27, direction="both"))
-      }
-    }
-    
-    if(c$list == 28){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best28, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best28, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best28, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null28, scope=list(lower=null28, upper=full28), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full28, data=data28, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null28, scope = list(upper=full28), data=data28, direction="both"))
-      }
-    }
-    
-    if(c$list == 29){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best29, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best29, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best29, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null29, scope=list(lower=null29, upper=full29), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full29, data=data29, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null29, scope = list(upper=full29), data=data29, direction="both"))
-      }
-    }
-    
-    if(c$list == 30){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best30, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best30, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best30, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null30, scope=list(lower=null30, upper=full30), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full30, data=data30, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null30, scope = list(upper=full30), data=data30, direction="both"))
-      }
-    }
-    
-    ################# plot: 6 variable ###################### 
-    if(c$list == 31){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best31, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best31, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best31, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null31, scope=list(lower=null31, upper=full31), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full31, data=data31, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null31, scope = list(upper=full31), data=data31, direction="both"))
-      }
-    }
-    
-    if(c$list == 32){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best32, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best32, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best32, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null32, scope=list(lower=null32, upper=full32), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full32, data=data32, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null32, scope = list(upper=full32), data=data32, direction="both"))
-      }
-    }
-    
-    if(c$list == 33){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best33, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best33, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best33, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null33, scope=list(lower=null33, upper=full33), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full33, data=data33, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null33, scope = list(upper=full33), data=data33, direction="both"))
-      }
-    }
-    
-    if(c$list == 34){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best34, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best34, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best34, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null34, scope=list(lower=null34, upper=full34), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full34, data=data34, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null34, scope = list(upper=full34), data=data34, direction="both"))
-      }
-    }
-    
-    if(c$list == 35){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best35, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best35, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best35, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null35, scope=list(lower=null35, upper=full35), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full35, data=data35, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null35, scope = list(upper=full35), data=data35, direction="both"))
-      }
-    }
-    
-    if(c$list == 36){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best36, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best36, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best36, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null36, scope=list(lower=null36, upper=full36), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full36, data=data36, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null36, scope = list(upper=full36), data=data36, direction="both"))
-      }
-    }
-    
-    if(c$list == 37){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best37, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best37, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best37, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null37, scope=list(lower=null37, upper=full37), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full37, data=data37, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null37, scope = list(upper=full37), data=data37, direction="both"))
-      }
-    }
-    
-    if(c$list == 38){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best38, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best38, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best38, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null38, scope=list(lower=null38, upper=full38), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full38, data=data38, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null38, scope = list(upper=full38), data=data38, direction="both"))
-      }
-    }
-    
-    if(c$list == 39){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best39, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best39, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best39, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null39, scope=list(lower=null39, upper=full39), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full39, data=data39, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null39, scope = list(upper=full39), data=data39, direction="both"))
-      }
-    }
-    
-    if(c$list == 40){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best40, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best40, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best40, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null40, scope=list(lower=null40, upper=full40), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full40, data=data40, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null40, scope = list(upper=full40), data=data40, direction="both"))
-      }
-    }
-    
-    ################# plot: 7 variable ###################### 
-    if(c$list == 41){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best41, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best41, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best41, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null41, scope=list(lower=null41, upper=full41), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full41, data=data41, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null41, scope = list(upper=full41), data=data41, direction="both"))
-      }
-    }
-    
-    if(c$list == 42){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best42, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best42, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best42, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null42, scope=list(lower=null42, upper=full42), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full42, data=data42, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null42, scope = list(upper=full42), data=data42, direction="both"))
-      }
-    }
-    
-    if(c$list == 43){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best43, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best43, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best43, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null43, scope=list(lower=null43, upper=full43), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full43, data=data43, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null43, scope = list(upper=full43), data=data43, direction="both"))
-      }
-    }
-    
-    if(c$list == 44){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best44, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best44, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best44, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null44, scope=list(lower=null44, upper=full44), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full44, data=data44, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null44, scope = list(upper=full44), data=data44, direction="both"))
-      }
-    }
-    
-    if(c$list == 45){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best45, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best45, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best45, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null45, scope=list(lower=null45, upper=full45), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full45, data=data45, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null45, scope = list(upper=full45), data=data45, direction="both"))
-      }
-    }
-    
-    if(c$list == 46){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best46, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best46, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best46, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null46, scope=list(lower=null46, upper=full46), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full46, data=data46, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null46, scope = list(upper=full46), data=data46, direction="both"))
-      }
-    }
-    
-    if(c$list == 47){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best47, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best47, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best47, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null47, scope=list(lower=null47, upper=full47), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full47, data=data47, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null47, scope = list(upper=full47), data=data47, direction="both"))
-      }
-    }
-    
-    if(c$list == 48){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best48, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best48, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best48, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null48, scope=list(lower=null48, upper=full48), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full48, data=data48, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null48, scope = list(upper=full48), data=data48, direction="both"))
-      }
-    }
-    
-    ################# plot: 8 variable ###################### 
-    if(c$list == 49){
-      if(input$model== "Adjusted R-Squared criterion"){
-        plot(best49, scale="adjr2",main = "Adjusted R-Squared")
-      }
-      else if(input$model == "Cp criterion"){
-        plot(best49, scale="Cp", main = "Cp criterion")
-      }
-      else if(input$model == "BIC criterion"){
-        plot(best49, scale="bic", main = "BIC criterion")
-      }
-      else if(input$model == "Forward Selection"){
-        plot(step(null49, scope=list(lower=null49, upper=full49), direction="forward"))
-      }
-      else if(input$model == "Backward Selection"){
-        plot(step(full49, data=data49, direction="backward"))
-      }
-      else if(input$model == "Stepwise Selection"){
-        plot(step(null49, scope = list(upper=full49), data=data49, direction="both"))
-      }
-    }
-    
-    })
-  
   })
-
+  
+  
+  output$Bplot <- renderPlot({
+    
+    ################# plot: 3 variable ###################### 
+    if(c$list == 1){
+      plot(best1,scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 2){
+      plot(best2, scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 3){
+      plot(best3, scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 4){
+      plot(best4, scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 5){
+      plot(best5, scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 6){
+      plot(best6, scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 7){
+      plot(best7, scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 8){
+      plot(best8, scale="adjr2",main = "BIC criterion")
+    }
+    else if(c$list == 9){
+      plot(best9, scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 10){
+      plot(best10, scale="bic",main = "BIC criterion")
+    }
+    
+    ################# plot: 4 variable ###################### 
+    else if(c$list == 11){
+      plot(best11,scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 12){
+      plot(best12, scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 13){
+      plot(best13, scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 14){
+      plot(best14, scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 15){
+      plot(best15, scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 16){
+      plot(best16, scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 17){
+      plot(best17, scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 18){
+      plot(best18, scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 19){
+      plot(best19, scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 20){
+      plot(best20, scale="bic",main = "BIC criterion")
+    }
+    
+    ################# plot: 5 variable ######################
+    else if(c$list == 21){
+      plot(best21,scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 22){
+      plot(best22, scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 23){
+      plot(best23, scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 24){
+      plot(best24, scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 25){
+      plot(best25, scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 26){
+      plot(best26, scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 27){
+      plot(best27, scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 28){
+      plot(best28, scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 29){
+      plot(best29, scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 30){
+      plot(best30, scale="bic",main = "BIC criterion")
+    }
+    
+    ################# plot: 6 variable ######################
+    else if(c$list == 31){
+      plot(best31,scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 32){
+      plot(best32, scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 33){
+      plot(best33, scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 34){
+      plot(best34, scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 35){
+      plot(best35, scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 36){
+      plot(best36, scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 37){
+      plot(best37, scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 38){
+      plot(best38, scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 39){
+      plot(best39, scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 40){
+      plot(best40, scale="bic",main = "BIC criterion")
+    }
+    
+    ################# plot: 7 variable ######################
+    else if(c$list == 41){
+      plot(best41,scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 42){
+      plot(best42, scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 43){
+      plot(best43, scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 44){
+      plot(best44, scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 45){
+      plot(best45, scale="bic",main ="BIC criterion")
+    }
+    else if(c$list == 46){
+      plot(best46, scale="bic",main = "BIC criterion")
+    }
+    else if(c$list == 47){
+      plot(best47, scale="bic",main ="BIC criterion")
+    }
+    else if(c$list == 48){
+      plot(best48, scale="bic",main ="BIC criterion")
+    }
+    
+    ################# plot: 8 variable ######################
+    else if(c$list == 49){
+      plot(best49, scale="bic",main = "BIC criterion")
+    }
+    
+  })
+  
+  
+  output$Cplot <- renderPlot({
+    
+    ################# plot: 3 variable ###################### 
+    if(c$list == 1){
+      plot(best1, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 2){
+      plot(best2, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 3){
+      plot(best3, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 4){
+      plot(best4, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 5){
+      plot(best5, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 6){
+      plot(best6, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 7){
+      plot(best7, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 8){
+      plot(best8, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 9){
+      plot(best9, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 10){
+      plot(best10, scale="Cp", main = "Cp criterion")
+    }
+    
+    ################# plot: 4 variable ###################### 
+    else if(c$list == 11){
+      plot(best11, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 12){
+      plot(best12, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 13){
+      plot(best13, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 14){
+      plot(best14, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 15){
+      plot(best15, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 16){
+      plot(best16, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 17){
+      plot(best17, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 18){
+      plot(best18, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 19){
+      plot(best19, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 20){
+      plot(best20, scale="Cp", main = "Cp criterion")
+    }
+    
+    ################# plot: 5 variable ######################
+    else if(c$list == 21){
+      plot(best21, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 22){
+      plot(best22, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 23){
+      plot(best23, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 24){
+      plot(best24, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 25){
+      plot(best25, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 26){
+      plot(best26, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 27){
+      plot(best27, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 28){
+      plot(best28, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 29){
+      plot(best29, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 30){
+      plot(best30, scale="Cp", main = "Cp criterion")
+    }
+    
+    ################# plot: 6 variable ######################
+    else if(c$list == 31){
+      plot(best31, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 32){
+      plot(best32, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 33){
+      plot(best33, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 34){
+      plot(best34, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 35){
+      plot(best35, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 36){
+      plot(best36, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 37){
+      plot(best37, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 38){
+      plot(best38, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 39){
+      plot(best39, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 40){
+      plot(best40, scale="Cp", main = "Cp criterion")
+    }
+    
+    ################# plot: 7 variable ######################
+    else if(c$list == 41){
+    }
+    else if(c$list == 42){
+      plot(best42, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 43){
+      plot(best43, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 44){
+      plot(best44, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 45){
+      plot(best45, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 46){
+      plot(best46, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 47){
+      plot(best47, scale="Cp", main = "Cp criterion")
+    }
+    else if(c$list == 48){
+      plot(best48, scale="Cp", main = "Cp criterion")
+    }
+    
+    ################# plot: 8 variable ######################
+    else if(c$list == 49){
+      plot(best49, scale="Cp", main = "Cp criterion")
+    }
+    
+  })#close of Cplot
+  })#close of data simulation
+  
+ 
+  
   output$answer <- renderText({
     ############################ True Answer text: 3 variables####################################
     if(c$list == 1){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X1,X2,X3. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X1,X2,X3. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X1,X2,X3. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X1,X2,X3. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X1,X2,X3. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X1,X2,X3. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X1,X2,X3.")
     }
-    
     else if(c$list == 2){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X3,X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X3,X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X3,X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X3,X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X3,X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X3,X8. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X3,X8. ")
     }
-    
     else if(c$list == 3){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X1 and X2. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X1 and X2. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X1 and X2. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X1 and X2. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X1 and X2. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X1 and X2. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X1 and X2. ")
     }
-    
     else if(c$list == 4){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X2, X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X2, X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X2, X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X2, X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X2, X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X2, X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X2, X3 and X8.")
     }
-    
     else if(c$list == 5){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X2 and X3. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X2 and X3. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X2 and X3. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X2 and X3. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X2 and X3. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X2 and X3. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X2 and X3.")
     }
-    
     else if(c$list == 6){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X3. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X3. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X3. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X3. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X3. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X3. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X3.")
     }
-    
     else if(c$list == 7){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X3. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X3. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X3. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X3. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X3. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X3. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X3.")
     }
-    
     else if(c$list == 8){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X2. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X2. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X2. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X2. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X2. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X2. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X2.")
     }
-    
     else if(c$list == 9){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X1 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X1 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X1 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X1 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X1 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X1 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X1 and X8.")
     }
-    
     else if(c$list == 10){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X1. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X1. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X1. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X1. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X1. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X1. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X1.")
     }
     
     ############################ True Answer text: 4 variables####################################
     else if(c$list == 11){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X2. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X2. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X2. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X2. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X2. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X2. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X2. ")
     }
-    
     else if(c$list == 12){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X1,X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X1,X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X1,X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X1,X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X1,X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X1,X8. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X1,X8.")
     }
-    
     else if(c$list == 13){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X1,X2 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X1,X2 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X1,X2 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X1,X2 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X1,X2 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X1,X2 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X1,X2 and X8.")
     }
-    
     else if(c$list == 14){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X1. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X1. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X1. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X1. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X1. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X1. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X1.")
     }
-    
     else if(c$list == 15){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X2, X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X2, X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X2, X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X2, X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X2, X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X2, X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X2, X3 and X8.")
     }
-    
     else if(c$list == 16){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X2. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X2. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X2. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X2. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X2. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X2. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X2.")
     }
-    
     else if(c$list == 17){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X1, X2 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X1, X2 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X1, X2 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X1, X2 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X1, X2 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X1, X2 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X1, X2 and X8. ")
     }
-    
     else if(c$list == 18){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X2 and X3. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X2 and X3. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X2 and X3. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X2 and X3. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X2 and X3. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X2 and X3. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X2 and X3.")
     }
-    
     else if(c$list == 19){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X3 and X8.")
     }
-    
     else if(c$list == 20){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X3. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X3 . You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X3 . You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X3 . You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X3 . You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X3 . You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X3.")
     }
     
     ############################ True Answer text: 5 variables####################################
     else if(c$list == 21){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X2,X3. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X2,X3. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X2,X3. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X2,X3. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X2,X3. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X2,X3. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X2,X3.")
     }
-    
     else if(c$list == 22){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X1,X3,X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X1,X3,X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X1,X3,X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X1,X3,X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X1,X3,X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X1,X3,X8. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X1,X3,X8.")
     }
-    
     else if(c$list == 23){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X1, X2, X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X1, X2, X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X1, X2, X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X1, X2, X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X1, X2, X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X1, X2, X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X1, X2, X3 and X8.")
     }
-    
     else if(c$list == 24){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X1 and X3. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X1 and X3. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X1 and X3. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X1 and X3. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X1 and X3. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X1 and X3. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X1 and X3.")
     }
-    
     else if(c$list == 25){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X2 and X3. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X2 and X3. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X2 and X3. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X2 and X3. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X2 and X3. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X2 and X3. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X2 and X3.")
     }
-    
     else if(c$list == 26){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X2 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X2 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X2 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X2 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X2 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X2 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X2 and X8.")
     }
-    
     else if(c$list == 27){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X3 and X8.")
     }
-    
     else if(c$list == 28){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X3 and X8.")
     }
-    
     else if(c$list == 29){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X3 and X8.")
     }
-    
     else if(c$list == 30){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X1 and X2. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X1 and X2. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X1 and X2. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X1 and X2. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X1 and X2. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X1 and X2. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X1 and X2.")
     }
     
     ############################ True Answer text: 6 variables####################################
     else if(c$list == 31){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X1,X3,X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X1,X3,X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X1,X3,X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X1,X3,X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X1,X3,X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X1,X3,X8. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X1,X3,X8.")
     }
-    
     else if(c$list == 32){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X1,X2,X3. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X1,X2,X3. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X1,X2,X3. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X1,X2,X3. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X1,X2,X3. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X1,X2,X3. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X1,X2,X3. ")
     }
-    
     else if(c$list == 33){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X1 and X2. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X1 and X2. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X1 and X2. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X1 and X2. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X1 and X2. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X1 and X2. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X1 and X2. ")
     }
-    
     else if(c$list == 34){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X1, X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X1, X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X1, X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X1, X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X1, X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X1, X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X1, X3 and X8. ")
     }
-    
     else if(c$list == 35){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X1 and X3. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X1 and X3. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X1 and X3. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X1 and X3. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X1 and X3. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X1 and X3. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X1 and X3. ")
     }
-    
     else if(c$list == 36){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X2, X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X2, X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X2, X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X2, X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X2, X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X2, X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X2, X3 and X8.")
     }
-    
     else if(c$list == 37){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X2 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X2 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X2 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X2 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X2 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X2 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X2 and X8.")
     }
-    
     else if(c$list == 38){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X2, X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X2, X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X2, X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X2, X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X2, X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X2, X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X2, X3 and X8.")
     }
-    
     else if(c$list == 39){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X2 and X3. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X2 and X3. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X2 and X3. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X2 and X3. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X2 and X3. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X2 and X3. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X2 and X3. ")
     } 
-    
     else if(c$list == 40){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X3 and X8. ")
     }
     
     ############################ True Answer text: 7 variables####################################
     else if(c$list == 41){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X2,X3,X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X2,X3,X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X2,X3,X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X2,X3,X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X2,X3,X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X2,X3,X8. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X2,X3,X8. ")
     }
-    
     else if(c$list == 42){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X1,X2,X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X1,X2,X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X1,X2,X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X1,X2,X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X1,X2,X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X1,X2,X8. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X1,X2,X8. ")
     }
-    
     else if(c$list == 43){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X1, X2 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X1, X2 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X1, X2 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X1, X2 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X1, X2 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X1, X2 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X1, X2 and X8.")
     }
-    
     else if(c$list == 44){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X1, X2, X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X1, X2, X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X1, X2, X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X1, X2, X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X1, X2, X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X1, X2, X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X1, X2, X3 and X8. ")
     }
-    
     else if(c$list == 45){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X1, X2, X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X1, X2, X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X1, X2, X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X1, X2, X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X1, X2, X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X1, X2, X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X1, X2, X3 and X8. ")
     }
-    
     else if(c$list == 46){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X1, X2, X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X1, X2, X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X1, X2, X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X1, X2, X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X1, X2, X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X1, X2, X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X1, X2, X3 and X8. ")
     }
-    
     else if(c$list == 47){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X1, X2, X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X1, X2, X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X1, X2, X3 and X8. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X1, X2, X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X1, X2, X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X1, X2, X3 and X8. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X1, X2, X3 and X8. ")
     }
-    
     else if(c$list == 48){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X1, X2 and X3. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X1, X2 and X3. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X1, X2 and X3. You can compare the true model with the result that you interpret from graph. ")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X1, X2 and X3. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X1, X2 and X3. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X1, X2 and X3. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X1, X2 and X3.")
     }
     
     ############################ True Answer text: 8 variables####################################
     else if(c$list == 49){
-      if(input$model== "Adjusted R-Squared criterion"){
-        paste("The true model for this data set is the model which contains X1,X2,X3,X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Cp criterion"){
-        paste("The true model for this data set is the model which contains X1,X2,X3,X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "BIC criterion"){ 
-        paste("The true model for this data set is the model which contains X1,X2,X3,X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Forward Selection"){
-        paste("The true model for this data set is the model which contains X1,X2,X3,X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Backward Selection"){
-        paste("The true model for this data set is the model which contains X1,X2,X3,X8. You can compare the true model with the result that you interpret from graph.")
-      }
-      else if(input$model== "Stepwise Selection"){
-        paste("The true model for this data set is the model which contains X1,X2,X3,X8. You can compare the true model with the result that you interpret from graph.")
-      }
+      paste("The best model for this data set using the given criterion is the model which contains X1,X2,X3,X8.")
     }
     
   })
-###closing for SERVER DON'T DELET####      
+  
+  output$best <- renderText({
+    paste0("Which is the best estimated model under the given criterion?")
+  })
+  
+  full.model <- lm(Fertility ~., data = swiss)
+  best.model <- regsubsets(Fertility~., data=swiss, nbest=3)
+  null.model <- lm(Fertility~1, data=swiss)
+
+  output$aPlot <- renderPlot({
+    plot(best.model, scale="adjr2",main = "Adjusted R-Squared")
+  })
+  
+  output$bPlot <- renderPlot({
+    plot(best.model,scale="bic",main = "BIC criterion")
+  })
+  
+  output$cPlot <- renderPlot({
+    plot(best.model, scale="Cp", main = "Cp criterion")
+  })
+  
+  output$feedback <- renderPrint({
+   
+    validate(need(!is.null(input$question1) & !is.null(input$question2) & !is.null(input$question3) & !is.null(input$question4),'Please answer all questions.'))
+    if((input$question1 == "Examination" | input$question1 == "examination")
+       &(input$question2 == 'y')
+       &(input$question3 == 'y')
+       &(input$question4 == 'y')
+       &(input$question5 == 'y')
+       &(input$question6 == 'y')){
+      cat('All correct. Great Job!')
+    }
+    
+    #Render pic1
+    if (input$question1!=''){
+      # output$pic1 = renderUI({
+      #   
+      #   if(input$question1 == "Examination" || input$question1 == "examination"){
+      #     img(src = "check.png", alt = "it means the answer is correct", width = 25)
+      #   }
+      #   else{
+      #     img(src = "cross.png", alt = "it means the answer is wrong", width = 25)
+      #   }
+      # })}
+      # The below code replaces the above code
+    output$pic1 <- boastUtils::renderIcon(
+      icon = ifelse(input$question1 == "Examination" || input$question1 == "examination",
+                    "correct",
+                    "incorrect"),
+      width = 25)
+    }
+    
+    # To clear the grade mark
+    # output$pic1 <- boastUtils::renderIcon()
+    #The same as
+    # output$pic1 <- renderUI({
+    # img(src = NULL)
+    # })
+    
+    #Render pic2
+    if (input$question2!='null'){
+      output$pic2 <- boastUtils::renderIcon(
+      icon = ifelse(input$question2 == 'y',
+                    "correct",
+                    "incorrect"),
+      width = 25)
+  }
+    #Render pic3
+    if (input$question3!='null'){
+      output$pic3 <- boastUtils::renderIcon(
+        icon = ifelse(input$question3 == "y",
+                      "correct",
+                      "incorrect"),
+        width = 25)
+    }
+    
+    
+    #Render pic4
+    if (input$question4!='null'){
+      output$pic4 <- boastUtils::renderIcon(
+        icon = ifelse(input$question4 == 'y',
+                      "correct",
+                      "incorrect"),
+        width = 25)
+    }
+    
+    
+    #Render pic5
+    if (input$question5!='null'){
+      output$pic5 <- boastUtils::renderIcon(
+        icon = ifelse(input$question5 == 'y',
+                      "correct",
+                      "incorrect"),
+        width = 25)
+    }
+    
+     
+    
+    #Render pic6
+    if (input$question6!='null'){
+      output$pic6 <- boastUtils::renderIcon(
+        icon = ifelse(input$question6 == 'y',
+                      "correct",
+                      "incorrect"),
+        width = 25)
+    }
+    
+    
+    #Render pic7
+    if (input$question7!=''){
+      output$pic2 <- boastUtils::renderIcon(
+        icon = ifelse(input$question7 == 'null',
+                      "correct",
+                      "incorrect"),
+        width = 25)
+    }
+  })
+  
+
+  ###closing for SERVER DON'T DELET####      
 })
