@@ -144,7 +144,7 @@ dashboardPage(
         disabled = FALSE),
       bsButton(
         inputId = 'restart', 
-        label = "Genereate New Model", 
+        label = "Generate New Model", 
         disabled = FALSE),
       br(),
       br(),
