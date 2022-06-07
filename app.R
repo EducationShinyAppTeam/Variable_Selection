@@ -56,7 +56,7 @@ ui <- list(
             tags$li("Review the common metrics for exploring variable selection
                     by checking out the Prerequisites."),
             div(
-              style = "text-align: center",
+              style = "text-align: center;",
               bsButton(
                 inputId = "prereqs",
                 label = "Prerequisites",
