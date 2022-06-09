@@ -35,7 +35,7 @@ ui <- list(
         menuItem("Overview", tabName = "overview", icon = icon("tachometer-alt")),
         menuItem("Prerequisites", tabName = "prereq", icon = icon("book")),
         menuItem("Explore Criteria", tabName = "explore1", icon = icon("wpexplorer")),
-        menuItem("Using Real Data", tabName = "challenge", icon = icon("gears")),
+        menuItem("Using Real Data", tabName = "challenge", icon = icon("cogs")), # change gears to cogs
         menuItem("References", tabName = "references", icon = icon("leanpub"))
       ),
       tags$div(
@@ -56,11 +56,11 @@ ui <- list(
             tags$li("Review the common metrics for exploring variable selection
                     by checking out the Prerequisites."),
             div(
-              style = "text-align: center;",
+              style = "text-align: center;", # add ;
               bsButton(
                 inputId = "prereqs",
                 label = "Prerequisites",
-                icon = icon("book"),
+                icon = icon("book"), 
                 size = "large"
               )
             ),
@@ -73,7 +73,7 @@ ui <- list(
           ),
           br(),
           div(
-            style = "text-align: center",
+            style = "text-align: center;", # add ;
             bsButton(
               inputId = "explore",
               label = "Explore",
@@ -435,9 +435,9 @@ ui <- list(
                   uiOutput('pic7')
                 )
               )
-            )
-          )
-        ),
+            )# close tabpanel
+          ) # close tabpset panel
+        ), # close tabitem
         ### References ----
         tabItem(
           tabName = "references",
@@ -458,12 +458,20 @@ ui <- list(
         from https://cran.r-project.org/web/packages/leaps/index.html"),
         p(class = "hangingindent",
           "Perrier, V., Meyer, F., and Granjon, D. (2020), shinyWidgets: Custom inputs
-        widgets for shiny, R Package. Available from https://cran.r-project.org/web/packages/shinyWidgets/index.html")
-        )
+        widgets for shiny, R Package. Available from https://cran.r-project.org/web/packages/shinyWidgets/index.html"),
+        br(), # add
+        br(), #add
+        br(), #add
+        boastUtils::copyrightInfo() # add
+        ) # close tabitem
       )#close tabItems
     )#close dashboardbody
   )
 )
+
+
+value <- reactiveValues(index = 1)
+c<-reactiveValues(list = 3)
 
 # Define server logic ----
 server <- function(input, output, session) {
