@@ -35,7 +35,7 @@ ui <- list(
         menuItem("Overview", tabName = "overview", icon = icon("tachometer-alt")),
         menuItem("Prerequisites", tabName = "prereq", icon = icon("book")),
         menuItem("Explore Criteria", tabName = "explore1", icon = icon("wpexplorer")),
-        menuItem("Using Real Data", tabName = "challenge", icon = icon("cogs")), # change gears to cogs
+        menuItem("Using Real Data", tabName = "challenge", icon = icon("cogs")), 
         menuItem("References", tabName = "references", icon = icon("leanpub"))
       ),
       tags$div(
@@ -43,10 +43,10 @@ ui <- list(
         boastUtils::sidebarFooter()
       )
     ),
-    ## Body ----
+    # Define Body for the app ----
     dashboardBody(
       tabItems(
-        ### Overview Page ----
+        ## Overview Page ----
         tabItem(
           tabName = "overview",
           h1("Variable Selection"),
@@ -56,7 +56,7 @@ ui <- list(
             tags$li("Review the common metrics for exploring variable selection
                     by checking out the Prerequisites."),
             div(
-              style = "text-align: center;", # add ;
+              style = "text-align: center;", 
               bsButton(
                 inputId = "prereqs",
                 label = "Prerequisites",
@@ -73,7 +73,7 @@ ui <- list(
           ),
           br(),
           div(
-            style = "text-align: center;", # add ;
+            style = "text-align: center;",
             bsButton(
               inputId = "explore",
               label = "Explore",
@@ -83,14 +83,17 @@ ui <- list(
           ),
           br(),
           h2("Acknowledgements"),
-          p("This app was developed and programmed by Ziruo Wang and updated by Zhuolin Luo in 2020.",
+          p("This app was developed and programmed by Ziruo Wang and 
+            updated by Zhuolin Luo in 2020 and Yijun Yao in 2022.
+            Special Thanks to Neil Hatfield for being incredibly helpful 
+           with coding issues.",
             br(),
             br(),
             br(),
             div(class = "updated", "Last Update: 06/15/2021 by YY.")
           )
         ),
-        ### Prerequisites ----
+        ## Prerequisites ----
         tabItem(
           tabName = "prereq",
           h2("Prerequisites"),
@@ -103,22 +106,22 @@ ui <- list(
           tags$ul(
             tags$li("The ", strong("Adjusted R-squared"), " compares the
                     explanatory power of regression models that contain different
-                    numbers of predictors. The model with the highest adjusted
-                    R-squared is preferred."),
+                    numbers of predictors. The R-squared value represents what percentage 
+                    of the variation in the independent variable is explained by the independent variables.
+                    The model with the highest adjusted R-squared is preferred."),
             tags$li("The ", strong("Mallow Cp criterion"), " is used to assess
                     the fit of a regression model that has been estimated using
-                    ordinary least squares. The model with the lowest Cp is
-                    preferred."),
+                    ordinary least squares. 
+                    It calculates the amount of bias incorporated into projected responses as a result of an underspecified model.
+                    The model with the lowest Cp is preferred."),
             tags$li("The ", strong("Bayesian Information Criterion (BIC)"), " is
                     a criterion for model selection among a finite set of models.
-                    The model with the lowest BIC is preferred."),
-            tags$li("The ", strong("Akaike Information Criterion (AIC)"), " is a
-                    criterion for model selection, dealing with both the risk of
-                    overfitting and the risk of underfitting. The model with the
-                    lowest AIC is preferred.")
+                    BIC is calculated by the formula: BIC = -2*loglikelihood + d*log(N),
+                    where N is the sample size of the training set and d is the total number of parameters.
+                    The model with the lowest BIC is preferred.")
           )
         ),
-        ### Explore Criteria Page ----
+        ## Explore Criteria Page ----
         tabItem(
           tabName = "explore1",
           h2("Exploring Variable Selection Criteria"),
@@ -148,7 +151,11 @@ ui <- list(
             tabPanel(
               title = "Adjusted R-Squared",
               br(),
-              br(),
+              tags$strong("Hint: "), #add
+              fluidRow(
+                column(width = 10, p("For Adjusted R-Squared, greater values are preferred.")),
+                column(width = 10, p('(Graph cannot give us exact Adjusted R-Squared value)'))
+              ),#add
               plotOutput("Aplot"),
               tags$script(HTML(
                 "$(document).ready(function() {
@@ -160,7 +167,11 @@ ui <- list(
             tabPanel(
               title = "BIC Criterion",
               br(),
-              br(),
+              tags$strong("Hint: "), #add
+              fluidRow(
+                column(width = 10, p("For BIC Criterion, lower values are preferred.")),
+                column(width = 10, p('(Graph cannot give us exact BIC value)'))
+              ),#add
               plotOutput("Bplot"),
               tags$script(HTML(
                 "$(document).ready(function() {
@@ -172,7 +183,11 @@ ui <- list(
             tabPanel(
               title = "Mallow's Cp",
               br(),
-              br(),
+              tags$strong("Hint: "), #add
+              fluidRow(
+                column(width = 10, p("For Mallow's Cp, smaller values are preferred.")),
+                column(width = 10, p("(Graph cannot give us exact Mallow's Cp value)"))
+              ),#add
               plotOutput("Cplot"),
               tags$script(HTML(
                 "$(document).ready(function() {
@@ -190,7 +205,7 @@ ui <- list(
             icon = icon("check")),
           conditionalPanel("input.button != 0", textOutput("answer"))
         ),
-        ### Explore Real Data ----
+        ## Explore Real Data ----
         tabItem(
           tabName = "challenge",
           h2("Using Real Data"),
@@ -266,7 +281,7 @@ ui <- list(
               br(),
               p("Answer the following questions about the model for the Swiss
               Fertility and Socioeconomic Indicators data."),
-              #### Question 1 ----
+              ### Question 1 ----
               fluidRow(
                 column(
                   width = 6,
@@ -285,7 +300,7 @@ ui <- list(
                   uiOutput('pic1')
                 )
               ),
-              #### Question 2 ----
+              ### Question 2 ----
               fluidRow(
                 column(
                   width = 6,
@@ -310,14 +325,15 @@ ui <- list(
                   uiOutput('pic2')
                 )
               ),
-              #### Question 3 ----
+              ### Question 3 ----
               fluidRow(
                 column(
                   width = 6,
                   offset = 0,
                   selectInput(
                     inputId = "question3",
-                    label = "For Adjusted R-squared criterion, which model does the best using only three of the five variables?",
+                    label = "For Adjusted R-squared criterion, 
+                    which model does the best using only three of the five variables?",
                     choices = c(
                       " " = "null",
                       "Model with Agriculture, Education, and Catholic" = "n1",
@@ -336,14 +352,15 @@ ui <- list(
                   uiOutput('pic3')
                 )
               ),
-              #### Question 4 ----
+              ### Question 4 ----
               fluidRow(
                 column(
                   width = 6,
                   offset = 0,
                   selectInput(
                     inputId = "question4",
-                    label = "For BIC criterion, which model does the best using only three of the five variables?",
+                    label = "For BIC criterion, which model does the best using 
+                    only three of the five variables?",
                     choices = c(
                       " " = "null",
                       "Model with Agriculture, Education, and Catholic" = "n1",
@@ -362,14 +379,15 @@ ui <- list(
                   uiOutput('pic4')
                 )
               ),
-              #### Question 5 ----
+              ### Question 5 ----
               fluidRow(
                 column(
                   width = 6,
                   offset = 0,
                   selectInput(
                     inputId = "question5",
-                    label = "For Mallow's Cp criterion, which model does the best using only three of the five variables?",
+                    label = "For Mallow's Cp criterion, 
+                    which model does the best using only three of the five variables?",
                     choices = c(
                       " " = "null",
                       "Model with Agriculture, Education, and Catholic" = "n1",
@@ -388,14 +406,15 @@ ui <- list(
                   uiOutput('pic5')
                 )
               ),
-              #### Question 6 ----
+              ### Question 6 ----
               fluidRow(
                 column(
                   width = 6,
                   offset = 0,
                   selectInput(
                     inputId = "question6",
-                    label = "Is there any model using only three of the five variables that does well for all of the criteria?",
+                    label = "Is there any model using only three of the five variables
+                    that does well for all of the criteria?",
                     choices = c(
                       "Yes, there is such a model." = "y",
                       "No, it does not exist." = "n",
@@ -412,10 +431,10 @@ ui <- list(
                   uiOutput('pic6')
                 )
               ),
-              #### Feedback Message ----
+              ### Feedback Message ----
               textOutput("feedback"),
               br(),
-              #### Question 7 ----
+              ### Question 7 ----
               fluidRow(
                 column(
                   width = 6,
@@ -424,7 +443,7 @@ ui <- list(
                     inputId = "question7",
                     label = "Which model makes the most sense to you in terms of
                   the Swiss fertility context?",
-                  width = "100%"
+                    width = "100%"
                   )
                 ),
                 # Why is this being "graded"?
@@ -438,7 +457,7 @@ ui <- list(
             )# close tabpanel
           ) # close tabpset panel
         ), # close tabitem
-        ### References ----
+        ## References ----
         tabItem(
           tabName = "references",
           h2("References"),
@@ -454,15 +473,26 @@ ui <- list(
                     shiny: Web application framework for R, R Package.
                     Available from https://CRAN.R-project.org/package=shiny"),
           p(class = "hangingindent",
+            "Hocking, R. R. (1976), 
+          ols_mallows_cp: get Mallows' Cp statistic with olsrr, R package.
+          Available from https://search.r-project.org/CRAN/refmans/olsrr/html/ols_mallows_cp.html"),
+          p(class = "hangingindent",
             "Lumley, T. (2020), leaps: Regression subset selection, R Package. Available
         from https://cran.r-project.org/web/packages/leaps/index.html"),
-        p(class = "hangingindent",
-          "Perrier, V., Meyer, F., and Granjon, D. (2020), shinyWidgets: Custom inputs
+          p(class = "hangingindent",
+            "Model Selection Criteria. Model Selection.[Text file].
+             DePaul University: Chicago, USA.
+             Available from http://facweb.cs.depaul.edu/sjost/csc423/documents/model-selection.htm"),
+          p(class = "hangingindent",
+            "Perrier, V., Meyer, F., and Granjon, D. (2020), shinyWidgets: Custom inputs
         widgets for shiny, R Package. Available from https://cran.r-project.org/web/packages/shinyWidgets/index.html"),
-        br(), # add
-        br(), #add
-        br(), #add
-        boastUtils::copyrightInfo() # add
+          p(class = "hangingindent",
+            "Statistical & Financial Consulting by Stanford PhD. BAYESIAN INFORMATION CRITERTIAN.
+             Available from https://stanfordphd.com/BIC.html"),
+          br(), # add
+          br(), #add
+          br(), #add
+          boastUtils::copyrightInfo() # add
         ) # close tabitem
       )#close tabItems
     )#close dashboardbody
@@ -475,7 +505,7 @@ c<-reactiveValues(list = 3)
 
 # Define server logic ----
 server <- function(input, output, session) {
-  ##########################action buttons#####################################
+  ## action buttons ----
   observeEvent(input$info,{
     sendSweetAlert(
       session = session,
@@ -486,7 +516,7 @@ server <- function(input, output, session) {
 Make your own choice about which model you think is best before showing the true model."
     )
   })
-
+  
   observeEvent(input$hint,{
     sendSweetAlert(
       session = session,
@@ -494,24 +524,24 @@ Make your own choice about which model you think is best before showing the true
       type = NULL,
       closeOnClickOutside = TRUE,
       text = " Each row designates a model which contains all of the variables shown in black blocks.The deeper the color, the more precise this model is.[adjr2 is the abbreviation of adjusted R-squared]"
-
+      
     )
   })
-
+  
   observeEvent(input$prereqs,{
     print("test")
     updateTabItems(session=session,inputId = "pages", selected = "prereq")
-
+    
   })
-
+  
   observeEvent(input$explore,{
     updateTabItems(session=session,inputId = "pages",selected = "explore1")
-
+    
   })
-
-
-  #################################Gray out buttons###############################
-
+  
+  
+  ## Gray out buttons ----
+  
   observeEvent(input$restart, {
     value$index <- 1
     if(input$nfactor == 3){
@@ -533,26 +563,9 @@ Make your own choice about which model you think is best before showing the true
       c$list = 49
     }
   })
-
-  #################################### exploring #####################################
-  # hi, can you find out a way to simplify the code below?
-  # For example, when I put in a new data, the code will automaticlly change the plot and corresponding answer?
-  # Thank you so much!
-
-  #reactive for how the user chooses the dataset they want to use
-
-
-
-
-  #read in the dataset that they want to use
-  # if statements for which they chose and then if statements for type of file if they are inputing their own
-
-
-
-  #####################input#########################
+  
+  ## input ----
   observeEvent(input$refresh, {
-
-
     x1 <- rnorm(200,3,1.5)
     x2 <- rnorm(200,10,2)
     x3 <- rnorm(200,0,.2)
@@ -562,8 +575,8 @@ Make your own choice about which model you think is best before showing the true
     x7 <- rnorm(200,25,7.5)
     x8 <- rnorm(200,10,4)
     Y  <- 0.2*x1 + 0.3*x2 + 0.5*x3 + 0.05*x8 + 50
-
-    ################# model: 3 variable ######################
+    
+    ## model: 3 variable ----
     data1 <- data.frame(Y,x1,x2,x3)
     data2 <- data.frame(Y,x3,x4,x8)
     data3 <- data.frame(Y,x1,x2,x4)
@@ -574,8 +587,8 @@ Make your own choice about which model you think is best before showing the true
     data8 <- data.frame(Y,x2,x4,x6)
     data9 <- data.frame(Y,x1,x5,x8)
     data10 <- data.frame(Y,x1,x5,x7)
-
-    ################# model: 4 variable ######################
+    
+    ## model: 4 variable ----
     data11 <- data.frame(Y,x2,x5,x6,x7)
     data12 <- data.frame(Y,x1,x5,x7,x8)
     data13 <- data.frame(Y,x1,x2,x3,x8)
@@ -586,8 +599,8 @@ Make your own choice about which model you think is best before showing the true
     data18 <- data.frame(Y,x2,x3,x4,x5)
     data19 <- data.frame(Y,x3,x6,x7,x8)
     data20 <- data.frame(Y,x3,x4,x5,x6)
-
-    ################# model: 5 variable ######################
+    
+    ## model: 5 variable ----
     data21 <- data.frame(Y,x2,x3,x4,x5,x6)
     data22 <- data.frame(Y,x1,x3,x4,x7,x8)
     data23 <- data.frame(Y,x1,x2,x3,x6,x8)
@@ -598,8 +611,8 @@ Make your own choice about which model you think is best before showing the true
     data28 <- data.frame(Y,x3,x5,x6,x7,x8)
     data29 <- data.frame(Y,x3,x4,x6,x7,x8)
     data30 <- data.frame(Y,x1,x2,x4,x5,x6)
-
-    ################# model: 6 variable ######################
+    
+    ## model: 6 variable ----
     data31 <- data.frame(Y,x1,x3,x4,x6,x7,x8)
     data32 <- data.frame(Y,x1,x2,x3,x4,x5,x6)
     data33 <- data.frame(Y,x1,x2,x4,x5,x6,x7)
@@ -610,8 +623,8 @@ Make your own choice about which model you think is best before showing the true
     data38 <- data.frame(Y,x2,x3,x5,x6,x7,x8)
     data39 <- data.frame(Y,x2,x3,x4,x5,x6,x7)
     data40 <- data.frame(Y,x3,x4,x5,x6,x7,x8)
-
-    ################# model: 7 variable ######################
+    
+    ## model: 7 variable ----
     data41 <- data.frame(Y,x2,x3,x4,x5,x6,x7,x8)
     data42 <- data.frame(Y,x1,x3,x4,x5,x6,x7,x8)
     data43 <- data.frame(Y,x1,x2,x4,x5,x6,x7,x8)
@@ -620,12 +633,12 @@ Make your own choice about which model you think is best before showing the true
     data46 <- data.frame(Y,x1,x2,x3,x4,x5,x7,x8)
     data47 <- data.frame(Y,x1,x2,x3,x4,x5,x7,x8)
     data48 <- data.frame(Y,x1,x2,x3,x4,x5,x6,x7)
-
-    ################# model: 8 variable ######################
+    
+    ## model: 8 variable ----
     data49 <- data.frame(Y,x1,x2,x3,x4,x5,x6,x7,x8)
-
-
-    ################# regression: 3 variable ######################
+    
+    
+    ## regression: 3 variable ----
     best1 <- regsubsets(Y~., data=data1, nbest=3)
     null1 <- lm(Y~1, data=data1)
     full1 <- lm(Y~., data=data1)
@@ -656,7 +669,7 @@ Make your own choice about which model you think is best before showing the true
     best10 <- regsubsets(Y~., data=data10, nbest=3)
     null10 <- lm(Y~1, data=data10)
     full10 <- lm(Y~., data=data10)
-    ################# regression: 4 variable ######################
+    ## regression: 4 variable ----
     best11 <- regsubsets(Y~., data=data11, nbest=3)
     null11 <- lm(Y~1, data=data11)
     full11 <- lm(Y~., data=data11)
@@ -687,7 +700,7 @@ Make your own choice about which model you think is best before showing the true
     best20 <- regsubsets(Y~., data=data20, nbest=3)
     null20 <- lm(Y~1, data=data20)
     full20 <- lm(Y~., data=data20)
-    ################# regression: 5 variable ######################
+    ## regression: 5 variable ----
     best21 <- regsubsets(Y~., data=data21, nbest=3)
     null21 <- lm(Y~1, data=data21)
     full21 <- lm(Y~., data=data21)
@@ -718,7 +731,7 @@ Make your own choice about which model you think is best before showing the true
     best30 <- regsubsets(Y~., data=data30, nbest=3)
     null30 <- lm(Y~1, data=data30)
     full30 <- lm(Y~., data=data30)
-    ################# regression: 6 variable ######################
+    ## regression: 6 variable ----
     best31 <- regsubsets(Y~., data=data31, nbest=3)
     null31 <- lm(Y~1, data=data31)
     full31 <- lm(Y~., data=data31)
@@ -749,7 +762,7 @@ Make your own choice about which model you think is best before showing the true
     best40 <- regsubsets(Y~., data=data40, nbest=3)
     null40 <- lm(Y~1, data=data40)
     full40 <- lm(Y~., data=data40)
-    ################# regression: 7 variable ######################
+    ## regression: 7 variable ----
     best41 <- regsubsets(Y~., data=data41, nbest=3)
     null41 <- lm(Y~1, data=data41)
     full41 <- lm(Y~., data=data41)
@@ -774,17 +787,17 @@ Make your own choice about which model you think is best before showing the true
     best48 <- regsubsets(Y~., data=data48, nbest=3)
     null48 <- lm(Y~1, data=data48)
     full48 <- lm(Y~., data=data48)
-    ################# regression: 8 variable ######################
+    ## regression: 8 variable ----
     best49 <- regsubsets(Y~., data=data49, nbest=3)
     null49 <- lm(Y~1, data=data49)
     full49 <- lm(Y~., data=data49)
-
-
-
-
+    
+    
+    
+    
     output$Aplot <- renderPlot({
-
-      ################# plot: 3 variable ######################
+      
+      ## plot: 3 variable ----
       if(c$list == 1){
         plot(best1,scale="adjr2", main = "Adjusted R-Squared")
       }
@@ -815,8 +828,8 @@ Make your own choice about which model you think is best before showing the true
       else if(c$list == 10){
         plot(best10, scale="adjr2",main = "Adjusted R-Squared")
       }
-
-      ################# plot: 4 variable ######################
+      
+      ## plot: 4 variable ----
       else if(c$list == 11){
         plot(best11,scale="adjr2",main = "Adjusted R-Squared")
       }
@@ -847,8 +860,8 @@ Make your own choice about which model you think is best before showing the true
       else if(c$list == 20){
         plot(best20, scale="adjr2",main = "Adjusted R-Squared")
       }
-
-      ################# plot: 5 variable ######################
+      
+      ## plot: 5 variable ----
       else if(c$list == 21){
         plot(best21,scale="adjr2",main = "Adjusted R-Squared")
       }
@@ -879,8 +892,8 @@ Make your own choice about which model you think is best before showing the true
       else if(c$list == 30){
         plot(best30, scale="adjr2",main = "Adjusted R-Squared")
       }
-
-      ################# plot: 6 variable ######################
+      
+      ## plot: 6 variable ----
       else if(c$list == 31){
         plot(best31,scale="adjr2",main = "Adjusted R-Squared")
       }
@@ -911,8 +924,8 @@ Make your own choice about which model you think is best before showing the true
       else if(c$list == 40){
         plot(best40, scale="adjr2",main = "Adjusted R-Squared")
       }
-
-      ################# plot: 7 variable ######################
+      
+      ## plot: 7 variable ----
       else if(c$list == 41){
         plot(best41,scale="adjr2",main = "Adjusted R-Squared")
       }
@@ -937,18 +950,18 @@ Make your own choice about which model you think is best before showing the true
       else if(c$list == 48){
         plot(best48, scale="adjr2",main = "Adjusted R-Squared")
       }
-
-      ################# plot: 8 variable ######################
+      
+      ## plot: 8 variable ----
       else if(c$list == 49){
         plot(best49, scale="adjr2",main = "Adjusted R-Squared")
       }
-
+      
     })
-
-
+    
+    
     output$Bplot <- renderPlot({
-
-      ################# plot: 3 variable ######################
+      
+      ## plot: 3 variable ----
       if(c$list == 1){
         plot(best1,scale="bic",main = "BIC criterion")
       }
@@ -979,8 +992,8 @@ Make your own choice about which model you think is best before showing the true
       else if(c$list == 10){
         plot(best10, scale="bic",main = "BIC criterion")
       }
-
-      ################# plot: 4 variable ######################
+      
+      ## plot: 4 variable ----
       else if(c$list == 11){
         plot(best11,scale="bic",main = "BIC criterion")
       }
@@ -1011,8 +1024,8 @@ Make your own choice about which model you think is best before showing the true
       else if(c$list == 20){
         plot(best20, scale="bic",main = "BIC criterion")
       }
-
-      ################# plot: 5 variable ######################
+      
+      ## plot: 5 variable ----
       else if(c$list == 21){
         plot(best21,scale="bic",main = "BIC criterion")
       }
@@ -1043,8 +1056,8 @@ Make your own choice about which model you think is best before showing the true
       else if(c$list == 30){
         plot(best30, scale="bic",main = "BIC criterion")
       }
-
-      ################# plot: 6 variable ######################
+      
+      ## plot: 6 variable ----
       else if(c$list == 31){
         plot(best31,scale="bic",main = "BIC criterion")
       }
@@ -1075,8 +1088,8 @@ Make your own choice about which model you think is best before showing the true
       else if(c$list == 40){
         plot(best40, scale="bic",main = "BIC criterion")
       }
-
-      ################# plot: 7 variable ######################
+      
+      ## plot: 7 variable ----
       else if(c$list == 41){
         plot(best41,scale="bic",main = "BIC criterion")
       }
@@ -1101,18 +1114,18 @@ Make your own choice about which model you think is best before showing the true
       else if(c$list == 48){
         plot(best48, scale="bic",main ="BIC criterion")
       }
-
-      ################# plot: 8 variable ######################
+      
+      ## plot: 8 variable ----
       else if(c$list == 49){
-        plot(best49, scale="bic",main = "BIC criterion")
+        plot(
+          best49, scale="bic",main = "BIC criterion"
+        )
       }
-
     })
-
-
+    
+    
     output$Cplot <- renderPlot({
-
-      ################# plot: 3 variable ######################
+      ## plot: 3 variable ----
       if(c$list == 1){
         plot(best1, scale="Cp", main = "Cp criterion")
       }
@@ -1143,8 +1156,8 @@ Make your own choice about which model you think is best before showing the true
       else if(c$list == 10){
         plot(best10, scale="Cp", main = "Cp criterion")
       }
-
-      ################# plot: 4 variable ######################
+      
+      ## plot: 4 variable ----
       else if(c$list == 11){
         plot(best11, scale="Cp", main = "Cp criterion")
       }
@@ -1175,8 +1188,8 @@ Make your own choice about which model you think is best before showing the true
       else if(c$list == 20){
         plot(best20, scale="Cp", main = "Cp criterion")
       }
-
-      ################# plot: 5 variable ######################
+      
+      ## plot: 5 variable ----
       else if(c$list == 21){
         plot(best21, scale="Cp", main = "Cp criterion")
       }
@@ -1207,8 +1220,8 @@ Make your own choice about which model you think is best before showing the true
       else if(c$list == 30){
         plot(best30, scale="Cp", main = "Cp criterion")
       }
-
-      ################# plot: 6 variable ######################
+      
+      ## plot: 6 variable ----
       else if(c$list == 31){
         plot(best31, scale="Cp", main = "Cp criterion")
       }
@@ -1239,8 +1252,8 @@ Make your own choice about which model you think is best before showing the true
       else if(c$list == 40){
         plot(best40, scale="Cp", main = "Cp criterion")
       }
-
-      ################# plot: 7 variable ######################
+      
+      ## plot: 7 variable ----
       else if(c$list == 41){
       }
       else if(c$list == 42){
@@ -1264,19 +1277,18 @@ Make your own choice about which model you think is best before showing the true
       else if(c$list == 48){
         plot(best48, scale="Cp", main = "Cp criterion")
       }
-
-      ################# plot: 8 variable ######################
+      
+      ## plot: 8 variable ----
       else if(c$list == 49){
         plot(best49, scale="Cp", main = "Cp criterion")
       }
-
     })#close of Cplot
   })#close of data simulation
-
-
-
+  
+  
+  
   output$answer <- renderText({
-    ############################ True Answer text: 3 variables####################################
+    ## True Answer text: 3 variables ----
     if(c$list == 1){
       paste("The best model for this data set using the given criterion is the model which contains X1,X2,X3.")
     }
@@ -1307,8 +1319,8 @@ Make your own choice about which model you think is best before showing the true
     else if(c$list == 10){
       paste("The best model for this data set using the given criterion is the model which contains X1.")
     }
-
-    ############################ True Answer text: 4 variables####################################
+    
+    ## True Answer text: 4 variables ----
     else if(c$list == 11){
       paste("The best model for this data set using the given criterion is the model which contains X2. ")
     }
@@ -1339,8 +1351,8 @@ Make your own choice about which model you think is best before showing the true
     else if(c$list == 20){
       paste("The best model for this data set using the given criterion is the model which contains X3.")
     }
-
-    ############################ True Answer text: 5 variables####################################
+    
+    ## True Answer text: 5 variables ----
     else if(c$list == 21){
       paste("The best model for this data set using the given criterion is the model which contains X2,X3.")
     }
@@ -1371,8 +1383,8 @@ Make your own choice about which model you think is best before showing the true
     else if(c$list == 30){
       paste("The best model for this data set using the given criterion is the model which contains X1 and X2.")
     }
-
-    ############################ True Answer text: 6 variables####################################
+    
+    ## True Answer text: 6 variables ----
     else if(c$list == 31){
       paste("The best model for this data set using the given criterion is the model which contains X1,X3,X8.")
     }
@@ -1403,8 +1415,8 @@ Make your own choice about which model you think is best before showing the true
     else if(c$list == 40){
       paste("The best model for this data set using the given criterion is the model which contains X3 and X8. ")
     }
-
-    ############################ True Answer text: 7 variables####################################
+    
+    ## True Answer text: 7 variables ----
     else if(c$list == 41){
       paste("The best model for this data set using the given criterion is the model which contains X2,X3,X8. ")
     }
@@ -1429,36 +1441,36 @@ Make your own choice about which model you think is best before showing the true
     else if(c$list == 48){
       paste("The best model for this data set using the given criterion is the model which contains X1, X2 and X3.")
     }
-
-    ############################ True Answer text: 8 variables####################################
+    
+    ## True Answer text: 8 variables ----
     else if(c$list == 49){
       paste("The best model for this data set using the given criterion is the model which contains X1,X2,X3,X8.")
     }
-
+    
   })
-
+  
   output$best <- renderText({
     paste0("Which is the best estimated model under the given criterion?")
   })
-
+  
   full.model <- lm(Fertility ~., data = swiss)
   best.model <- regsubsets(Fertility~., data=swiss, nbest=3)
   null.model <- lm(Fertility~1, data=swiss)
-
+  
   output$aPlot <- renderPlot({
     plot(best.model, scale="adjr2",main = "Adjusted R-Squared")
   })
-
+  
   output$bPlot <- renderPlot({
     plot(best.model,scale="bic",main = "BIC criterion")
   })
-
+  
   output$cPlot <- renderPlot({
     plot(best.model, scale="Cp", main = "Cp criterion")
   })
-
+  
   output$feedback <- renderPrint({
-
+    
     validate(need(!is.null(input$question1) & !is.null(input$question2) & !is.null(input$question3) & !is.null(input$question4),'Please answer all questions.'))
     if((input$question1 == "Examination" | input$question1 == "examination")
        &(input$question2 == 'y')
@@ -1468,19 +1480,9 @@ Make your own choice about which model you think is best before showing the true
        &(input$question6 == 'y')){
       cat('All correct. Great Job!')
     }
-
+    
     #Render pic1
     if (input$question1!=''){
-      # output$pic1 = renderUI({
-      #
-      #   if(input$question1 == "Examination" || input$question1 == "examination"){
-      #     img(src = "check.png", alt = "it means the answer is correct", width = 25)
-      #   }
-      #   else{
-      #     img(src = "cross.png", alt = "it means the answer is wrong", width = 25)
-      #   }
-      # })}
-      # The below code replaces the above code
       output$pic1 <- boastUtils::renderIcon(
         icon = ifelse(
           test = input$question1 == "Examination" || input$question1 == "examination",
@@ -1489,14 +1491,7 @@ Make your own choice about which model you think is best before showing the true
         ),
         width = 50)
     }
-
-    # To clear the grade mark
-    # output$pic1 <- boastUtils::renderIcon()
-    #The same as
-    # output$pic1 <- renderUI({
-    # img(src = NULL)
-    # })
-
+    
     #Render pic2
     if (input$question2!='null'){
       output$pic2 <- boastUtils::renderIcon(
@@ -1513,8 +1508,8 @@ Make your own choice about which model you think is best before showing the true
                       "incorrect"),
         width = 50)
     }
-
-
+    
+    
     #Render pic4
     if (input$question4!='null'){
       output$pic4 <- boastUtils::renderIcon(
@@ -1523,8 +1518,8 @@ Make your own choice about which model you think is best before showing the true
                       "incorrect"),
         width = 50)
     }
-
-
+    
+    
     #Render pic5
     if (input$question5!='null'){
       output$pic5 <- boastUtils::renderIcon(
@@ -1533,9 +1528,9 @@ Make your own choice about which model you think is best before showing the true
                       "incorrect"),
         width = 50)
     }
-
-
-
+    
+    
+    
     #Render pic6
     if (input$question6!='null'){
       output$pic6 <- boastUtils::renderIcon(
@@ -1544,8 +1539,8 @@ Make your own choice about which model you think is best before showing the true
                       "incorrect"),
         width = 50)
     }
-
-
+    
+    
     #Render pic7
     if (input$question7!=''){
       output$pic7 <- boastUtils::renderIcon(
@@ -1555,8 +1550,8 @@ Make your own choice about which model you think is best before showing the true
         width = 50)
     }
   })
-
-
+  
+  
 }
 
 # Boast App Call ----
