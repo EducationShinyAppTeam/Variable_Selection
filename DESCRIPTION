@@ -1,23 +1,19 @@
 Title: Variable Selection
 ShortName: Variable Selection
-Date: 2021-06-06
+Date: 2019-08-01
 Lifecycle: experimental
 Authors@R: c(
   person(given = "Neil", family = "Hatfield", email = "njh5464@psu.edu", role = c("aut", "cre")),
-  person(given = "Yijun", family = "Yao", role = c("aut"))
+  person(given = "Zhiro", family = "Wang", role = c("aut")),
+  person(given = "Zhoulin", family = "Luo", role = c("ctb")),
+  person(given = "Yijun", family = "Yao", role = c("ctb"))
  )
 Chapter: Chapter 6
 Description: This app introduces the concept of variable selection.
 LearningObjectives: c(
-  "The student will be able to classify attributes as being a response, factor,
-    block or covariate for a given study context.",
-  "The student will be able to differentiate between various ANOVA models.",
-  "The student will be able to produce a visual representation (e.g., Hasse
-    diagrams, equations) of underlying model for a given situation.",
-  "The student will learn to use technology to his/her advantage when engaged 
-    in data analysis.",
-  "The student will learn to meaningfully discuss data visualizations to support
-    others in their learning about the current context."
+  "The student will be able to do variable selection based on three criteria:
+  adjusted R-Squared, BIC criterion and Mallow's Cp.",
+  "The student will be able to choose predictors in a model"
  )
 DisplayMode: Normal
 URL: https://psu-eberly.shinyapps.io/Variable_Selection

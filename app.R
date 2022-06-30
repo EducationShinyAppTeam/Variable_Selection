@@ -96,6 +96,7 @@ ui <- list(
         ## Prerequisites ----
         tabItem(
           tabName = "prereq",
+          withMathJax(),
           h2("Prerequisites"),
           p("Variable selection refers to the portion of the model building
             process where you're trying to see which predictors to keep in your
@@ -106,18 +107,21 @@ ui <- list(
           tags$ul(
             tags$li("The ", strong("Adjusted R-squared"), " compares the
                     explanatory power of regression models that contain different
-                    numbers of predictors. The R-squared value represents what percentage 
-                    of the variation in the independent variable is explained by the independent variables.
+                    numbers of predictors. The R-squared value represents what 
+                    percentage of the variation in the independent variable is 
+                    explained by the independent variables.
                     The model with the highest adjusted R-squared is preferred."),
             tags$li("The ", strong("Mallow Cp criterion"), " is used to assess
                     the fit of a regression model that has been estimated using
                     ordinary least squares. 
-                    It calculates the amount of bias incorporated into projected responses as a result of an underspecified model.
+                    It calculates the amount of bias incorporated into projected
+                    responses as a result of an underspecified model.
                     The model with the lowest Cp is preferred."),
             tags$li("The ", strong("Bayesian Information Criterion (BIC)"), " is
                     a criterion for model selection among a finite set of models.
-                    BIC is calculated by the formula: BIC = -2*loglikelihood + d*log(N),
-                    where N is the sample size of the training set and d is the total number of parameters.
+                    BIC is calculated by the formula: \\(BIC = -2*loglikelihood + d*log(N)\\),
+                    where N is the sample size of the training set 
+                    and d is the total number of parameters.
                     The model with the lowest BIC is preferred.")
           )
         ),
@@ -125,7 +129,7 @@ ui <- list(
         tabItem(
           tabName = "explore1",
           h2("Exploring Variable Selection Criteria"),
-          p("We need some information here."),
+          p("Instruction: Click the Refresh data button first."),
           sliderInput(
             inputId = "nfactor",
             label = "Number of Xs in Data Set",
@@ -151,12 +155,11 @@ ui <- list(
             tabPanel(
               title = "Adjusted R-Squared",
               br(),
-              tags$strong("Hint: "), #add
-              fluidRow(
-                column(width = 10, p("For Adjusted R-Squared, greater values are preferred.")),
-                column(width = 10, p('(Graph cannot give us exact Adjusted R-Squared value)'))
-              ),#add
+              tags$strong("Hint: "), 
+              p("For Adjusted R-Squared, greater values are preferred."),
               plotOutput("Aplot"),
+              p("Graph cannot give us exact Adjusted R-Squared value"),
+              br(),
               tags$script(HTML(
                 "$(document).ready(function() {
             document.getElementById('Aplot').setAttribute('aria-label',
@@ -168,11 +171,10 @@ ui <- list(
               title = "BIC Criterion",
               br(),
               tags$strong("Hint: "), #add
-              fluidRow(
-                column(width = 10, p("For BIC Criterion, lower values are preferred.")),
-                column(width = 10, p('(Graph cannot give us exact BIC value)'))
-              ),#add
+              p("For BIC Criterion, lower values are preferred."),
               plotOutput("Bplot"),
+              p("Graph cannot give us exact BIC value"),
+              br(),
               tags$script(HTML(
                 "$(document).ready(function() {
             document.getElementById('Bplot').setAttribute('aria-label',
@@ -183,12 +185,11 @@ ui <- list(
             tabPanel(
               title = "Mallow's Cp",
               br(),
-              tags$strong("Hint: "), #add
-              fluidRow(
-                column(width = 10, p("For Mallow's Cp, smaller values are preferred.")),
-                column(width = 10, p("(Graph cannot give us exact Mallow's Cp value)"))
-              ),#add
+              tags$strong("Hint: "), 
+              p("For Mallow's Cp, smaller values are preferred."),
               plotOutput("Cplot"),
+              p("Graph cannot give us exact Mallow's Cp value"),
+              br(),
               tags$script(HTML(
                 "$(document).ready(function() {
             document.getElementById('Cplot').setAttribute('aria-label',
@@ -250,7 +251,8 @@ ui <- list(
                   tags$script(HTML(
                     "$(document).ready(function() {
                      document.getElementById('aPlot').setAttribute('aria-label',
-                     `real data model selection plot under the criterion adjusted r-squared`)
+                     `real data model selection plot under 
+                     the criterion adjusted r-squared`)
                      })"
                   ))
                 ),
@@ -307,7 +309,8 @@ ui <- list(
                   offset = 0,
                   selectInput(
                     inputId = "question2",
-                    label = "Which model is at or near the optimum for all three criteria?",
+                    label = "Which model is at or near the optimum 
+                    for all three criteria?",
                     choices = c(
                       " " = "null",
                       "Full model" = "n1",
@@ -333,7 +336,8 @@ ui <- list(
                   selectInput(
                     inputId = "question3",
                     label = "For Adjusted R-squared criterion, 
-                    which model does the best using only three of the five variables?",
+                    which model does the best using only three of the 
+                    five variables?",
                     choices = c(
                       " " = "null",
                       "Model with Agriculture, Education, and Catholic" = "n1",
@@ -413,8 +417,8 @@ ui <- list(
                   offset = 0,
                   selectInput(
                     inputId = "question6",
-                    label = "Is there any model using only three of the five variables
-                    that does well for all of the criteria?",
+                    label = "Is there any model using only three of the five 
+                    variables that does well for all of the criteria?",
                     choices = c(
                       "Yes, there is such a model." = "y",
                       "No, it does not exist." = "n",
@@ -435,64 +439,67 @@ ui <- list(
               textOutput("feedback"),
               br(),
               ### Question 7 ----
-              fluidRow(
-                column(
-                  width = 6,
-                  offset = 0,
-                  textInput(
-                    inputId = "question7",
-                    label = "Which model makes the most sense to you in terms of
-                  the Swiss fertility context?",
-                    width = "100%"
-                  )
-                ),
-                # Why is this being "graded"?
-                column(
-                  width = 2,
-                  offset = 0,
-                  br(),
-                  uiOutput('pic7')
-                )
-              )
+              h3("Reflection Question:"),
+              p("Which model makes the most sense to you in terms of
+                the Swiss fertility context? Why?"),
+              textAreaInput(
+                inputId = "reflection", 
+                label = "Type your response here",
+                resize = "both")
             )# close tabpanel
           ) # close tabpset panel
         ), # close tabitem
         ## References ----
         tabItem(
           tabName = "references",
+          
           h2("References"),
+          
           p(class = "hangingindent",
-            "Bailey, E. (2015), shinyBS: Twitter bootstrap components for shiny, R package.
-                    Available from https://CRAN.R-project.org/package=shinyBS"),
+            "Bailey, E. (2015), shinyBS: Twitter bootstrap components for shiny, 
+            R package.
+            Available from https://CRAN.R-project.org/package=shinyBS"),
+          
           p(class = "hangingindent",
             "Chang, W. and Borges Ribeio, B. (2018), shinydashboard:
                     Create dashboards with 'Shiny', R Package. Available from
                     https://CRAN.R-project.org/package=shinydashboard"),
+          
           p(class = "hangingindent",
             "Chang, W., Cheng, J., Allaire, J., Xie, Y., and McPherson, J. (2019),
                     shiny: Web application framework for R, R Package.
                     Available from https://CRAN.R-project.org/package=shiny"),
+          
           p(class = "hangingindent",
             "Hocking, R. R. (1976), 
           ols_mallows_cp: get Mallows' Cp statistic with olsrr, R package.
-          Available from https://search.r-project.org/CRAN/refmans/olsrr/html/ols_mallows_cp.html"),
+          Available from 
+          https://search.r-project.org/CRAN/refmans/olsrr/html/ols_mallows_cp.html"),
+          
           p(class = "hangingindent",
             "Lumley, T. (2020), leaps: Regression subset selection, R Package. Available
         from https://cran.r-project.org/web/packages/leaps/index.html"),
+          
           p(class = "hangingindent",
             "Model Selection Criteria. Model Selection.[Text file].
              DePaul University: Chicago, USA.
-             Available from http://facweb.cs.depaul.edu/sjost/csc423/documents/model-selection.htm"),
+             Available from 
+            http://facweb.cs.depaul.edu/sjost/csc423/documents/model-selection.htm"),
+          
           p(class = "hangingindent",
             "Perrier, V., Meyer, F., and Granjon, D. (2020), shinyWidgets: Custom inputs
-        widgets for shiny, R Package. Available from https://cran.r-project.org/web/packages/shinyWidgets/index.html"),
+        widgets for shiny, R Package. 
+            Available from 
+            https://cran.r-project.org/web/packages/shinyWidgets/index.html"),
+          
           p(class = "hangingindent",
-            "Statistical & Financial Consulting by Stanford PhD. BAYESIAN INFORMATION CRITERTIAN.
+            "Statistical & Financial Consulting by Stanford PhD. 
+            BAYESIAN INFORMATION CRITERTIAN.
              Available from https://stanfordphd.com/BIC.html"),
-          br(), # add
-          br(), #add
-          br(), #add
-          boastUtils::copyrightInfo() # add
+          br(), 
+          br(), 
+          br(), 
+          boastUtils::copyrightInfo() 
         ) # close tabitem
       )#close tabItems
     )#close dashboardbody
@@ -523,7 +530,9 @@ Make your own choice about which model you think is best before showing the true
       title = "Hints:",
       type = NULL,
       closeOnClickOutside = TRUE,
-      text = " Each row designates a model which contains all of the variables shown in black blocks.The deeper the color, the more precise this model is.[adjr2 is the abbreviation of adjusted R-squared]"
+      text = " Each row designates a model which contains all of the variables 
+      shown in black blocks.The deeper the color, the more precise this model is.
+      [adjr2 is the abbreviation of adjusted R-squared]"
       
     )
   })
@@ -796,7 +805,6 @@ Make your own choice about which model you think is best before showing the true
     
     
     output$Aplot <- renderPlot({
-      
       ## plot: 3 variable ----
       if(c$list == 1){
         plot(best1,scale="adjr2", main = "Adjusted R-Squared")
@@ -1290,161 +1298,210 @@ Make your own choice about which model you think is best before showing the true
   output$answer <- renderText({
     ## True Answer text: 3 variables ----
     if(c$list == 1){
-      paste("The best model for this data set using the given criterion is the model which contains X1,X2,X3.")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X1,X2,X3.")
     }
     else if(c$list == 2){
-      paste("The best model for this data set using the given criterion is the model which contains X3,X8. ")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X3,X8. ")
     }
     else if(c$list == 3){
-      paste("The best model for this data set using the given criterion is the model which contains X1 and X2. ")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X1 and X2. ")
     }
     else if(c$list == 4){
-      paste("The best model for this data set using the given criterion is the model which contains X2, X3 and X8.")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X2, X3 and X8.")
     }
     else if(c$list == 5){
-      paste("The best model for this data set using the given criterion is the model which contains X2 and X3.")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X2 and X3.")
     }
     else if(c$list == 6){
-      paste("The best model for this data set using the given criterion is the model which contains X3.")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X3.")
     }
     else if(c$list == 7){
-      paste("The best model for this data set using the given criterion is the model which contains X3.")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X3.")
     }
     else if(c$list == 8){
-      paste("The best model for this data set using the given criterion is the model which contains X2.")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X2.")
     }
     else if(c$list == 9){
-      paste("The best model for this data set using the given criterion is the model which contains X1 and X8.")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X1 and X8.")
     }
     else if(c$list == 10){
-      paste("The best model for this data set using the given criterion is the model which contains X1.")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X1.")
     }
     
     ## True Answer text: 4 variables ----
     else if(c$list == 11){
-      paste("The best model for this data set using the given criterion is the model which contains X2. ")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X2. ")
     }
     else if(c$list == 12){
-      paste("The best model for this data set using the given criterion is the model which contains X1,X8.")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X1,X8.")
     }
     else if(c$list == 13){
-      paste("The best model for this data set using the given criterion is the model which contains X1,X2 and X8.")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X1,X2 and X8.")
     }
     else if(c$list == 14){
-      paste("The best model for this data set using the given criterion is the model which contains X1.")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X1.")
     }
     else if(c$list == 15){
-      paste("The best model for this data set using the given criterion is the model which contains X2, X3 and X8.")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X2, X3 and X8.")
     }
     else if(c$list == 16){
-      paste("The best model for this data set using the given criterion is the model which contains X2.")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X2.")
     }
     else if(c$list == 17){
-      paste("The best model for this data set using the given criterion is the model which contains X1, X2 and X8. ")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X1, X2 and X8. ")
     }
     else if(c$list == 18){
-      paste("The best model for this data set using the given criterion is the model which contains X2 and X3.")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X2 and X3.")
     }
     else if(c$list == 19){
-      paste("The best model for this data set using the given criterion is the model which contains X3 and X8.")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X3 and X8.")
     }
     else if(c$list == 20){
-      paste("The best model for this data set using the given criterion is the model which contains X3.")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X3.")
     }
     
     ## True Answer text: 5 variables ----
     else if(c$list == 21){
-      paste("The best model for this data set using the given criterion is the model which contains X2,X3.")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X2,X3.")
     }
     else if(c$list == 22){
-      paste("The best model for this data set using the given criterion is the model which contains X1,X3,X8.")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X1,X3,X8.")
     }
     else if(c$list == 23){
-      paste("The best model for this data set using the given criterion is the model which contains X1, X2, X3 and X8.")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X1, X2, X3 and X8.")
     }
     else if(c$list == 24){
-      paste("The best model for this data set using the given criterion is the model which contains X1 and X3.")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X1 and X3.")
     }
     else if(c$list == 25){
-      paste("The best model for this data set using the given criterion is the model which contains X2 and X3.")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X2 and X3.")
     }
     else if(c$list == 26){
-      paste("The best model for this data set using the given criterion is the model which contains X2 and X8.")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X2 and X8.")
     }
     else if(c$list == 27){
-      paste("The best model for this data set using the given criterion is the model which contains X3 and X8.")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X3 and X8.")
     }
     else if(c$list == 28){
-      paste("The best model for this data set using the given criterion is the model which contains X3 and X8.")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X3 and X8.")
     }
     else if(c$list == 29){
-      paste("The best model for this data set using the given criterion is the model which contains X3 and X8.")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X3 and X8.")
     }
     else if(c$list == 30){
-      paste("The best model for this data set using the given criterion is the model which contains X1 and X2.")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X1 and X2.")
     }
     
     ## True Answer text: 6 variables ----
     else if(c$list == 31){
-      paste("The best model for this data set using the given criterion is the model which contains X1,X3,X8.")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X1,X3,X8.")
     }
     else if(c$list == 32){
-      paste("The best model for this data set using the given criterion is the model which contains X1,X2,X3. ")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X1,X2,X3. ")
     }
     else if(c$list == 33){
-      paste("The best model for this data set using the given criterion is the model which contains X1 and X2. ")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X1 and X2. ")
     }
     else if(c$list == 34){
-      paste("The best model for this data set using the given criterion is the model which contains X1, X3 and X8. ")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X1, X3 and X8. ")
     }
     else if(c$list == 35){
-      paste("The best model for this data set using the given criterion is the model which contains X1 and X3. ")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X1 and X3. ")
     }
     else if(c$list == 36){
-      paste("The best model for this data set using the given criterion is the model which contains X2, X3 and X8.")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X2, X3 and X8.")
     }
     else if(c$list == 37){
-      paste("The best model for this data set using the given criterion is the model which contains X2 and X8.")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X2 and X8.")
     }
     else if(c$list == 38){
-      paste("The best model for this data set using the given criterion is the model which contains X2, X3 and X8.")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X2, X3 and X8.")
     }
     else if(c$list == 39){
-      paste("The best model for this data set using the given criterion is the model which contains X2 and X3. ")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X2 and X3. ")
     }
     else if(c$list == 40){
-      paste("The best model for this data set using the given criterion is the model which contains X3 and X8. ")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X3 and X8. ")
     }
     
     ## True Answer text: 7 variables ----
     else if(c$list == 41){
-      paste("The best model for this data set using the given criterion is the model which contains X2,X3,X8. ")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X2,X3,X8. ")
     }
     else if(c$list == 42){
-      paste("The best model for this data set using the given criterion is the model which contains X1,X2,X8. ")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X1,X2,X8. ")
     }
     else if(c$list == 43){
-      paste("The best model for this data set using the given criterion is the model which contains X1, X2 and X8.")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X1, X2 and X8.")
     }
     else if(c$list == 44){
-      paste("The best model for this data set using the given criterion is the model which contains X1, X2, X3 and X8. ")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X1, X2, X3 and X8. ")
     }
     else if(c$list == 45){
-      paste("The best model for this data set using the given criterion is the model which contains X1, X2, X3 and X8. ")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X1, X2, X3 and X8. ")
     }
     else if(c$list == 46){
-      paste("The best model for this data set using the given criterion is the model which contains X1, X2, X3 and X8. ")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X1, X2, X3 and X8. ")
     }
     else if(c$list == 47){
-      paste("The best model for this data set using the given criterion is the model which contains X1, X2, X3 and X8. ")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X1, X2, X3 and X8. ")
     }
     else if(c$list == 48){
-      paste("The best model for this data set using the given criterion is the model which contains X1, X2 and X3.")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X1, X2 and X3.")
     }
     
     ## True Answer text: 8 variables ----
     else if(c$list == 49){
-      paste("The best model for this data set using the given criterion is the model which contains X1,X2,X3,X8.")
+      paste("The best model for this data set using the given criterion is the 
+            model which contains X1,X2,X3,X8.")
     }
     
   })
@@ -1470,8 +1527,13 @@ Make your own choice about which model you think is best before showing the true
   })
   
   output$feedback <- renderPrint({
-    
-    validate(need(!is.null(input$question1) & !is.null(input$question2) & !is.null(input$question3) & !is.null(input$question4),'Please answer all questions.'))
+    validate(
+      need(
+        !is.null(input$question1) & 
+          !is.null(input$question2) & 
+          !is.null(input$question3) & 
+          !is.null(input$question4),
+        'Please answer all questions.'))
     if((input$question1 == "Examination" | input$question1 == "examination")
        &(input$question2 == 'y')
        &(input$question3 == 'y')
@@ -1535,16 +1597,6 @@ Make your own choice about which model you think is best before showing the true
     if (input$question6!='null'){
       output$pic6 <- boastUtils::renderIcon(
         icon = ifelse(input$question6 == 'y',
-                      "correct",
-                      "incorrect"),
-        width = 50)
-    }
-    
-    
-    #Render pic7
-    if (input$question7!=''){
-      output$pic7 <- boastUtils::renderIcon(
-        icon = ifelse(input$question7 == 'null',
                       "correct",
                       "incorrect"),
         width = 50)
