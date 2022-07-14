@@ -34,7 +34,8 @@ ui <- list(
         id = "pages",
         menuItem("Overview", tabName = "overview", icon = icon("tachometer-alt")),
         menuItem("Prerequisites", tabName = "prereq", icon = icon("book")),
-        menuItem("Explore Criteria", tabName = "explore1", icon = icon("wpexplorer")),
+        menuItem("Explore Criteria", tabName = "explore1", 
+                 icon = icon("wpexplorer")),
         menuItem("Using Real Data", tabName = "challenge", icon = icon("cogs")), 
         menuItem("References", tabName = "references", icon = icon("leanpub"))
       ),
@@ -50,7 +51,9 @@ ui <- list(
         tabItem(
           tabName = "overview",
           h1("Variable Selection"),
-          p("This app introduces the concept of variable selection."),
+          p("This app introduces the concept of variable selection. It introduces 
+            three variable selection criteria: 
+            Adjusted R-Squared, BIC Criterion and Mallow's Cp."),
           h2("Instructions"),
           tags$ol(
             tags$li("Review the common metrics for exploring variable selection
@@ -90,7 +93,7 @@ ui <- list(
             br(),
             br(),
             br(),
-            div(class = "updated", "Last Update: 06/15/2021 by YY.")
+            div(class = "updated", "Last Update: 07/13/2022 by YY.")
           )
         ),
         ## Prerequisites ----
@@ -119,7 +122,8 @@ ui <- list(
                     The model with the lowest Cp is preferred."),
             tags$li("The ", strong("Bayesian Information Criterion (BIC)"), " is
                     a criterion for model selection among a finite set of models.
-                    BIC is calculated by the formula: \\(BIC = -2*loglikelihood + d*log(N)\\),
+                    BIC is calculated by the formula: \\(BIC = -2*loglikelihood + 
+                    d*log(N)\\),
                     where N is the sample size of the training set 
                     and d is the total number of parameters.
                     The model with the lowest BIC is preferred.")
@@ -133,9 +137,9 @@ ui <- list(
           sliderInput(
             inputId = "nfactor",
             label = "Number of Xs in Data Set",
-            min = 3 ,
+            min = 3 , 
             max = 8,
-            value = 4,
+            value = 4, 
             step = 1
           ),
           br(),
@@ -155,7 +159,7 @@ ui <- list(
             tabPanel(
               title = "Adjusted R-Squared",
               br(),
-              tags$strong("Hint: "), 
+              p(strong("Hint: ")), 
               p("For Adjusted R-Squared, greater values are preferred."),
               plotOutput("Aplot"),
               p("Graph cannot give us exact Adjusted R-Squared value"),
@@ -170,7 +174,7 @@ ui <- list(
             tabPanel(
               title = "BIC Criterion",
               br(),
-              tags$strong("Hint: "), #add
+              p(strong("Hint: ")),
               p("For BIC Criterion, lower values are preferred."),
               plotOutput("Bplot"),
               p("Graph cannot give us exact BIC value"),
@@ -185,7 +189,7 @@ ui <- list(
             tabPanel(
               title = "Mallow's Cp",
               br(),
-              tags$strong("Hint: "), 
+              p(strong("Hint: ")), 
               p("For Mallow's Cp, smaller values are preferred."),
               plotOutput("Cplot"),
               p("Graph cannot give us exact Mallow's Cp value"),
@@ -200,11 +204,12 @@ ui <- list(
           ),
           textOutput("best"),
           br(),
-          prettyCheckbox(
-            inputId = "button",
+          awesomeCheckbox(
+            inputId = "describeBest",
             label = "Describe the Best Estimated Model",
-            icon = icon("check")),
-          conditionalPanel("input.button != 0", textOutput("answer"))
+            status = "default"
+            ),
+          conditionalPanel("input.describeBest != 0", textOutput("answer"))
         ),
         ## Explore Real Data ----
         tabItem(
@@ -341,9 +346,12 @@ ui <- list(
                     choices = c(
                       " " = "null",
                       "Model with Agriculture, Education, and Catholic" = "n1",
-                      "Model with Examination, Education, and Infant Mortality" = "n2",
-                      "Model with Education, Catholic, and Infant Mortality" = "y",
-                      "Model with Agriculture, Examination, and Infant Mortality" = "n3"
+                      "Model with Examination, Education, 
+                      and Infant Mortality" = "n2",
+                      "Model with Education, Catholic, 
+                      and Infant Mortality" = "y",
+                      "Model with Agriculture, Examination, 
+                      and Infant Mortality" = "n3"
                     ),
                     width = "100%",
                     selected = "null"
@@ -368,9 +376,12 @@ ui <- list(
                     choices = c(
                       " " = "null",
                       "Model with Agriculture, Education, and Catholic" = "n1",
-                      "Model with Education, Catholic, and Infant Mortality" = "y",
-                      "Model with Examination, Education, and Infant Mortality" = "n2",
-                      "Model with Agriculture, Examination, and Infant Mortality" = "n3"
+                      "Model with Education, Catholic, 
+                      and Infant Mortality" = "y",
+                      "Model with Examination, Education, 
+                      and Infant Mortality" = "n2",
+                      "Model with Agriculture, Examination, 
+                      and Infant Mortality" = "n3"
                     ),
                     width = "100%",
                     selected = "null"
@@ -391,13 +402,18 @@ ui <- list(
                   selectInput(
                     inputId = "question5",
                     label = "For Mallow's Cp criterion, 
-                    which model does the best using only three of the five variables?",
+                    which model does the best using 
+                    only three of the five variables?",
                     choices = c(
                       " " = "null",
-                      "Model with Agriculture, Education, and Catholic" = "n1",
-                      "Model with Examination, Education, and Infant Mortality" = "n2",
-                      "Model with Agriculture, Examination, and Infant Mortality" = "n3",
-                      "Model with Education, Catholic, and Infant Mortality" = "y"
+                      "Model with Agriculture, Education, 
+                      and Catholic" = "n1",
+                      "Model with Examination, Education, 
+                      and Infant Mortality" = "n2",
+                      "Model with Agriculture, Examination, 
+                      and Infant Mortality" = "n3",
+                      "Model with Education, Catholic, 
+                      and Infant Mortality" = "y"
                     ),
                     width = "100%",
                     selected = "null"
@@ -477,7 +493,8 @@ ui <- list(
           https://search.r-project.org/CRAN/refmans/olsrr/html/ols_mallows_cp.html"),
           
           p(class = "hangingindent",
-            "Lumley, T. (2020), leaps: Regression subset selection, R Package. Available
+            "Lumley, T. (2020), leaps: Regression subset selection, R Package. 
+            Available
         from https://cran.r-project.org/web/packages/leaps/index.html"),
           
           p(class = "hangingindent",
@@ -487,8 +504,8 @@ ui <- list(
             http://facweb.cs.depaul.edu/sjost/csc423/documents/model-selection.htm"),
           
           p(class = "hangingindent",
-            "Perrier, V., Meyer, F., and Granjon, D. (2020), shinyWidgets: Custom inputs
-        widgets for shiny, R Package. 
+            "Perrier, V., Meyer, F., and Granjon, D. (2020), shinyWidgets: 
+            Custom inputs widgets for shiny, R Package. 
             Available from 
             https://cran.r-project.org/web/packages/shinyWidgets/index.html"),
           
@@ -519,8 +536,9 @@ server <- function(input, output, session) {
       title = "Instructions:",
       type = NULL,
       closeOnClickOutside = TRUE,
-      text = " Choose the optimality criteria from the dropdown list of different methods.
-Make your own choice about which model you think is best before showing the true model."
+      text = " Choose the optimality criteria from the dropdown list of 
+      different methods. Make your own choice about which model you think is 
+      best before showing the true model."
     )
   })
   
