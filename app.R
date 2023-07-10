@@ -543,7 +543,9 @@ server <- function(input, output, session) {
     )
   })
   
-  observeEvent(input$hint,{
+  observeEvent(
+    eventExpr = input$hint,
+    handlerExpr = {
     sendSweetAlert(
       session = session,
       title = "Hints:",
@@ -572,7 +574,9 @@ server <- function(input, output, session) {
   
   ## Gray out buttons ----
   
-  observeEvent(input$restart, {
+  observeEvent(
+    eventExpr = input$restart, 
+    handlerExpr = {
     value$index <- 1
     if(input$nfactor == 3){
       c$list = sample(1:10,1,replace = TRUE)
@@ -595,7 +599,9 @@ server <- function(input, output, session) {
   })
   
   ## input ----
-  observeEvent(input$refresh, {
+  observeEvent(
+    eventExprinput$refresh, 
+    handlerExpr = {
     x1 <- rnorm(200,3,1.5)
     x2 <- rnorm(200,10,2)
     x3 <- rnorm(200,0,.2)
@@ -986,7 +992,9 @@ server <- function(input, output, session) {
         plot(best49, scale="adjr2",main = "Adjusted R-Squared")
       }
       
-    })
+    },
+    alt = "A graph of the R-squared values"
+    )
     
     
     output$Bplot <- renderPlot({
@@ -1151,7 +1159,8 @@ server <- function(input, output, session) {
           best49, scale="bic",main = "BIC criterion"
         )
       }
-    })
+    },
+    alt = "BIC criterion graph")
     
     
     output$Cplot <- renderPlot(
@@ -1313,7 +1322,8 @@ server <- function(input, output, session) {
       else if(c$list == 49){
         plot(best49, scale="Cp", main = "Cp criterion")
       }
-    })#close of Cplot
+    },
+    alt = "CP criterion graph")#close of Cplot
   })#close of data simulation
   
   
