@@ -87,13 +87,14 @@ ui <- list(
           br(),
           h2("Acknowledgements"),
           p("This app was developed and programmed by Ziruo Wang and 
-            updated by Zhuolin Luo in 2020 and Yijun Yao in 2022.
+            updated by Zhuolin Luo in 2020, Yijun Yao in 2022 and Robert Chappell in 2023.
             Special Thanks to Neil Hatfield for being incredibly helpful 
            with coding issues.",
-            br(),
-            br(),
-            br(),
-            div(class = "updated", "Last Update: 07/13/2022 by YY.")
+           br(),
+           br(),
+           citeApp(),
+           br(),
+           div(class = "updated", "Last Update: 07/10/2023 by RC.")
           )
         ),
         ## Prerequisites ----
@@ -208,7 +209,7 @@ ui <- list(
             inputId = "describeBest",
             label = "Describe the Best Estimated Model",
             status = "default"
-            ),
+          ),
           conditionalPanel("input.describeBest != 0", textOutput("answer"))
         ),
         ## Explore Real Data ----
@@ -496,27 +497,27 @@ ui <- list(
             "Lumley, T. (2020), leaps: Regression subset selection, R Package. 
             Available
         from https://cran.r-project.org/web/packages/leaps/index.html"),
-          
-          p(class = "hangingindent",
-            "Model Selection Criteria. Model Selection.[Text file].
+        
+        p(class = "hangingindent",
+          "Model Selection Criteria. Model Selection.[Text file].
              DePaul University: Chicago, USA.
              Available from 
             http://facweb.cs.depaul.edu/sjost/csc423/documents/model-selection.htm"),
-          
-          p(class = "hangingindent",
-            "Perrier, V., Meyer, F., and Granjon, D. (2020), shinyWidgets: 
+        
+        p(class = "hangingindent",
+          "Perrier, V., Meyer, F., and Granjon, D. (2020), shinyWidgets: 
             Custom inputs widgets for shiny, R Package. 
             Available from 
             https://cran.r-project.org/web/packages/shinyWidgets/index.html"),
-          
-          p(class = "hangingindent",
-            "Statistical & Financial Consulting by Stanford PhD. 
+        
+        p(class = "hangingindent",
+          "Statistical & Financial Consulting by Stanford PhD. 
             BAYESIAN INFORMATION CRITERTIAN.
              Available from https://stanfordphd.com/BIC.html"),
-          br(), 
-          br(), 
-          br(), 
-          boastUtils::copyrightInfo() 
+        br(), 
+        br(), 
+        br(), 
+        boastUtils::copyrightInfo() 
         ) # close tabitem
       )#close tabItems
     )#close dashboardbody
@@ -529,7 +530,7 @@ c<-reactiveValues(list = 3)
 
 # Define server logic ----
 server <- function(input, output, session) {
-  ## action buttons ----
+  ## Action buttons ----
   observeEvent(input$info,{
     sendSweetAlert(
       session = session,
@@ -555,13 +556,15 @@ server <- function(input, output, session) {
     )
   })
   
-  observeEvent(input$prereqs,{
-    print("test")
+  observeEvent(
+    eventExpr = input$prereqs,
+    handlerExpr = {
     updateTabItems(session=session,inputId = "pages", selected = "prereq")
-    
   })
   
-  observeEvent(input$explore,{
+  observeEvent(
+    eventExpr = input$explore,
+    handlerExpr = {
     updateTabItems(session=session,inputId = "pages",selected = "explore1")
     
   })
@@ -822,7 +825,8 @@ server <- function(input, output, session) {
     
     
     
-    output$Aplot <- renderPlot({
+    output$Aplot <- renderPlot(
+      expr = {
       ## plot: 3 variable ----
       if(c$list == 1){
         plot(best1,scale="adjr2", main = "Adjusted R-Squared")
@@ -1150,7 +1154,8 @@ server <- function(input, output, session) {
     })
     
     
-    output$Cplot <- renderPlot({
+    output$Cplot <- renderPlot(
+      expr = {
       ## plot: 3 variable ----
       if(c$list == 1){
         plot(best1, scale="Cp", main = "Cp criterion")
@@ -1313,7 +1318,8 @@ server <- function(input, output, session) {
   
   
   
-  output$answer <- renderText({
+  output$answer <- renderText(
+    expr = {
     ## True Answer text: 3 variables ----
     if(c$list == 1){
       paste("The best model for this data set using the given criterion is the 
