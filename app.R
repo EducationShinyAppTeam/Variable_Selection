@@ -58,15 +58,11 @@ ui <- list(
           tags$ol(
             tags$li("Review the common metrics for exploring variable selection
                     by checking out the Prerequisites."),
-            br(),
             tags$li("When you're ready, click the explore button below to begin
                     exploring the criteria."),
-            br(),
             tags$li("Change the options to see how each method performs when
                     exploring stimulation page."),
-            br(),
             tags$li("Click Refresh button if you want to generate a new dataset."),
-            br(),
             tags$li("See how each method works when exploring real date set page.")
           ),
           br(),
@@ -104,21 +100,21 @@ ui <- list(
             metric(s) you are using as well as what predictors you have available."),
           p("There are several different metrics or criteria which you can use:"),
           tags$ul(
-            tags$li("The ", strong("Adjusted R-squared"), " compares the
+            tags$li("The ", tags$strong("Adjusted R-squared"), " compares the
                     explanatory power of regression models that contain different
                     numbers of predictors. The R-squared value represents what 
                     percentage of the variation in the independent variable is 
                     explained by the independent variables.
                     The model with the highest adjusted R-squared is preferred."),
             br(),
-            tags$li("The ", strong("Mallow Cp criterion"), " is used to assess
+            tags$li("The ", tags$strong("Mallow Cp criterion"), " is used to assess
                     the fit of a regression model that has been estimated using
                     ordinary least squares. 
                     It calculates the amount of bias incorporated into projected
                     responses as a result of an underspecified model.
                     The model with the lowest Cp is preferred."),
             br(),
-            tags$li("The ", strong("Bayesian Information Criterion (BIC)"), " is
+            tags$li("The ", tags$strong("Bayesian Information Criterion (BIC)"), " is
                     a criterion for model selection among a finite set of models.
                     BIC is calculated by the formula: \\(BIC = -2*loglikelihood + 
                     d*log(N)\\), where N is the sample size of the training set 
@@ -172,14 +168,7 @@ ui <- list(
               p(strong("Hint: ")), 
               p("For Adjusted R-Squared, greater values are preferred."),
               plotOutput("Aplot"),
-              p("Graph cannot give us exact Adjusted R-Squared value"),
-              br(),
-              tags$script(HTML(
-                "$(document).ready(function() {
-            document.getElementById('Aplot').setAttribute('aria-label',
-            `model selection plot under the criterion adjusted r-squared`)
-            })"
-              ))
+              p("Graph cannot give us exact Adjusted R-Squared value")
             ),
             tabPanel(
               title = "BIC Criterion",
@@ -187,14 +176,7 @@ ui <- list(
               p(strong("Hint: ")),
               p("For BIC Criterion, lower values are preferred."),
               plotOutput("Bplot"),
-              p("Graph cannot give us exact BIC value"),
-              br(),
-              tags$script(HTML(
-                "$(document).ready(function() {
-            document.getElementById('Bplot').setAttribute('aria-label',
-            `model selection plot under the criterion BIC criterion`)
-            })"
-              ))
+              p("Graph cannot give us exact BIC value")
             ),
             tabPanel(
               title = "Mallow's Cp",
@@ -202,15 +184,7 @@ ui <- list(
               p(strong("Hint: ")), 
               p("For Mallow's Cp, smaller values are preferred."),
               plotOutput("Cplot"),
-              p("Graph cannot give us exact Mallow's Cp value"),
-              br(),
-              tags$script(HTML(
-                "$(document).ready(function() {
-            document.getElementById('Cplot').setAttribute('aria-label',
-            `model selection plot under the criterion Mallow's Cp criterion`)
-            })"
-              )
-            )
+              p("Graph cannot give us exact Mallow's Cp value")
           )
         ),
           textOutput("best"),
@@ -262,34 +236,15 @@ ui <- list(
               fluidRow(
                 column(
                   width = 4,
-                  plotOutput("aPlot"),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                     document.getElementById('aPlot').setAttribute('aria-label',
-                     `real data model selection plot under 
-                     the criterion adjusted r-squared`)
-                     })"
-                  ))
+                  plotOutput("aPlot")
                 ),
                 column(
                   width = 4,
-                  plotOutput("bPlot"),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                     document.getElementById('bPlot').setAttribute('aria-label',
-                     `real data model selection plot under the criterion BIC`)
-                     })"
-                  ))
+                  plotOutput("bPlot")
                 ),
                 column(
                   width = 4,
-                  plotOutput("cPlot"),
-                  tags$script(HTML(
-                    "$(document).ready(function() {
-                     document.getElementById('cPlot').setAttribute('aria-label',
-                     `real data model selection plot under the criterion Mallow's Cp`)
-                     })"
-                  ))
+                  plotOutput("cPlot")
                 )
               )
             ),
@@ -577,7 +532,8 @@ server <- function(input, output, session) {
       shown in black blocks.The deeper the color, the more precise this model is.
       [adjr2 is the abbreviation of adjusted R-squared]"
     )
-  })
+  }
+ )
   
   observeEvent(
     eventExpr = input$prereqs,
@@ -585,7 +541,8 @@ server <- function(input, output, session) {
     updateTabItems(session = session,
                    inputId = "pages", 
                    selected = "prereq")
-  })
+  }
+ )
   
   observeEvent(
     eventExpr = input$explore,
@@ -593,7 +550,8 @@ server <- function(input, output, session) {
     updateTabItems(session = session,
                    inputId = "pages", 
                    selected = "explore1")
-  })
+  }
+ )
   
   ## Gray out buttons ----
   
@@ -601,25 +559,26 @@ server <- function(input, output, session) {
     eventExpr = input$restart, 
     handlerExpr = {
     value$index <- 1
-    if (input$nfactor == 3){
+    if (input$nfactor == 3) {
       c$list = sample(1:10, 1, replace = TRUE)
     }
-    else if (input$nfactor == 4){
+    else if (input$nfactor == 4) {
       c$list = sample(11:20, 1, replace = TRUE)
     }
-    else if (input$nfactor == 5){
+    else if (input$nfactor == 5) {
       c$list = sample(21:30, 1, replace = TRUE)
     }
-    else if (input$nfactor == 6){
+    else if (input$nfactor == 6) {
       c$list = sample(31:40, 1, replace = TRUE)
     }
-    else if (input$nfactor == 7){
+    else if (input$nfactor == 7) {
       c$list = sample(41:48, 1, replace = FALSE)
     }
-    else if (input$nfactor == 8){
+    else if (input$nfactor == 8) {
       c$list = 49
     }
-  })
+  }
+ )
   
   ## input ----
   observeEvent(
@@ -854,714 +813,719 @@ server <- function(input, output, session) {
     output$Aplot <- renderPlot(
       expr = {
       ## plot: 3 variable ----
-      if(c$list == 1){
+      if (c$list == 1) {
         plot(best1, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 2){
+      else if (c$list == 2) {
         plot(best2, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 3){
+      else if (c$list == 3) {
         plot(best3, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 4){
+      else if (c$list == 4) {
         plot(best4, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 5){
+      else if (c$list == 5) {
         plot(best5, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 6){
+      else if (c$list == 6) {
         plot(best6, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 7){
+      else if (c$list == 7) {
         plot(best7, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 8){
+      else if (c$list == 8) {
         plot(best8, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 9){
+      else if (c$list == 9) {
         plot(best9, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 10){
+      else if (c$list == 10) {
         plot(best10, scale = "adjr2", main = "Adjusted R-Squared")
       }
       
       ## plot: 4 variable ----
-      else if(c$list == 11){
+      else if (c$list == 11) {
         plot(best11, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 12){
+      else if (c$list == 12) {
         plot(best12, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 13){
+      else if (c$list == 13) {
         plot(best13, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 14){
+      else if (c$list == 14) {
         plot(best14, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 15){
+      else if (c$list == 15) {
         plot(best15, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 16){
+      else if (c$list == 16) {
         plot(best16, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 17){
+      else if (c$list == 17) {
         plot(best17, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 18){
+      else if (c$list == 18) {
         plot(best18, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 19){
+      else if (c$list == 19) {
         plot(best19, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 20){
+      else if (c$list == 20) {
         plot(best20, scale = "adjr2", main = "Adjusted R-Squared")
       }
       
       ## plot: 5 variable ----
-      else if(c$list == 21){
+      else if (c$list == 21) {
         plot(best21, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 22){
+      else if (c$list == 22) {
         plot(best22, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 23){
+      else if (c$list == 23) {
         plot(best23, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 24){
+      else if (c$list == 24) {
         plot(best24, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 25){
+      else if (c$list == 25) {
         plot(best25, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 26){
+      else if (c$list == 26) {
         plot(best26, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 27){
+      else if (c$list == 27) {
         plot(best27, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 28){
+      else if (c$list == 28) {
         plot(best28, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 29){
+      else if (c$list == 29) {
         plot(best29, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 30){
+      else if (c$list == 30) {
         plot(best30, scale = "adjr2", main = "Adjusted R-Squared")
       }
       
       ## plot: 6 variable ----
-      else if(c$list == 31){
+      else if (c$list == 31) {
         plot(best31, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 32){
+      else if (c$list == 32) {
         plot(best32, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 33){
+      else if (c$list == 33) {
         plot(best33, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 34){
+      else if (c$list == 34) {
         plot(best34, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 35){
+      else if (c$list == 35) {
         plot(best35, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 36){
+      else if (c$list == 36) {
         plot(best36, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 37){
+      else if (c$list == 37) {
         plot(best37, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 38){
+      else if (c$list == 38) {
         plot(best38, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 39){
+      else if (c$list == 39) {
         plot(best39, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 40){
+      else if (c$list == 40) {
         plot(best40, scale = "adjr2", main = "Adjusted R-Squared")
       }
       
       ## plot: 7 variable ----
-      else if(c$list == 41){
+      else if (c$list == 41) {
         plot(best41, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 42){
+      else if (c$list == 42) {
         plot(best42, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 43){
+      else if (c$list == 43) {
         plot(best43, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 44){
+      else if (c$list == 44) {
         plot(best44, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 45){
+      else if (c$list == 45) {
         plot(best45, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 46){
+      else if (c$list == 46) {
         plot(best46, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 47){
+      else if (c$list == 47) {
         plot(best47, scale = "adjr2", main = "Adjusted R-Squared")
       }
-      else if(c$list == 48){
+      else if (c$list == 48) {
         plot(best48, scale = "adjr2", main = "Adjusted R-Squared")
       }
       ## plot: 8 variable ----
-      else if(c$list == 49){
+      else if (c$list == 49) {
         plot(best49, scale = "adjr2", main = "Adjusted R-Squared")
       }
     },
     alt = "A graph of the R-squared values"
     )
     
-    output$Bplot <- renderPlot({
+    output$Bplot <- renderPlot(
+      expr = {
       
       ## plot: 3 variable ----
-      if(c$list == 1){
+      if (c$list == 1) {
         plot(best1, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 2){
+      else if (c$list == 2) {
         plot(best2, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 3){
+      else if (c$list == 3) {
         plot(best3, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 4){
+      else if (c$list == 4) {
         plot(best4, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 5){
+      else if (c$list == 5) {
         plot(best5, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 6){
+      else if (c$list == 6) {
         plot(best6, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 7){
+      else if (c$list == 7) {
         plot(best7, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 8){
+      else if (c$list == 8) {
         plot(best8, scale = "adjr2", main = "BIC criterion")
       }
-      else if(c$list == 9){
+      else if (c$list == 9) {
         plot(best9, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 10){
+      else if (c$list == 10) {
         plot(best10, scale = "bic", main = "BIC criterion")
       }
       
       ## plot: 4 variable ----
-      else if(c$list == 11){
+      else if (c$list == 11) {
         plot(best11, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 12){
+      else if (c$list == 12) {
         plot(best12, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 13){
+      else if (c$list == 13) {
         plot(best13, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 14){
+      else if (c$list == 14) {
         plot(best14, scale = "bic", main = "BIC criterion")
       } 
-      else if(c$list == 15){
+      else if (c$list == 15) {
         plot(best15, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 16){
+      else if (c$list == 16) {
         plot(best16, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 17){
+      else if (c$list == 17) {
         plot(best17, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 18){
+      else if (c$list == 18) {
         plot(best18, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 19){
+      else if (c$list == 19) {
         plot(best19, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 20){
+      else if (c$list == 20) {
         plot(best20, scale = "bic", main = "BIC criterion")
       }
       
       ## plot: 5 variable ----
-      else if(c$list == 21){
+      else if (c$list == 21) {
         plot(best21, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 22){
+      else if (c$list == 22) {
         plot(best22, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 23){
+      else if (c$list == 23) {
         plot(best23, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 24){
+      else if (c$list == 24) {
         plot(best24, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 25){
+      else if  (c$list == 25) {
         plot(best25, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 26){
+      else if (c$list == 26) {
         plot(best26, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 27){
+      else if (c$list == 27) {
         plot(best27, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 28){
+      else if (c$list == 28) {
         plot(best28, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 29){
+      else if (c$list == 29) {
         plot(best29, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 30){
+      else if (c$list == 30) {
         plot(best30, scale = "bic", main = "BIC criterion")
       }
       
       ## plot: 6 variable ----
-      else if(c$list == 31){
+      else if (c$list == 31) {
         plot(best31,scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 32){
+      else if (c$list == 32) {
         plot(best32, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 33){
+      else if (c$list == 33) {
         plot(best33, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 34){
+      else if (c$list == 34) {
         plot(best34, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 35){
+      else if (c$list == 35) {
         plot(best35, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 36){
+      else if (c$list == 36) {
         plot(best36, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 37){
+      else if (c$list == 37) {
         plot(best37, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 38){
+      else if (c$list == 38) {
         plot(best38, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 39){
+      else if (c$list == 39) {
         plot(best39, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 40){
+      else if (c$list == 40) {
         plot(best40, scale = "bic", main = "BIC criterion")
       }
       
       ## plot: 7 variable ----
-      else if(c$list == 41){
+      else if (c$list == 41) {
         plot(best41, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 42){
+      else if (c$list == 42) {
         plot(best42, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 43){
+      else if (c$list == 43) {
         plot(best43, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 44){
+      else if (c$list == 44) {
         plot(best44, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 45){
+      else if (c$list == 45) {
         plot(best45, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 46){
+      else if (c$list == 46) {
         plot(best46, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 47){
+      else if (c$list == 47) {
         plot(best47, scale = "bic", main = "BIC criterion")
       }
-      else if(c$list == 48){
+      else if (c$list == 48) {
         plot(best48, scale = "bic", main = "BIC criterion")
       }
       
       ## plot: 8 variable ----
-      else if(c$list == 49){
+      else if (c$list == 49) {
         plot(
           best49, scale = "bic", main = "BIC criterion"
         )
       }
     },
-    alt = "BIC criterion graph")
+    alt = "BIC criterion graph"
+  )
     
     
     output$Cplot <- renderPlot(
       expr = {
       ## plot: 3 variable ----
-      if(c$list == 1){
+      if (c$list == 1) {
         plot(best1, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 2){
+      else if (c$list == 2) {
         plot(best2, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 3){
+      else if (c$list == 3) {
         plot(best3, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 4){
+      else if (c$list == 4) {
         plot(best4, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 5){
+      else if (c$list == 5) {
         plot(best5, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 6){
+      else if (c$list == 6) {
         plot(best6, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 7){
+      else if (c$list == 7) {
         plot(best7, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 8){
+      else if (c$list == 8) {
         plot(best8, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 9){
+      else if (c$list == 9) {
         plot(best9, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 10){
+      else if (c$list == 10) {
         plot(best10, scale = "Cp", main = "Cp criterion")
       }
       
       ## plot: 4 variable ----
-      else if(c$list == 11){
+      else if (c$list == 11) {
         plot(best11, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 12){
+      else if (c$list == 12) {
         plot(best12, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 13){
+      else if (c$list == 13) {
         plot(best13, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 14){
+      else if (c$list == 14) {
         plot(best14, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 15){
+      else if (c$list == 15) {
         plot(best15, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 16){
+      else if (c$list == 16) {
         plot(best16, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 17){
+      else if (c$list == 17) {
         plot(best17, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 18){
+      else if (c$list == 18) {
         plot(best18, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 19){
+      else if (c$list == 19) {
         plot(best19, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 20){
+      else if (c$list == 20) {
         plot(best20, scale = "Cp", main = "Cp criterion")
       }
       
       ## plot: 5 variable ----
-      else if(c$list == 21){
+      else if (c$list == 21) {
         plot(best21, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 22){
+      else if (c$list == 22) {
         plot(best22, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 23){
+      else if (c$list == 23) {
         plot(best23, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 24){
+      else if (c$list == 24) {
         plot(best24, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 25){
+      else if (c$list == 25) {
         plot(best25, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 26){
+      else if (c$list == 26) {
         plot(best26, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 27){
+      else if (c$list == 27) {
         plot(best27, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 28){
+      else if (c$list == 28) {
         plot(best28, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 29){
+      else if (c$list == 29) {
         plot(best29, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 30){
+      else if (c$list == 30) {
         plot(best30, scale = "Cp", main = "Cp criterion")
       }
       
       ## plot: 6 variable ----
-      else if(c$list == 31){
+      else if (c$list == 31) {
         plot(best31, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 32){
+      else if (c$list == 32) {
         plot(best32, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 33){
+      else if (c$list == 33) {
         plot(best33, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 34){
+      else if (c$list == 34) {
         plot(best34, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 35){
+      else if (c$list == 35) {
         plot(best35, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 36){
+      else if (c$list == 36) {
         plot(best36, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 37){
+      else if (c$list == 37) {
         plot(best37, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 38){
+      else if (c$list == 38) {
         plot(best38, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 39){
+      else if (c$list == 39) {
         plot(best39, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 40){
+      else if (c$list == 40) {
         plot(best40, scale = "Cp", main = "Cp criterion")
       }
       
       ## plot: 7 variable ----
-      else if(c$list == 41){
+      else if (c$list == 41) {
         plot(best41, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 42){
+      else if (c$list == 42) {
         plot(best42, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 43){
+      else if (c$list == 43) {
         plot(best43, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 44){
+      else if (c$list == 44) {
         plot(best44, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 45){
+      else if (c$list == 45) {
         plot(best45, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 46){
+      else if (c$list == 46) {
         plot(best46, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 47){
+      else if (c$list == 47) {
         plot(best47, scale = "Cp", main = "Cp criterion")
       }
-      else if(c$list == 48){
+      else if (c$list == 48) {
         plot(best48, scale = "Cp", main = "Cp criterion")
       }
       
       ## plot: 8 variable ----
-      else if(c$list == 49){
+      else if (c$list == 49) {
         plot(best49, scale = "Cp", main = "Cp criterion")
       }
     },
-    alt = "CP criterion graph")#close of Cplot
-  })#close of data simulation
+    alt = "CP criterion graph"
+    )#close of Cplot
+  }
+  )#close of data simulation
   
   
   
   output$answer <- renderText(
     expr = {
     ## True Answer text: 3 variables ----
-    if(c$list == 1){
+    if (c$list == 1) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X1, X2, and X3.")
     }
-    else if(c$list == 2){
+    else if (c$list == 2) {
       paste("The best model for this data set using the given criterion is the 
-            model which contains X3 and X8. ")
+            model which contains X3 and X8.")
     }
-    else if(c$list == 3){
+    else if (c$list == 3) {
       paste("The best model for this data set using the given criterion is the 
-            model which contains X1 and X2. ")
+            model which contains X1 and X2.")
     }
-    else if(c$list == 4){
+    else if (c$list == 4) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X2, X3, and X8.")
     }
-    else if(c$list == 5){
+    else if (c$list == 5) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X2 and X3.")
     }
-    else if(c$list == 6){
+    else if (c$list == 6) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X3.")
     }
-    else if(c$list == 7){
+    else if (c$list == 7) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X3.")
     }
-    else if(c$list == 8){
+    else if (c$list == 8) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X2.")
     }
-    else if(c$list == 9){
+    else if (c$list == 9) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X1 and X8.")
     }
-    else if(c$list == 10){
+    else if (c$list == 10) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X1.")
     }
     
     ## True Answer text: 4 variables ----
-    else if(c$list == 11){
+    else if (c$list == 11) { 
       paste("The best model for this data set using the given criterion is the 
             model which contains X2. ")
     }
-    else if(c$list == 12){
+    else if (c$list == 12) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X1 and X8.")
     }
-    else if(c$list == 13){
+    else if (c$list == 13) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X1, X2, and X8.")
     }
-    else if(c$list == 14){
+    else if (c$list == 14) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X1.")
     }
-    else if(c$list == 15){
+    else if (c$list == 15) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X2, X3, and X8.")
     }
-    else if(c$list == 16){
+    else if (c$list == 16) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X2.")
     }
-    else if(c$list == 17){
+    else if (c$list == 17) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X1, X2, and X8. ")
     }
-    else if(c$list == 18){
+    else if (c$list == 18) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X2 and X3.")
     }
-    else if(c$list == 19){
+    else if (c$list == 19) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X3 and X8.")
     }
-    else if(c$list == 20){
+    else if (c$list == 20) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X3.")
     }
     
     ## True Answer text: 5 variables ----
-    else if(c$list == 21){
+    else if (c$list == 21) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X2 and X3.")
     }
-    else if(c$list == 22){
+    else if (c$list == 22) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X1, X3, and X8.")
     }
-    else if(c$list == 23){
+    else if (c$list == 23) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X1, X2, X3, and X8.")
     }
-    else if(c$list == 24){
+    else if (c$list == 24) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X1 and X3.")
     }
-    else if(c$list == 25){
+    else if (c$list == 25) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X2 and X3.")
     }
-    else if(c$list == 26){
+    else if (c$list == 26) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X2 and X8.")
     }
-    else if(c$list == 27){
+    else if (c$list == 27) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X3 and X8.")
     }
-    else if(c$list == 28){
+    else if (c$list == 28) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X3 and X8.")
     }
-    else if(c$list == 29){
+    else if (c$list == 29) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X3 and X8.")
     }
-    else if(c$list == 30){
+    else if (c$list == 30) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X1 and X2.")
     }
     
     ## True Answer text: 6 variables ----
-    else if(c$list == 31){
+    else if (c$list == 31) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X1, X3, and X8.")
     }
-    else if(c$list == 32){
+    else if (c$list == 32) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X1, X2, and X3. ")
     }
-    else if(c$list == 33){
+    else if (c$list == 33) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X1 and X2. ")
     }
-    else if(c$list == 34){
+    else if (c$list == 34) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X1, X3, and X8. ")
     }
-    else if(c$list == 35){
+    else if (c$list == 35) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X1 and X3. ")
     }
-    else if(c$list == 36){
+    else if (c$list == 36) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X2, X3, and X8.")
     }
-    else if(c$list == 37){
+    else if (c$list == 37) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X2 and X8.")
     }
-    else if(c$list == 38){
+    else if (c$list == 38) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X2, X3, and X8.")
     }
-    else if(c$list == 39){
+    else if (c$list == 39) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X2 and X3. ")
     }
-    else if(c$list == 40){
+    else if (c$list == 40) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X3 and X8. ")
     }
     
     ## True Answer text: 7 variables ----
-    else if(c$list == 41){
+    else if (c$list == 41) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X2, X3, and X8.")
     }
-    else if(c$list == 42){
+    else if (c$list == 42) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X1, X2, and X8.")
     }
-    else if(c$list == 43){
+    else if (c$list == 43) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X1, X2, and X8.")
     }
-    else if(c$list == 44){
+    else if (c$list == 44) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X1, X2, X3, and X8.")
     }
-    else if(c$list == 45){
+    else if (c$list == 45) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X1, X2, X3, and X8.")
     }
-    else if(c$list == 46){
+    else if (c$list == 46) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X1, X2, X3, and X8.")
     }
-    else if(c$list == 47){
+    else if (c$list == 47) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X1, X2, X3, and X8.")
     }
-    else if(c$list == 48){
+    else if (c$list == 48) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X1, X2, and X3.")
     }
     
     ## True Answer text: 8 variables ----
-    else if(c$list == 49){
+    else if (c$list == 49) {
       paste("The best model for this data set using the given criterion is the 
             model which contains X1, X2, X3, and X8.")
     }
-    
-  })
+  }
+  )
   
   output$best <- renderText(
     expr = {
     paste0("Which is the best estimated model under the given criterion?")
-  })
+  }
+  )
   
   full.model <- lm(Fertility ~ ., data = swiss)
   best.model <- regsubsets(Fertility ~ ., data = swiss, nbest = 3)
@@ -1570,17 +1534,20 @@ server <- function(input, output, session) {
   output$aPlot <- renderPlot(
     expr = {
     plot(best.model, scale = "adjr2", main = "Adjusted R-Squared")
-  })
+  }
+  )
   
   output$bPlot <- renderPlot(
     expr = {
     plot(best.model, scale = "bic", main = "BIC criterion")
-  })
+  }
+  )
   
   output$cPlot <- renderPlot(
     expr = {
     plot(best.model, scale = "Cp", main = "Cp criterion")
-  })
+  }
+  )
   
   output$feedback <- renderPrint(
     expr = {
@@ -1591,7 +1558,7 @@ server <- function(input, output, session) {
           !is.null(input$question3) & 
           !is.null(input$question4),
         'Please answer all questions.'))
-    if((input$question1 == "Examination" | input$question1 == "examination")
+    if ((input$question1 == "Examination" | input$question1 == "examination")
        &(input$question2 == 'y')
        &(input$question3 == 'y')
        &(input$question4 == 'y')
@@ -1601,7 +1568,7 @@ server <- function(input, output, session) {
     }
     
     #Render pic1
-    if (input$question1 != ''){
+    if (input$question1 != '') {
       output$pic1 <- boastUtils::renderIcon(
         icon = ifelse(
           test = input$question1 == "Examination" || input$question1 == "examination",
@@ -1612,7 +1579,7 @@ server <- function(input, output, session) {
     }
     
     #Render pic2
-    if (input$question2 != 'null'){
+    if (input$question2 != 'null') {
       output$pic2 <- boastUtils::renderIcon(
         icon = ifelse(input$question2 == 'y',
                       "correct",
@@ -1620,7 +1587,7 @@ server <- function(input, output, session) {
         width = 50)
     }
     #Render pic3
-    if (input$question3 != 'null'){
+    if (input$question3 != 'null') {
       output$pic3 <- boastUtils::renderIcon(
         icon = ifelse(input$question3 == "y",
                       "correct",
@@ -1629,7 +1596,7 @@ server <- function(input, output, session) {
     }
     
     #Render pic4
-    if (input$question4 != 'null'){
+    if (input$question4 != 'null') {
       output$pic4 <- boastUtils::renderIcon(
         icon = ifelse(input$question4 == 'y',
                       "correct",
@@ -1638,7 +1605,7 @@ server <- function(input, output, session) {
     }
     
     #Render pic5
-    if (input$question5 != 'null'){
+    if (input$question5 != 'null') {
       output$pic5 <- boastUtils::renderIcon(
         icon = ifelse(input$question5 == 'y',
                       "correct",
@@ -1647,14 +1614,15 @@ server <- function(input, output, session) {
     }
     
     #Render pic6
-    if (input$question6 != 'null'){
+    if (input$question6 != 'null') {
       output$pic6 <- boastUtils::renderIcon(
         icon = ifelse(input$question6 == 'y',
                       "correct",
                       "incorrect"),
         width = 50)
     }
-  })
+  }
+  )
 }
 
 # Boast App Call ----
