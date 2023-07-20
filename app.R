@@ -1528,19 +1528,22 @@ server <- function(input, output, session) {
   output$aPlot <- renderPlot(
     expr = {
       plot(best.model, scale = "adjr2", main = "Adjusted R-Squared")
-    }
+    },
+    alt = "Adjusted R-Squared Plot"
   )
   
   output$bPlot <- renderPlot(
     expr = {
       plot(best.model, scale = "bic", main = "BIC criterion")
-    }
+    },
+    alt = "BIC criterion graph"
   )
   
   output$cPlot <- renderPlot(
     expr = {
       plot(best.model, scale = "Cp", main = "Cp criterion")
-    }
+    },
+    alt = "Cp criterion graph"
   )
   
   output$feedback <- renderPrint(
