@@ -58,12 +58,16 @@ ui <- list(
           tags$ol(
             tags$li("Review the common metrics for exploring variable selection
                     by checking out the Prerequisites."),
-            tags$li("When you're ready, click the explore button below to begin
+            tags$li("When you're ready, click the Explore Criteria link to begin
                     exploring the criteria."),
             tags$li("Change the options to see how each method performs when
                     exploring stimulation page."),
-            tags$li("Click Refresh button if you want to generate a new dataset."),
-            tags$li("See how each method works when exploring real date set page.")
+            tags$li("Click the Generate new model button to have data generated
+                    from a different model and use the Refresh data button to get
+                    a different data set from that model."),
+            tags$li("See how each method works when exploring a real data set 
+                    and test your knowledge about variable selection in that 
+                    example.")
           ),
           br(),
           div(
@@ -98,12 +102,13 @@ ui <- list(
             model to build the 'best' possible statistical model. Keep in mind
             that 'best' is going to depend upon several issues including which
             metric(s) you are using as well as what predictors you have available."),
-          p("There are several different metrics or criteria which you can use:"),
+          p("There are several different metrics or criteria that you can use,
+            including:"),
           tags$ul(
             tags$li("The ", tags$strong("Adjusted R-squared"), " compares the
                     explanatory power of regression models that contain different
-                    numbers of predictors. The R-squared value represents what 
-                    percentage of the variation in the independent variable is 
+                    numbers of predictors. The R-squared value represents what
+                    percentage of the variation in the dependent variable is
                     explained by the independent variables.
                     The model with the highest adjusted R-squared is preferred."),
             br(),
@@ -121,6 +126,16 @@ ui <- list(
                     and d is the total number of parameters. The model with the
                     lowest BIC is preferred.")
           ),
+          br(),
+          p(
+            "How to ", tags$strong("read the plots:"), " When looking at the
+            generated model table plots, rows represent a model giving a 
+            particular value of the criterion and columns represent different
+            variables.  Within a row, the black boxes indicate that the variable
+            is included in the model and white boxes mean the variable is not
+            included. For each of the three criteria, look for the simplest and
+            most efficient model."
+            ),
           div(
             style = "text-align: center;",
             bsButton(
@@ -135,7 +150,8 @@ ui <- list(
         tabItem(
           tabName = "explore1",
           h2("Exploring Variable Selection Criteria"),
-          p("Instruction: Click the Refresh data button first."),
+          p("Instruction: Click the Generate New Model data button first, then
+            click the Refresh data button to observe the table."),
           wellPanel(
             sliderInput(
               inputId = "nfactor",
@@ -147,14 +163,14 @@ ui <- list(
             ),
             br(),
             bsButton(
-              inputId = 'refresh',
-              label = "Refresh data",
-              disabled = FALSE
-            ),
-            bsButton(
               inputId = 'restart',
               label = "Generate New Model",
               disabled = FALSE
+            ),
+            bsButton(
+              inputId = 'refresh',
+              label = "Refresh data",
+              disabled = TRUE
             )
           ),
           br(),
@@ -166,7 +182,9 @@ ui <- list(
               title = "Adjusted R-Squared",
               br(),
               p(tags$strong("Hint: ")), 
-              p("For Adjusted R-Squared, greater values are preferred."),
+              p("For Adjusted R-Squared, greater values are preferred. Look for
+                row with the highest value. If there are multiple with the same
+                value take the row with the least variables."),
               plotOutput("Aplot"),
               p("Graph cannot give us exact Adjusted R-Squared value")
             ),
@@ -174,7 +192,9 @@ ui <- list(
               title = "BIC Criterion",
               br(),
               p(tags$strong("Hint: ")),
-              p("For BIC Criterion, lower values are preferred."),
+              p("For BIC Criterion, lower values are preferred. Look for
+                row with the lowest value. If there are multiple with the same
+                value take the row with the least variables."),
               plotOutput("Bplot"),
               p("Graph cannot give us exact BIC value")
             ),
@@ -182,7 +202,9 @@ ui <- list(
               title = "Mallow's Cp",
               br(),
               p(tags$strong("Hint: ")), 
-              p("For Mallow's Cp, smaller values are preferred."),
+              p("For Mallow's Cp, lower values are preferred. Look for
+                row with the lowest value. If there are multiple with the same
+                value take the row with the least variables."),
               plotOutput("Cplot"),
               p("Graph cannot give us exact Mallow's Cp value")
             )
@@ -191,7 +213,7 @@ ui <- list(
           br(),
           awesomeCheckbox(
             inputId = "describeBest",
-            label = "Describe the Best Estimated Model",
+            label = "Show the true model",
             status = "default"
           ),
           conditionalPanel("input.describeBest != 0", textOutput("answer"))
@@ -204,7 +226,7 @@ ui <- list(
             Fertility and Socioeconomic Indicators data set allows us to explore
             which of several predictors (various socioecnomic indicators) we can
             use to model standardized fertility measures for each of the 47
-            French-speaking provinces of Switzerland, around 1888."),
+            French-speaking provinces of Switzerland."),
           box(
             title = tags$strong("Potential Predictors"),
             status = "primary",
@@ -220,8 +242,8 @@ ui <- list(
                       beyond primary schooling."),
               tags$li(tags$strong("Catholic: "), "percent of individuals who identify
                       as being of the Catholic faith (as possed to other faiths)."),
-              tags$li(tags$strong("Infant Mortality: "), "percentage of children born
-                      who died within the first year.")
+              tags$li(tags$strong("Infant Mortality: "), "percent of children born
+                      that died within the first year.")
             )
           ),
           br(),
@@ -258,11 +280,18 @@ ui <- list(
                 column(
                   width = 6,
                   offset = 0,
-                  textInput(
+                  selectInput(
                     inputId = "question1",
                     label = "Which variable(s) are not included in the top model
                     for any of the three criteria?",
-                    width = "100%"
+                    choices = c(
+                      " " = "null",
+                      "Agriculture" = "n1",
+                      "Examination" = "y",
+                      "Agriculture and Infant Mortality" = "n2"
+                    ),
+                    width = "100%",
+                    selected = "null"
                   )
                 ),
                 column(
@@ -417,16 +446,7 @@ ui <- list(
                 )
               ),
               ### Feedback Message ----
-              textOutput("feedback"),
-              br(),
-              ### Question 7 ----
-              h3("Reflection Question:"),
-              p("Which model makes the most sense to you in terms of
-                the Swiss fertility context? Why?"),
-              textAreaInput(
-                inputId = "reflection", 
-                label = "Type your response here",
-                resize = "both")
+              textOutput("feedback")
             )# close tabpanel
           ) # close tabpset panel
         ), # close tabitem
@@ -550,6 +570,12 @@ server <- function(input, output, session) {
   ## Gray out buttons ----
   
   observeEvent(
+    eventExpr = input$nfactor, 
+    handlerExpr = {
+    updateButton(session, "refresh", disabled = TRUE)
+  })
+  
+  observeEvent(
     eventExpr = input$restart, 
     handlerExpr = {
       value$index <- 1
@@ -571,6 +597,7 @@ server <- function(input, output, session) {
       else if (input$nfactor == 8) {
         c$list = 49
       }
+      updateButton(session, "refresh", disabled = FALSE)
     }
   )
   
@@ -1565,13 +1592,11 @@ server <- function(input, output, session) {
       }
       
       #Render pic1
-      if (input$question1 != '') {
+      if (input$question1 != 'null') {
         output$pic1 <- boastUtils::renderIcon(
-          icon = ifelse(
-            test = input$question1 == "Examination" || input$question1 == "examination",
-            yes = "correct",
-            no = "incorrect"
-          ),
+          icon = ifelse(input$question1 == 'y',
+                        "correct",
+                        "incorrect"),
           width = 50)
       }
       
