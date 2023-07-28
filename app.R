@@ -5,9 +5,17 @@ library(shinyBS)
 library(shinyWidgets)
 library(boastUtils)
 library(leaps)
+library(ggplotify)
+library(ggplot2)
 
-# Load additional dependencies and setup functions
-# source("global.R")
+# Load additional dependencies and setup functions ----
+## Code to reconfigure plot.regsubsets for this app
+altMethod <- getS3method("plot", "regsubsets")
+body <- as.list(body(altMethod))
+body[[4]]$mar <- c(7,3,1,1) + 0.5
+body[[15]]$ylab <- ""
+body(altMethod) <- as.call(body)
+
 
 # Define UI for App ----
 ui <- list(
@@ -831,165 +839,57 @@ server <- function(input, output, session) {
       null49 <- lm(Y ~ 1, data = data49)
       full49 <- lm(Y ~ ., data = data49)
       
+      ## Aplot ----
       output$Aplot <- renderPlot(
         expr = {
-          ## plot: 3 variable ----
-          if (c$list == 1) {
-            plot(best1, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 2) {
-            plot(best2, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 3) {
-            plot(best3, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 4) {
-            plot(best4, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 5) {
-            plot(best5, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 6) {
-            plot(best6, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 7) {
-            plot(best7, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 8) {
-            plot(best8, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 9) {
-            plot(best9, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 10) {
-            plot(best10, scale = "adjr2", main = "Adjusted R-Squared")
-          }
+          # This is not the best form but it will do for now
+          # We might look at making model a reactiveVal that what the switch 
+          # only needs programmed once and then we just call model()
+          model <- switch(
+            EXPR = c$list,
+            `1` = best1, `2` = best2, `3` = best3, `4` = best4, `5` = best5,
+            `6` = best6, `7` = best7, `8` = best8, `9` = best9, `10` = best10,
+            `11` = best11, `12` = best12, `13` = best13, `14` = best14, `15` = best15,
+            `16` = best16, `17` = best17, `18` = best18, `19` = best19, `20` = best20,
+            `21` = best21, `22` = best22, `23` = best23, `24` = best24, `25` = best25,
+            `26` = best26, `27` = best27, `28` = best28, `29` = best29, `30` = best30,
+            `31` = best31, `32` = best32, `33` = best33, `34` = best34, `35` = best35,
+            `36` = best36, `37` = best37, `38` = best38, `39` = best39, `40` = best40,
+            `41` = best41, `42` = best42, `43` = best43, `44` = best44, `45` = best45,
+            `46` = best46, `47` = best47, `48` = best48, `49` = best49
+          )
+          originalPlot <- as.ggplot(
+            plot = function() {
+              altMethod(
+                x = model,
+                main = NULL, #"Adjusted R-Squared",
+                scale = "adjr2"
+              )
+            },
+            scale = 1
+          )
+          originalPlot +
+            ggtitle(bquote("Adjusted" ~R^2)) +
+            ylab(bquote("Approximate" ~R^2)) +
+            labs(
+              subtitle = "Subtitle",
+              caption = "Caption"
+            ) +
+            theme(
+              text = element_text(size = 18),
+              axis.title.y = element_text(size = 16, angle = 90)
+            )
+          # print(str(originalPlot))
+          # originalPlot +
+          #   ylab("Test") +
+          #   labs(
+          #     caption = "caption text"
+          #   ) +
+          #   theme_void() +
+          #   theme(
+          #     text = element_text(size = 16)
+          #   )
           
-          ## plot: 4 variable ----
-          else if (c$list == 11) {
-            plot(best11, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 12) {
-            plot(best12, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 13) {
-            plot(best13, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 14) {
-            plot(best14, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 15) {
-            plot(best15, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 16) {
-            plot(best16, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 17) {
-            plot(best17, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 18) {
-            plot(best18, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 19) {
-            plot(best19, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 20) {
-            plot(best20, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          
-          ## plot: 5 variable ----
-          else if (c$list == 21) {
-            plot(best21, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 22) {
-            plot(best22, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 23) {
-            plot(best23, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 24) {
-            plot(best24, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 25) {
-            plot(best25, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 26) {
-            plot(best26, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 27) {
-            plot(best27, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 28) {
-            plot(best28, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 29) {
-            plot(best29, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 30) {
-            plot(best30, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          
-          ## plot: 6 variable ----
-          else if (c$list == 31) {
-            plot(best31, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 32) {
-            plot(best32, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 33) {
-            plot(best33, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 34) {
-            plot(best34, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 35) {
-            plot(best35, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 36) {
-            plot(best36, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 37) {
-            plot(best37, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 38) {
-            plot(best38, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 39) {
-            plot(best39, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 40) {
-            plot(best40, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          
-          ## plot: 7 variable ----
-          else if (c$list == 41) {
-            plot(best41, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 42) {
-            plot(best42, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 43) {
-            plot(best43, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 44) {
-            plot(best44, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 45) {
-            plot(best45, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 46) {
-            plot(best46, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 47) {
-            plot(best47, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          else if (c$list == 48) {
-            plot(best48, scale = "adjr2", main = "Adjusted R-Squared")
-          }
-          ## plot: 8 variable ----
-          else if (c$list == 49) {
-            plot(best49, scale = "adjr2", main = "Adjusted R-Squared")
-          }
         },
         alt = "A graph of the R-squared values"
       )
