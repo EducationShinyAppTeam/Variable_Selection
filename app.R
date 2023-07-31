@@ -120,19 +120,20 @@ ui <- list(
                     explained by the independent variables.
                     The model with the highest adjusted R-squared is preferred."),
             br(),
-            tags$li("The ", tags$strong("Mallow Cp criterion"), " is used to assess
-                    the fit of a regression model that has been estimated using
-                    ordinary least squares. 
-                    It calculates the amount of bias incorporated into projected
-                    responses as a result of an underspecified model.
-                    The model with the lowest Cp is preferred."),
-            br(),
             tags$li("The ", tags$strong("Bayesian Information Criterion (BIC)"), " is
                     a criterion for model selection among a finite set of models.
                     BIC is calculated by the formula: \\(BIC = -2*loglikelihood + 
                     d*log(N)\\), where N is the sample size of the training set 
                     and d is the total number of parameters. The model with the
                     lowest BIC is preferred.")
+            ,
+            br(),
+            tags$li("The ", tags$strong("Mallow Cp criterion"), " is used to assess
+                    the fit of a regression model that has been estimated using
+                    ordinary least squares. 
+                    It calculates the amount of bias incorporated into projected
+                    responses as a result of an underspecified model.
+                    The model with the lowest Cp is preferred.")
           ),
           br(),
           p(
@@ -193,8 +194,7 @@ ui <- list(
               p("For Adjusted R-Squared, greater values are preferred. Look for
                 row with the highest value. If there are multiple with the same
                 value take the row with the least variables."),
-              plotOutput("Aplot"),
-              p("Graph cannot give us exact Adjusted R-Squared value")
+              plotOutput("Aplot")
             ),
             tabPanel(
               title = "BIC Criterion",
@@ -203,8 +203,7 @@ ui <- list(
               p("For BIC Criterion, lower values are preferred. Look for
                 row with the lowest value. If there are multiple with the same
                 value take the row with the least variables."),
-              plotOutput("Bplot"),
-              p("Graph cannot give us exact BIC value")
+              plotOutput("Bplot")
             ),
             tabPanel(
               title = "Mallow's Cp",
@@ -213,8 +212,7 @@ ui <- list(
               p("For Mallow's Cp, lower values are preferred. Look for
                 row with the lowest value. If there are multiple with the same
                 value take the row with the least variables."),
-              plotOutput("Cplot"),
-              p("Graph cannot give us exact Mallow's Cp value")
+              plotOutput("Cplot")
             )
           ),
           textOutput("best"),
@@ -869,362 +867,100 @@ server <- function(input, output, session) {
             scale = 1
           )
           originalPlot +
-            ggtitle(bquote("Adjusted" ~R^2)) +
-            ylab(bquote("Approximate" ~R^2)) +
+            ggtitle(bquote("Model Table Plot for Adjusted" ~R^2)) +
+            ylab(bquote("Adjusted" ~R^2)) +
             labs(
-              subtitle = "Subtitle",
-              caption = "Caption"
+              caption = bquote("(Note: Ties in the printed adjusted" ~ R^2 ~ 
+                                 "values are due to rounding)")
             ) +
             theme(
               text = element_text(size = 18),
               axis.title.y = element_text(size = 16, angle = 90)
             )
-          # print(str(originalPlot))
-          # originalPlot +
-          #   ylab("Test") +
-          #   labs(
-          #     caption = "caption text"
-          #   ) +
-          #   theme_void() +
-          #   theme(
-          #     text = element_text(size = 16)
-          #   )
-          
         },
         alt = "A graph of the R-squared values"
       )
       
       output$Bplot <- renderPlot(
         expr = {
-          
-          ## plot: 3 variable ----
-          if (c$list == 1) {
-            plot(best1, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 2) {
-            plot(best2, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 3) {
-            plot(best3, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 4) {
-            plot(best4, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 5) {
-            plot(best5, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 6) {
-            plot(best6, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 7) {
-            plot(best7, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 8) {
-            plot(best8, scale = "adjr2", main = "BIC criterion")
-          }
-          else if (c$list == 9) {
-            plot(best9, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 10) {
-            plot(best10, scale = "bic", main = "BIC criterion")
-          }
-          
-          ## plot: 4 variable ----
-          else if (c$list == 11) {
-            plot(best11, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 12) {
-            plot(best12, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 13) {
-            plot(best13, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 14) {
-            plot(best14, scale = "bic", main = "BIC criterion")
-          } 
-          else if (c$list == 15) {
-            plot(best15, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 16) {
-            plot(best16, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 17) {
-            plot(best17, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 18) {
-            plot(best18, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 19) {
-            plot(best19, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 20) {
-            plot(best20, scale = "bic", main = "BIC criterion")
-          }
-          
-          ## plot: 5 variable ----
-          else if (c$list == 21) {
-            plot(best21, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 22) {
-            plot(best22, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 23) {
-            plot(best23, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 24) {
-            plot(best24, scale = "bic", main = "BIC criterion")
-          }
-          else if  (c$list == 25) {
-            plot(best25, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 26) {
-            plot(best26, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 27) {
-            plot(best27, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 28) {
-            plot(best28, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 29) {
-            plot(best29, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 30) {
-            plot(best30, scale = "bic", main = "BIC criterion")
-          }
-          
-          ## plot: 6 variable ----
-          else if (c$list == 31) {
-            plot(best31,scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 32) {
-            plot(best32, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 33) {
-            plot(best33, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 34) {
-            plot(best34, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 35) {
-            plot(best35, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 36) {
-            plot(best36, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 37) {
-            plot(best37, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 38) {
-            plot(best38, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 39) {
-            plot(best39, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 40) {
-            plot(best40, scale = "bic", main = "BIC criterion")
-          }
-          
-          ## plot: 7 variable ----
-          else if (c$list == 41) {
-            plot(best41, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 42) {
-            plot(best42, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 43) {
-            plot(best43, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 44) {
-            plot(best44, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 45) {
-            plot(best45, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 46) {
-            plot(best46, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 47) {
-            plot(best47, scale = "bic", main = "BIC criterion")
-          }
-          else if (c$list == 48) {
-            plot(best48, scale = "bic", main = "BIC criterion")
-          }
-          
-          ## plot: 8 variable ----
-          else if (c$list == 49) {
-            plot(
-              best49, scale = "bic", main = "BIC criterion"
+          model <- switch(
+            EXPR = c$list,
+            `1` = best1, `2` = best2, `3` = best3, `4` = best4, `5` = best5,
+            `6` = best6, `7` = best7, `8` = best8, `9` = best9, `10` = best10,
+            `11` = best11, `12` = best12, `13` = best13, `14` = best14, `15` = best15,
+            `16` = best16, `17` = best17, `18` = best18, `19` = best19, `20` = best20,
+            `21` = best21, `22` = best22, `23` = best23, `24` = best24, `25` = best25,
+            `26` = best26, `27` = best27, `28` = best28, `29` = best29, `30` = best30,
+            `31` = best31, `32` = best32, `33` = best33, `34` = best34, `35` = best35,
+            `36` = best36, `37` = best37, `38` = best38, `39` = best39, `40` = best40,
+            `41` = best41, `42` = best42, `43` = best43, `44` = best44, `45` = best45,
+            `46` = best46, `47` = best47, `48` = best48, `49` = best49
+          )
+          originalPlot <- as.ggplot(
+            plot = function() {
+              altMethod(
+                x = model,
+                main = NULL, #"bic",
+                scale = "bic"
+              )
+            },
+            scale = 1
+          )
+          originalPlot +
+            ggtitle(bquote("Model Table Plot for Bayesian Information Criterion")) +
+            ylab(bquote("BIC")) +
+            labs(
+              caption = "(Note: Ties in the printed BIC values are
+              due to rounding)"
+            ) +
+            theme(
+              text = element_text(size = 18),
+              axis.title.y = element_text(size = 16, angle = 90)
             )
-          }
         },
-        alt = "BIC criterion graph"
+        alt = "A graph of the BIC values"
       )
       
       
       output$Cplot <- renderPlot(
         expr = {
-          ## plot: 3 variable ----
-          if (c$list == 1) {
-            plot(best1, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 2) {
-            plot(best2, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 3) {
-            plot(best3, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 4) {
-            plot(best4, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 5) {
-            plot(best5, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 6) {
-            plot(best6, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 7) {
-            plot(best7, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 8) {
-            plot(best8, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 9) {
-            plot(best9, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 10) {
-            plot(best10, scale = "Cp", main = "Cp criterion")
-          }
-          
-          ## plot: 4 variable ----
-          else if (c$list == 11) {
-            plot(best11, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 12) {
-            plot(best12, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 13) {
-            plot(best13, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 14) {
-            plot(best14, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 15) {
-            plot(best15, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 16) {
-            plot(best16, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 17) {
-            plot(best17, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 18) {
-            plot(best18, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 19) {
-            plot(best19, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 20) {
-            plot(best20, scale = "Cp", main = "Cp criterion")
-          }
-          
-          ## plot: 5 variable ----
-          else if (c$list == 21) {
-            plot(best21, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 22) {
-            plot(best22, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 23) {
-            plot(best23, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 24) {
-            plot(best24, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 25) {
-            plot(best25, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 26) {
-            plot(best26, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 27) {
-            plot(best27, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 28) {
-            plot(best28, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 29) {
-            plot(best29, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 30) {
-            plot(best30, scale = "Cp", main = "Cp criterion")
-          }
-          
-          ## plot: 6 variable ----
-          else if (c$list == 31) {
-            plot(best31, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 32) {
-            plot(best32, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 33) {
-            plot(best33, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 34) {
-            plot(best34, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 35) {
-            plot(best35, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 36) {
-            plot(best36, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 37) {
-            plot(best37, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 38) {
-            plot(best38, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 39) {
-            plot(best39, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 40) {
-            plot(best40, scale = "Cp", main = "Cp criterion")
-          }
-          
-          ## plot: 7 variable ----
-          else if (c$list == 41) {
-            plot(best41, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 42) {
-            plot(best42, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 43) {
-            plot(best43, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 44) {
-            plot(best44, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 45) {
-            plot(best45, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 46) {
-            plot(best46, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 47) {
-            plot(best47, scale = "Cp", main = "Cp criterion")
-          }
-          else if (c$list == 48) {
-            plot(best48, scale = "Cp", main = "Cp criterion")
-          }
-          
-          ## plot: 8 variable ----
-          else if (c$list == 49) {
-            plot(best49, scale = "Cp", main = "Cp criterion")
-          }
+          model <- switch(
+            EXPR = c$list,
+            `1` = best1, `2` = best2, `3` = best3, `4` = best4, `5` = best5,
+            `6` = best6, `7` = best7, `8` = best8, `9` = best9, `10` = best10,
+            `11` = best11, `12` = best12, `13` = best13, `14` = best14, `15` = best15,
+            `16` = best16, `17` = best17, `18` = best18, `19` = best19, `20` = best20,
+            `21` = best21, `22` = best22, `23` = best23, `24` = best24, `25` = best25,
+            `26` = best26, `27` = best27, `28` = best28, `29` = best29, `30` = best30,
+            `31` = best31, `32` = best32, `33` = best33, `34` = best34, `35` = best35,
+            `36` = best36, `37` = best37, `38` = best38, `39` = best39, `40` = best40,
+            `41` = best41, `42` = best42, `43` = best43, `44` = best44, `45` = best45,
+            `46` = best46, `47` = best47, `48` = best48, `49` = best49
+          )
+          originalPlot <- as.ggplot(
+            plot = function() {
+              altMethod(
+                x = model,
+                main = NULL, #"Cp",
+                scale = "Cp"
+              )
+            },
+            scale = 1
+          )
+          originalPlot +
+            ggtitle(bquote("Model Table Plot for Mallow's Cp Criterion")) +
+            ylab(bquote("CP Criterion")) +
+            labs(
+              caption = "(Note: Ties in the printed Cp criterion values are
+              due to rounding)"
+            ) +
+            theme(
+              text = element_text(size = 18),
+              axis.title.y = element_text(size = 16, angle = 90)
+            )
         },
-        alt = "CP criterion graph"
-      )#close of Cplot
+        alt = "A graph of the Mallow's Cp Criterion values"
+      )
     }
   )#close of data simulation
   
