@@ -92,7 +92,7 @@ ui <- list(
           p("This app was developed and programmed by Ziruo Wang and 
             updated by Zhuolin Luo in 2020, Yijun Yao in 2022 and Robert Chappell in 2023.
             Special thanks to Neil Hatfield for being incredibly helpful 
-            with coding issues.",
+            with coding issues, and Dennis Pearl with design issues.",
             br(),
             br(),
             citeApp(),
