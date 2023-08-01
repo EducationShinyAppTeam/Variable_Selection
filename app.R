@@ -164,7 +164,7 @@ ui <- list(
           wellPanel(
             sliderInput(
               inputId = "nfactor",
-              label = "Number of Xs in Data Set",
+              label = "Number of Exploratory Variables (x) in Model",
               min = 3, 
               max = 8,
               value = 4, 
