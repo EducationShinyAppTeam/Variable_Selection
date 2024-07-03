@@ -8,6 +8,7 @@ library(leaps)
 library(ggplotify)
 library(ggplot2)
 
+
 # Load additional dependencies and setup functions ----
 ## Code to reconfigure plot.regsubsets for this app
 altMethod <- getS3method("plot", "regsubsets")
@@ -61,21 +62,17 @@ ui <- list(
           h1("Variable Selection"),
           p("This app introduces the concept of variable selection. It introduces 
             three variable selection criteria: 
-            Adjusted R-Squared, BIC Criterion and Mallow's Cp."),
+            Adjusted R-Squared, BIC Criterion and Mallows' Cp."),
           h2("Instructions"),
           tags$ol(
             tags$li("Review the common metrics for exploring variable selection
                     by checking out the Prerequisites."),
-            tags$li("When you're ready, click the Explore Criteria link to begin
-                    exploring the criteria."),
-            tags$li("Change the options to see how each method performs when
-                    exploring stimulation page."),
-            tags$li("Click the Generate new model button to have data generated
-                    from a different model and use the Refresh data button to get
-                    a different data set from that model."),
-            tags$li("See how each method works when exploring a real data set 
-                    and test your knowledge about variable selection in that 
-                    example.")
+            tags$li("When you're ready, navigate to the 'Explore Criteria' tab to begin
+                    exploring all three metrics."),
+            tags$li("Adjust the number of explanatory variables to see how each method is evaluated 
+                    within the 'Explore Criteria' page."),
+            tags$li("Finally, the 'Using Real Data' tab contains a real-world scenario
+                    where you can test your knowledge about variable selection and its metrics.")
           ),
           br(),
           div(
@@ -90,14 +87,18 @@ ui <- list(
           br(),
           h2("Acknowledgements"),
           p("This app was developed and programmed by Ziruo Wang and 
-            updated by Zhuolin Luo in 2020, Yijun Yao in 2022 and Robert Chappell in 2023.
+            updated by Zhuolin Luo in 2020, Yijun Yao in 2022, Robert 
+            Chappell in 2023, and Nathan Pechulis in 2024.
             Special thanks to Neil Hatfield for being incredibly helpful 
             with coding issues, and Dennis Pearl with design issues.",
             br(),
             br(),
+            "Cite this app as:",
+            br(),
             citeApp(),
             br(),
-            div(class = "updated", "Last Update: 07/10/2023 by RC.")
+            br(),
+            div(class = "updated", "Last Update: 07/03/2024 by NP.")
           )
         ),
         ## Prerequisites ----
@@ -128,7 +129,7 @@ ui <- list(
                     lowest BIC is preferred.")
             ,
             br(),
-            tags$li("The ", tags$strong("Mallow Cp criterion"), " is used to assess
+            tags$li("The ", tags$strong("Mallows' Cp criterion"), " is used to assess
                     the fit of a regression model that has been estimated using
                     ordinary least squares. 
                     It calculates the amount of bias incorporated into projected
@@ -136,15 +137,6 @@ ui <- list(
                     The model with the lowest Cp is preferred.")
           ),
           br(),
-          p(
-            "How to ", tags$strong("read the plots:"), " When looking at the
-            generated model table plots, rows represent a model giving a 
-            particular value of the criterion and columns represent different
-            variables.  Within a row, the black boxes indicate that the variable
-            is included in the model and white boxes mean the variable is not
-            included. For each of the three criteria, look for the simplest and
-            most efficient model."
-            ),
           div(
             style = "text-align: center;",
             bsButton(
@@ -159,12 +151,17 @@ ui <- list(
         tabItem(
           tabName = "explore1",
           h2("Exploring Variable Selection Criteria"),
-          p("Instruction: Click the Generate New Model data button first, then
-            click the Refresh data button to observe the table."),
+          h3('Instructions'),
+          p("Here you can explore each variable selection metric. To begin, just select the desired
+          number of explanatory variables, click the 'Generate New Model' 
+          button, and then click the 'Refresh Data' button and observe the table that appears
+            for each metric. After exploring, you can click 'Show the true model' to see
+            which predictor variables would be included in the best model for the data
+            based on these metrics."),
           wellPanel(
             sliderInput(
               inputId = "nfactor",
-              label = "Number of Exploratory Variables (x) in Model",
+              label = "Number of explanatory variables (x) in model",
               min = 3, 
               max = 8,
               value = 4, 
@@ -178,11 +175,10 @@ ui <- list(
             ),
             bsButton(
               inputId = 'refresh',
-              label = "Refresh data",
+              label = "Refresh Data",
               disabled = TRUE
             )
           ),
-          br(),
           br(),
           tabsetPanel(
             id = "criteria",
@@ -190,10 +186,11 @@ ui <- list(
             tabPanel(
               title = "Adjusted R-Squared",
               br(),
-              p(tags$strong("Hint: ")), 
+              p(tags$strong("Hint")), 
               p("For Adjusted R-Squared, greater values are preferred. Look for
-                row with the highest value. If there are multiple with the same
-                value take the row with the least variables."),
+                the row with the highest value. If there are multiple with the same
+                value take the row with the least variables. Note, if there are any 
+                identical values for axis labels it is due to rounding."),
               plotOutput("Aplot")
             ),
             tabPanel(
@@ -201,25 +198,38 @@ ui <- list(
               br(),
               p(tags$strong("Hint: ")),
               p("For BIC Criterion, lower values are preferred. Look for
-                row with the lowest value. If there are multiple with the same
-                value take the row with the least variables."),
+                the row with the lowest value. If there are multiple with the same
+                value take the row with the least variables. Note, if there are any 
+                identical values for axis labels it is due to rounding."),
               plotOutput("Bplot")
             ),
             tabPanel(
-              title = "Mallow's Cp",
+              title = "Mallows' Cp",
               br(),
               p(tags$strong("Hint: ")), 
-              p("For Mallow's Cp, lower values are preferred. Look for
-                row with the lowest value. If there are multiple with the same
-                value take the row with the least variables."),
+              p("For Mallows' Cp, lower values are preferred. Look for
+                the row with the lowest value. If there are multiple with the same
+                value take the row with the least variables. Note, if there are any 
+                identical values for axis labels it is due to rounding."),
               plotOutput("Cplot")
             )
           ),
+          br(),
+          p(
+            tags$strong("How to read the plots:"), " When looking at the
+            generated model plots, rows represent a model giving a 
+            particular value of the criterion and columns represent different
+            variables.  Within a row, the black boxes indicate that the variable
+            is included in the model and white boxes mean the variable is not
+            included. For each of the three criteria, look for the simplest and
+            most efficient model."
+          ),
+          br(),
           textOutput("best"),
           br(),
           awesomeCheckbox(
             inputId = "describeBest",
-            label = "Show the true model",
+            label = "Show the best model",
             status = "default"
           ),
           conditionalPanel("input.describeBest != 0", textOutput("answer"))
@@ -228,11 +238,14 @@ ui <- list(
         tabItem(
           tabName = "challenge",
           h2("Using Real Data"),
-          p("Let's apply variable selection to a real world context. The Swiss
-            Fertility and Socioeconomic Indicators data set allows us to explore
+          p("Let's apply variable selection to a real world context. The 'Swiss
+            Fertility and Socioeconomic Indicators' data set allows us to explore
             which of several predictors (various socioecnomic indicators) we can
             use to model standardized fertility measures for each of the 47
-            French-speaking provinces of Switzerland."),
+            French-speaking provinces of Switzerland. To begin the challenge, 
+            observe the variables within the plot of each metric in the 'Model Selection'
+            tab and then switch to the 'Check Yourself' tab to answer variable selection
+            quiz questions about the scenario."),
           box(
             title = tags$strong("Potential Predictors"),
             status = "primary",
@@ -247,7 +260,7 @@ ui <- list(
               tags$li(tags$strong("Education: "), "percent of draftees with education
                       beyond primary schooling."),
               tags$li(tags$strong("Catholic: "), "percent of individuals who identify
-                      as being of the Catholic faith (as possed to other faiths)."),
+                      as being of the Catholic faith (as opposed to other faiths)."),
               tags$li(tags$strong("Infant Mortality: "), "percent of children born
                       that died within the first year.")
             )
@@ -279,8 +292,8 @@ ui <- list(
             tabPanel(
               title = "Check Yourself",
               br(),
-              p("Answer the following questions about the model for the Swiss
-              Fertility and Socioeconomic Indicators data."),
+              p("Answer the following questions about the model for the 'Swiss
+              Fertility and Socioeconomic Indicators' data set."),
               ### Question 1 ----
               fluidRow(
                 column(
@@ -401,7 +414,7 @@ ui <- list(
                   offset = 0,
                   selectInput(
                     inputId = "question5",
-                    label = "For Mallow's Cp criterion, 
+                    label = "For Mallows' Cp criterion, 
                     which model does the best using 
                     only three of the five variables?",
                     choices = c(
@@ -867,14 +880,12 @@ server <- function(input, output, session) {
             scale = 1
           )
           originalPlot +
-            ggtitle(bquote("Model Table Plot for Adjusted" ~R^2)) +
+            ggtitle(bquote("Model Plot for Adjusted" ~R^2)) +
             ylab(bquote("Adjusted" ~R^2)) +
-            labs(
-              caption = bquote("(Note: Ties in the printed adjusted" ~ R^2 ~ 
-                                 "values are due to rounding)")
-            ) +
+            xlab('Possible Explanatory Variables') +
             theme(
               text = element_text(size = 18),
+              axis.title.x = element_text(size = 16),
               axis.title.y = element_text(size = 16, angle = 90)
             )
         },
@@ -907,14 +918,12 @@ server <- function(input, output, session) {
             scale = 1
           )
           originalPlot +
-            ggtitle(bquote("Model Table Plot for Bayesian Information Criterion")) +
+            ggtitle(bquote("Model Plot for Bayesian Information Criterion")) +
             ylab(bquote("BIC")) +
-            labs(
-              caption = "(Note: Ties in the printed BIC values are
-              due to rounding)"
-            ) +
+            xlab('Possible Explanatory Variables') +
             theme(
               text = element_text(size = 18),
+              axis.title.x = element_text(size = 16),
               axis.title.y = element_text(size = 16, angle = 90)
             )
         },
@@ -948,18 +957,16 @@ server <- function(input, output, session) {
             scale = 1
           )
           originalPlot +
-            ggtitle(bquote("Model Table Plot for Mallow's Cp Criterion")) +
+            ggtitle(bquote("Model Plot for Mallows' Cp Criterion")) +
             ylab(bquote("CP Criterion")) +
-            labs(
-              caption = "(Note: Ties in the printed Cp criterion values are
-              due to rounding)"
-            ) +
+            xlab('Possible Explanatory Variables') +
             theme(
               text = element_text(size = 18),
+              axis.title.x = element_text(size = 16),
               axis.title.y = element_text(size = 16, angle = 90)
             )
         },
-        alt = "A graph of the Mallow's Cp Criterion values"
+        alt = "A graph of the Mallows' Cp Criterion values"
       )
     }
   )#close of data simulation

@@ -8,13 +8,14 @@ Authors@R: c(
   person(given = "Zhiro", family = "Wang", role = c("aut")),
   person(given = "Zhoulin", family = "Luo", role = c("ctb")),
   person(given = "Robert", family = "Chappell", role = c("ctb")),
-  person(given = "Yijun", family = "Yao", role = c("ctb"))
+  person(given = "Yijun", family = "Yao", role = c("ctb")),
+  person(given = "Nathan", family = "Pechulis", role = c("ctb"))
  )
 Chapter: Regression
-Description: This app introduces the concept of variable selection. It introduces three variable selection criteria Adjusted R-Squared, BIC Criterion and Mallow's Cp.
+Description: This app introduces the concept of variable selection. It introduces three variable selection criteria Adjusted R-Squared, BIC Criterion and Mallows' Cp.
 LearningObjectives: c(
   "The student will be able to do variable selection based on three criteria
-  adjusted R-Squared, BIC criterion and Mallow's Cp.",
+  adjusted R-Squared, BIC criterion and Mallows' Cp.",
   "The student will be able to choose predictors in a model"
  )
 DisplayMode: Normal
