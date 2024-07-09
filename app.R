@@ -62,7 +62,7 @@ ui <- list(
           h1("Variable Selection"),
           p("This app introduces the concept of variable selection. It introduces 
             three variable selection criteria: 
-            Adjusted R-Squared, BIC Criterion and Mallows' Cp."),
+            Adjusted R-Squared, Bayesian Information Criterion, and Mallows' Cp."),
           h2("Instructions"),
           tags$ol(
             tags$li("Review the common metrics for exploring variable selection
@@ -135,17 +135,7 @@ ui <- list(
                     It calculates the amount of bias incorporated into projected
                     responses as a result of an underspecified model.
                     The model with the lowest Cp is preferred.")
-          ),
-          br(),
-          div(
-            style = "text-align: center;",
-            bsButton(
-              inputId = "explore",
-              label = "Explore",
-              icon = icon("bolt"),
-              size = "large"
-            )
-          ),
+          )
         ),
         ## Explore Criteria Page ----
         tabItem(
@@ -155,7 +145,7 @@ ui <- list(
           p("Here you can explore each variable selection metric. To begin, just select the desired
           number of explanatory variables, click the 'Generate New Model' 
           button, and then click the 'Refresh Data' button and observe the table that appears
-            for each metric. After exploring, you can click 'Show the true model' to see
+            for each metric. After exploring, you can click the 'Show the true model' checkbox to see
             which predictor variables would be included in the best model for the data
             based on these metrics."),
           wellPanel(
@@ -194,10 +184,10 @@ ui <- list(
               plotOutput("Aplot")
             ),
             tabPanel(
-              title = "BIC Criterion",
+              title = "Bayesian Information Criterion",
               br(),
               p(tags$strong("Hint: ")),
-              p("For BIC Criterion, lower values are preferred. Look for
+              p("For BIC, lower values are preferred. Look for
                 the row with the lowest value. If there are multiple with the same
                 value take the row with the least variables. Note, if there are any 
                 identical values for axis labels it is due to rounding."),
@@ -384,7 +374,7 @@ ui <- list(
                   offset = 0,
                   selectInput(
                     inputId = "question4",
-                    label = "For BIC criterion, which model does the best using 
+                    label = "For BIC, which model does the best using 
                     only three of the five variables?",
                     choices = c(
                       " " = "null",
@@ -574,15 +564,6 @@ server <- function(input, output, session) {
       updateTabItems(session = session,
                      inputId = "pages", 
                      selected = "prereq")
-    }
-  )
-  
-  observeEvent(
-    eventExpr = input$explore,
-    handlerExpr = {
-      updateTabItems(session = session,
-                     inputId = "pages", 
-                     selected = "explore1")
     }
   )
   
@@ -1204,9 +1185,9 @@ server <- function(input, output, session) {
   
   output$bPlot <- renderPlot(
     expr = {
-      plot(best.model, scale = "bic", main = "BIC criterion")
+      plot(best.model, scale = "bic", main = "BIC")
     },
-    alt = "BIC criterion graph"
+    alt = "Bayesian Information Criterion graph"
   )
   
   output$cPlot <- renderPlot(
