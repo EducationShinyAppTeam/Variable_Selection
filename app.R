@@ -70,11 +70,11 @@ ui <- list(
           h2("Instructions"),
           tags$ol(
             tags$li("Review the common metrics for exploring variable selection
-                    by checking out the Prerequisites."),
+                    by checking out the 'Prerequisites'."),
             tags$li("When you're ready, navigate to the 'Explore Criteria' tab to begin
                     exploring all three metrics."),
-            tags$li("Adjust the number of explanatory variables to see how each method is evaluated 
-                    within the 'Explore Criteria' page."),
+            tags$li("There, you can adjust the number of explanatory variables and create a model 
+                    to see how each selection method is evaluated."),
             tags$li("Finally, the 'Using Real Data' tab contains a real-world scenario
                     where you can test your knowledge about variable selection and its metrics.")
           ),
@@ -102,7 +102,7 @@ ui <- list(
             citeApp(),
             br(),
             br(),
-            div(class = "updated", "Last Update: 07/03/2024 by NP.")
+            div(class = "updated", "Last Update: 07/13/2024 by NP.")
           )
         ),
         ## Prerequisites ----
@@ -513,7 +513,7 @@ ui <- list(
           p(
             class = "hangingindent",
             "Statistical & Financial Consulting by Stanford PhD. 
-            BAYESIAN INFORMATION CRITERTIAN.
+            BAYESIAN INFORMATION CRITERTION.
              Available from https://stanfordphd.com/BIC.html"
           ),
           br(), 
@@ -539,9 +539,10 @@ server <- function(input, output, session) {
       sendSweetAlert(
         session = session,
         title = "Information",
-        text = "Choose the optimality criteria from the dropdown list of 
-        different methods. Make your own choice about which model you think is 
-        best before showing the true model.",
+        text = "Create your own model and observe the graphs for each
+        of the three metrics on the 'Explore Criteria' page. On the 
+        'Using Real Data' page, you can challenge yourself with a small quiz about
+        a real-world example of variable selection.",
         type = "info"
       )
     }
@@ -867,7 +868,7 @@ server <- function(input, output, session) {
           originalPlot +
             ggtitle(bquote("Model Plot for Adjusted" ~R^2)) +
             ylab(bquote("Adjusted" ~R^2)) +
-            xlab('Possible Explanatory Variables') +
+            xlab('Explanatory Variables') +
             theme(
               text = element_text(size = 18),
               axis.title.x = element_text(size = 16),
@@ -905,7 +906,7 @@ server <- function(input, output, session) {
           originalPlot +
             ggtitle(bquote("Model Plot for Bayesian Information Criterion")) +
             ylab(bquote("BIC")) +
-            xlab('Possible Explanatory Variables') +
+            xlab('Explanatory Variables') +
             theme(
               text = element_text(size = 18),
               axis.title.x = element_text(size = 16),
@@ -944,7 +945,7 @@ server <- function(input, output, session) {
           originalPlot +
             ggtitle(bquote("Model Plot for Mallows' Cp Criterion")) +
             ylab(bquote("CP Criterion")) +
-            xlab('Possible Explanatory Variables') +
+            xlab('Explanatory Variables') +
             theme(
               text = element_text(size = 18),
               axis.title.x = element_text(size = 16),
